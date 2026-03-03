@@ -63,7 +63,7 @@
 .year-picker__title {
   font-size: 1.875rem;
   font-weight: 800;
-  color: var(--header-bg, #2c3e50);
+  color: var(--body-color, #111827);
   letter-spacing: -0.02em;
 }
 
@@ -144,7 +144,7 @@
   border: 2px solid #e5e7eb;
   border-radius: 10px;
   outline: none;
-  color: var(--header-bg, #2c3e50);
+  color: var(--cell-color, #111827);
   background: var(--cell-bg, #ffffff);
   letter-spacing: 0.05em;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -157,8 +157,8 @@
 }
 
 .year-picker__input:focus {
-  border-color: var(--header-bg, #2c3e50);
-  box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.12);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 [data-theme="dark"] .year-picker__input:focus {
@@ -174,7 +174,7 @@
 /* ─── Submit button ──────────────────────────────────────────────────────────── */
 .year-picker__submit-btn {
   padding: 14px 24px;
-  background: var(--header-bg, #2c3e50);
+  background: #3b82f6;
   color: #ffffff;
   border: none;
   border-radius: 10px;
@@ -186,11 +186,11 @@
 }
 
 .year-picker__submit-btn:hover:not(:disabled) {
-  background: #34495e;
+  background: #2563eb;
 }
 
 [data-theme="dark"] .year-picker__submit-btn:hover:not(:disabled) {
-  background: #263650;
+  background: #1d4ed8;
 }
 
 .year-picker__submit-btn:active:not(:disabled) {
