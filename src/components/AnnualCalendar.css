@@ -1,12 +1,7 @@
-/* ─── Outer shell ────────────────────────────────────────────────────────────
-   flex: 1 lets this component fill all available height below the app root.
-   min-height: 0 is the standard fix that lets a flex child shrink below its
-   natural content size (without it, overflowing content would push the layout). */
+/* ─── Outer shell ──────────────────────────────────────────────────────────── */
 .annual-calendar {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 0;
 }
 
 /* ─── Top header bar ─────────────────────────────────────────────────────────
@@ -74,13 +69,9 @@
 }
 
 /* ─── Grid wrapper ───────────────────────────────────────────────────────────
-   flex: 1 + min-height: 0 → takes all remaining height after the header.
-   overflow-x: auto → fallback horizontal scroll on very narrow viewports. */
+   overflow-x: auto → horizontal scroll on very narrow viewports. */
 .annual-calendar__grid-wrapper {
-  flex: 1;
-  min-height: 0;
   overflow-x: auto;
-  overflow-y: auto;
   padding: 8px 12px 12px;
 }
 
@@ -95,8 +86,6 @@
   display: grid;
   grid-template-columns: auto repeat(37, 1fr);
   grid-auto-rows: auto;
-  height: 100%;
-  min-height: 540px;
   border: 1px solid var(--border-color, #e5e7eb);
   border-radius: 6px;
   overflow: hidden;
