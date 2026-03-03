@@ -15,7 +15,6 @@
 .annual-calendar__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 10px 16px;
   background-color: var(--header-bg, #2c3e50);
   color: var(--header-color, #ffffff);
@@ -27,6 +26,8 @@
   font-size: 1.375rem;
   font-weight: 800;
   letter-spacing: 0.06em;
+  flex: 1;        /* pushes action buttons to the right */
+  text-align: center;
 }
 
 .annual-calendar__back-btn {
@@ -47,10 +48,29 @@
   background: rgba(255, 255, 255, 0.12);
 }
 
-/* Invisible spacer — same flex-basis as the back button so the year title
-   stays centred by symmetry. */
-.annual-calendar__header-spacer {
-  flex: 0 0 120px;
+/* ─── Header action buttons (theme toggle, export, import) ───────────────── */
+.annual-calendar__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.annual-calendar__action-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: inherit;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.annual-calendar__action-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 /* ─── Grid wrapper ───────────────────────────────────────────────────────────
@@ -97,7 +117,8 @@
 }
 
 /* ─── Shared cell base ───────────────────────────────────────────────────────
-   All cells share the same border, font, and flex-centering base.
+   All cells share the same border, font, and alignment base.
+   align-items: flex-start puts content at the top of each cell.
    font-size uses clamp() to scale from 0.55rem at narrow widths to 0.85rem at
    wide widths (1vw is the viewport-relative midpoint). */
 .annual-calendar__corner-cell,
@@ -105,8 +126,9 @@
 .annual-calendar__month-label,
 .annual-calendar__cell {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  padding-top: 4px;
   border-right: 1px solid var(--border-color, #d0d7de);
   border-bottom: 1px solid var(--border-color, #d0d7de);
   font-size: clamp(0.55rem, 1vw, 0.83rem);
@@ -144,7 +166,7 @@
   background-color: var(--month-label-bg, #f6f8fa);
   font-weight: 700;
   font-size: clamp(0.6rem, 1.1vw, 0.875rem);
-  padding: 0 10px;
+  padding: 4px 10px 0;
   white-space: nowrap;
   justify-content: flex-start; /* left-align month names */
   border-right: 2px solid var(--month-label-border, #b0bac5); /* thicker separator */
@@ -154,13 +176,31 @@
   color: #374151;
 }
 
+[data-theme="dark"] .annual-calendar__month-label {
+  color: #9ca3af;
+}
+
 /* ─── Date cells ─────────────────────────────────────────────────────────────*/
 .annual-calendar__cell {
-  background-color: #ffffff;
+  background-color: var(--cell-bg, #ffffff);
   cursor: default;
   user-select: none;
-  color: #1f2937;
+  color: var(--cell-color, #1f2937);
   font-weight: 500;
+  position: relative; /* for entry dot absolute positioning */
+}
+
+/* Clickable cells (non-empty) show pointer cursor */
+.annual-calendar__cell--clickable {
+  cursor: pointer;
+}
+
+.annual-calendar__cell--clickable:hover {
+  filter: brightness(0.95);
+}
+
+[data-theme="dark"] .annual-calendar__cell--clickable:hover {
+  filter: brightness(1.15);
 }
 
 /* Empty cells (before the 1st and after the last day of a month) */
@@ -178,7 +218,7 @@
    Using an inner span + border-radius: 50% with min(100%, 28px) ensures the
    circle is always circular regardless of the cell's aspect ratio. */
 .annual-calendar__cell--today {
-  background-color: #ffffff;
+  background-color: var(--cell-bg, #ffffff);
 }
 
 .annual-calendar__today-dot {
@@ -192,4 +232,18 @@
   font-weight: 800;
   border-radius: 50%;
   line-height: 1;
+}
+
+/* ─── Entry indicator dot ────────────────────────────────────────────────────
+   A small dot in the bottom-right corner signals that this date has an entry. */
+.annual-calendar__entry-dot {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--header-bg, #2c3e50);
+  opacity: 0.6;
+  pointer-events: none;
 }

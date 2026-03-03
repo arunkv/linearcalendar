@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './YearPicker.css'
 
-export default function YearPicker({ defaultYear, onYearSelect }) {
+export default function YearPicker({ defaultYear, onYearSelect, theme, onToggleTheme }) {
   const [inputValue, setInputValue] = useState(String(defaultYear))
 
   const parsedYear = parseInt(inputValue, 10)
@@ -28,6 +28,15 @@ export default function YearPicker({ defaultYear, onYearSelect }) {
 
   return (
     <div className="year-picker">
+      <button
+        className="year-picker__theme-btn"
+        onClick={onToggleTheme}
+        aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+        title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+      >
+        {theme === 'dark' ? '☀' : '☾'}
+      </button>
+
       <div className="year-picker__card">
         <div className="year-picker__icon" aria-hidden="true">📅</div>
         <h1 className="year-picker__title">Annual Calendar</h1>

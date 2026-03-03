@@ -81,6 +81,18 @@ export function getMonthName(monthIndex) {
  * @param {number} monthIndex
  * @returns {(number|null)[]}
  */
+/**
+ * Returns a date key string in "YYYY-MM-DD" format for use as a localStorage key.
+ * @param {number} year
+ * @param {number} monthIndex - 0 = January … 11 = December
+ * @param {number} day - 1-based day of month
+ */
+export function toDateKey(year, monthIndex, day) {
+  const m = String(monthIndex + 1).padStart(2, '0')
+  const d = String(day).padStart(2, '0')
+  return `${year}-${m}-${d}`
+}
+
 export function buildMonthRow(year, monthIndex) {
   const startCol = getMonthStartDay(year, monthIndex)
   const daysInMonth = getDaysInMonth(year, monthIndex)
