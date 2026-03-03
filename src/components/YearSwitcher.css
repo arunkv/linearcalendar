@@ -1,0 +1,111 @@
+/* ─── Year Switcher ────────────────────────────────────────────────────────── */
+.year-switcher {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* ── Arrow buttons (‹ ›) ──────────────────────────────────────────────────── */
+.year-switcher__arrow {
+  background: transparent;
+  border: 1px solid var(--border-color, #e5e7eb);
+  color: var(--header-color, #111827);
+  padding: 4px 9px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.year-switcher__arrow:hover:not(:disabled) {
+  background: var(--empty-cell-bg, #f9fafb);
+}
+
+.year-switcher__arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ── Preset year <select> ─────────────────────────────────────────────────── */
+.year-switcher__select {
+  background: transparent;
+  border: 1px solid var(--border-color, #e5e7eb);
+  color: var(--header-color, #111827);
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  width: 86px;
+  transition: background 0.15s;
+  /* Remove default arrow on some browsers for a cleaner look — keep native on others */
+}
+
+.year-switcher__select:hover {
+  background: var(--empty-cell-bg, #f9fafb);
+}
+
+.year-switcher__select:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 1px;
+}
+
+/* ── Custom year <input> ──────────────────────────────────────────────────── */
+.year-switcher__input {
+  background: transparent;
+  border: 1px solid var(--border-color, #e5e7eb);
+  color: var(--header-color, #111827);
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-family: inherit;
+  width: 86px;
+  /* Hide browser number spinners */
+  -moz-appearance: textfield;
+}
+
+.year-switcher__input::-webkit-inner-spin-button,
+.year-switcher__input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.year-switcher__input:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 1px;
+}
+
+.year-switcher__input--invalid {
+  outline: 2px solid #ef4444;
+  outline-offset: 1px;
+}
+
+/* ── Cancel (✕) button ────────────────────────────────────────────────────── */
+.year-switcher__cancel {
+  background: transparent;
+  border: 1px solid var(--border-color, #e5e7eb);
+  color: var(--header-color, #111827);
+  padding: 4px 7px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  line-height: 1;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.year-switcher__cancel:hover {
+  background: var(--empty-cell-bg, #f9fafb);
+}
+
+/* ── Dark mode option text fix ────────────────────────────────────────────── */
+[data-theme="dark"] .year-switcher__select option {
+  background: #1f2937;
+  color: #f9fafb;
+}

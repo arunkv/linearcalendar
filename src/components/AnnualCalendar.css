@@ -17,38 +17,13 @@
   gap: 12px;
 }
 
-.annual-calendar__year-title {
-  font-size: 1.375rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  flex: 1;        /* pushes action buttons to the right */
-  text-align: center;
-}
-
-.annual-calendar__back-btn {
-  background: transparent;
-  border: 1px solid var(--border-color, #e5e7eb);
-  color: var(--header-color, #111827);
-  padding: 6px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  white-space: nowrap;
-  transition: background 0.15s;
-  flex-shrink: 0;
-}
-
-.annual-calendar__back-btn:hover {
-  background: var(--empty-cell-bg, #f9fafb);
-}
-
 /* ─── Header action buttons (theme toggle, export, import) ───────────────── */
 .annual-calendar__header-actions {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
+  margin-left: auto; /* push action buttons to the right */
 }
 
 .annual-calendar__action-btn {

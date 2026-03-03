@@ -13,6 +13,7 @@ import {
 } from '../utils/calendarUtils.js'
 import { useEvents } from '../hooks/useEvents.js'
 import EventModal from './EventModal.jsx'
+import YearSwitcher from './YearSwitcher.jsx'
 import './AnnualCalendar.css'
 
 // Stable module-level arrays — built once, not on every render
@@ -71,15 +72,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
     <div className="annual-calendar">
       {/* ── Top header bar ─────────────────────────────────────────────────── */}
       <div className="annual-calendar__header">
-        <button
-          className="annual-calendar__back-btn"
-          onClick={onChangeYear}
-          aria-label="Change year"
-        >
-          ← Change Year
-        </button>
-
-        <h1 className="annual-calendar__year-title">{year}</h1>
+        <YearSwitcher year={year} onYearChange={onChangeYear} />
 
         <div className="annual-calendar__header-actions">
           <button
