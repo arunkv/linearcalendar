@@ -8,6 +8,8 @@ import {
   isWeekendColumn,
   toDateKey,
   getEventsForMonth,
+  eventsToIcs,
+  icsToEvents,
 } from '../utils/calendarUtils.js'
 import { useEvents } from '../hooks/useEvents.js'
 import EventModal from './EventModal.jsx'
@@ -37,30 +39,28 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
     [year]
   )
 
-  // ── Export events as JSON file download ───────────────────────────────────
+  // ── Export events as .ics file download ───────────────────────────────────
   function handleExport() {
-    const blob = new Blob([JSON.stringify(events, null, 2)], { type: 'application/json' })
+    const blob = new Blob([eventsToIcs(events)], { type: 'text/calendar' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = 'annual-calendar-events.json'
+    a.download = 'annual-calendar-events.ics'
     a.click()
     URL.revokeObjectURL(url)
   }
 
-  // ── Import events from a JSON file ────────────────────────────────────────
+  // ── Import events from a .ics file ────────────────────────────────────────
   function handleImportChange(e) {
     const file = e.target.files[0]
     if (!file) return
     const reader = new FileReader()
     reader.onload = (ev) => {
       try {
-        const parsed = JSON.parse(ev.target.result)
-        if (Array.isArray(parsed)) {
-          replaceAll(parsed)
-        }
+        const parsed = icsToEvents(ev.target.result)
+        if (parsed.length > 0) replaceAll(parsed)
       } catch {
-        // ignore invalid JSON
+        // ignore invalid .ics
       }
     }
     reader.readAsText(file)
@@ -111,7 +111,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
           <input
             ref={importInputRef}
             type="file"
-            accept=".json"
+            accept=".ics"
             style={{ display: 'none' }}
             onChange={handleImportChange}
           />

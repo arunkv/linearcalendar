@@ -110,6 +110,94 @@ export function buildMonthRow(year, monthIndex) {
  * @param {number} year
  * @param {number} monthIndex - 0 = January … 11 = December
  */
+/**
+ * Serialises an events array to iCalendar (.ics) format string.
+ * All events are treated as all-day events (VALUE=DATE).
+ * DTEND is exclusive per RFC 5545 (endDate + 1 day).
+ * @param {Array} events - array of { id, title, startDate, endDate, color }
+ * @returns {string}
+ */
+// Format a local Date as "YYYYMMDD" without timezone conversion
+function fmtIcsDate(d) {
+  return (
+    d.getFullYear().toString() +
+    String(d.getMonth() + 1).padStart(2, '0') +
+    String(d.getDate()).padStart(2, '0')
+  )
+}
+
+// Format a local Date as "YYYY-MM-DD" without timezone conversion
+function fmtIsoDate(d) {
+  return (
+    d.getFullYear() +
+    '-' + String(d.getMonth() + 1).padStart(2, '0') +
+    '-' + String(d.getDate()).padStart(2, '0')
+  )
+}
+
+export function eventsToIcs(events) {
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Annual Calendar//EN',
+    'CALSCALE:GREGORIAN',
+  ]
+  for (const ev of events) {
+    const dtStartStr = ev.startDate.replace(/-/g, '')
+    // DTEND is exclusive: endDate + 1 day (use local date arithmetic, not UTC)
+    const dtEnd = new Date(ev.endDate + 'T00:00:00')
+    dtEnd.setDate(dtEnd.getDate() + 1)
+    lines.push(
+      'BEGIN:VEVENT',
+      `UID:${ev.id}@annualcalendar`,
+      `SUMMARY:${ev.title}`,
+      `DTSTART;VALUE=DATE:${dtStartStr}`,
+      `DTEND;VALUE=DATE:${fmtIcsDate(dtEnd)}`,
+      `X-APPLE-CALENDAR-COLOR:${ev.color}`,
+      'END:VEVENT',
+    )
+  }
+  lines.push('END:VCALENDAR')
+  return lines.join('\r\n')
+}
+
+/**
+ * Parses an iCalendar (.ics) text string into an events array.
+ * Handles all-day events (VALUE=DATE). DTEND is exclusive per RFC 5545.
+ * @param {string} text - raw .ics file content
+ * @returns {Array} array of { id, title, startDate, endDate, color }
+ */
+export function icsToEvents(text) {
+  const events = []
+  const blocks = text.split('BEGIN:VEVENT')
+  for (let i = 1; i < blocks.length; i++) {
+    const block = blocks[i]
+    const get = (key) => {
+      const m = block.match(new RegExp(`^${key}[^:]*:(.+)`, 'm'))
+      return m ? m[1].trim() : ''
+    }
+    const title = get('SUMMARY')
+    const dtStart = get('DTSTART')
+    const dtEnd = get('DTEND')
+    if (!title || !dtStart || !dtEnd) continue
+
+    // Parse YYYYMMDD → YYYY-MM-DD string
+    const parseDate = (s) => `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`
+    const startDate = parseDate(dtStart)
+
+    // DTEND is exclusive → subtract 1 day for inclusive endDate (local arithmetic)
+    const endRaw = new Date(parseDate(dtEnd) + 'T00:00:00')
+    endRaw.setDate(endRaw.getDate() - 1)
+    const endDate = fmtIsoDate(endRaw)
+
+    const color = get('X-APPLE-CALENDAR-COLOR') || '#3b82f6'
+    const uid = get('UID').replace('@annualcalendar', '')
+    const id = uid || (Date.now().toString(36) + Math.random().toString(36).slice(2))
+    events.push({ id, title, startDate, endDate, color })
+  }
+  return events
+}
+
 export function getEventsForMonth(events, year, monthIndex) {
   const monthStart = new Date(year, monthIndex, 1)
   const monthEnd = new Date(year, monthIndex + 1, 0)
