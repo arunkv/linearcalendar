@@ -227,7 +227,7 @@
   padding: 2px 0;
   background-color: var(--cell-bg, #ffffff);
   border-bottom: 1px solid var(--border-color, #e5e7eb);
-  min-height: 10px;
+  min-height: 24px;
 }
 
 /* ─── Event bars ─────────────────────────────────────────────────────────────*/
