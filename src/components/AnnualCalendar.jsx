@@ -111,6 +111,14 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
             ↑ Import
           </button>
 
+          <button
+            className="annual-calendar__action-btn"
+            onClick={() => window.print()}
+            title="Print calendar"
+          >
+            ⎙ Print
+          </button>
+
           {/* Hidden file input for import */}
           <input
             ref={importInputRef}

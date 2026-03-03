@@ -188,3 +188,9 @@
 [data-theme="dark"] .event-modal__btn--delete:hover {
   background: rgba(239, 68, 68, 0.1);
 }
+
+@media print {
+  .event-modal__overlay {
+    display: none;
+  }
+}

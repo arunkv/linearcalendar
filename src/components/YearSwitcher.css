@@ -109,3 +109,19 @@
   background: #1f2937;
   color: #f9fafb;
 }
+
+/* ── Print: hide nav arrows, render the year as plain text ────────────────── */
+@media print {
+  .year-switcher__arrow {
+    display: none;
+  }
+
+  .year-switcher__select {
+    border: none;
+    background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    pointer-events: none;
+    color: var(--header-color, #111827);
+  }
+}

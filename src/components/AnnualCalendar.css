@@ -245,3 +245,113 @@
 .annual-calendar__event-bar:hover {
   filter: brightness(0.88);
 }
+
+/* ─── Print styles ───────────────────────────────────────────────────────────
+   • Landscape orientation, 1 cm margins
+   • Light palette forced regardless of user's dark-mode preference
+   • Interactive chrome hidden; backgrounds/colours preserved for event bars   */
+@media print {
+  /* Page setup */
+  @page {
+    size: landscape;
+    margin: 1cm 1.5cm;
+  }
+
+  /* Preserve background colours (event bars, today circle, weekend tints …) */
+  * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* ── Force light palette even in dark mode ── */
+  :root,
+  [data-theme='dark'] {
+    --header-bg:          #ffffff;
+    --header-color:       #111827;
+    --header-border:      #d1d5db;
+    --header-bg-weekend:  #f9fafb;
+    --weekend-bg:         #f5f5f5;
+    --today-bg:           #f97316;
+    --today-color:        #ffffff;
+    --border-color:       #d1d5db;
+    --month-label-bg:     #f3f4f6;
+    --month-label-color:  #4b5563;
+    --month-label-border: #d1d5db;
+    --empty-cell-bg:      #f3f4f6;
+    --cell-bg:            #ffffff;
+    --cell-color:         #111827;
+    --body-bg:            #ffffff;
+    --body-color:         #111827;
+  }
+
+  body {
+    background: #ffffff;
+  }
+
+  /* ── Hide interactive header buttons (theme / export / import / print) ── */
+  .annual-calendar__header-actions {
+    display: none;
+  }
+
+  /* ── Grid: fill the full printable width, no clipping ── */
+  .annual-calendar__grid-wrapper {
+    overflow: visible;
+    padding: 4px 0 0;
+  }
+
+  .annual-calendar__grid {
+    width: 100%;
+    /* Prevent the grid from being split across pages */
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* ── Remove sticky positioning (irrelevant without scrolling) ── */
+  .annual-calendar__corner-cell,
+  .annual-calendar__col-header {
+    position: static;
+  }
+
+  .annual-calendar__month-label {
+    position: static;
+  }
+
+  /* ── Tighter font sizes for print ── */
+  .annual-calendar__corner-cell,
+  .annual-calendar__col-header,
+  .annual-calendar__month-label,
+  .annual-calendar__cell {
+    font-size: 7px;
+  }
+
+  .annual-calendar__month-label {
+    font-size: 7.5px;
+    padding: 3px 6px 0;
+  }
+
+  /* ── Compact event rows ── */
+  .annual-calendar__events-container {
+    grid-auto-rows: 13px;
+    min-height: 15px;
+  }
+
+  .annual-calendar__event-bar {
+    font-size: 5.5px;
+    cursor: default;
+    transition: none;
+  }
+
+  /* ── Strip hover effects ── */
+  .annual-calendar__cell--clickable {
+    cursor: default;
+  }
+
+  .annual-calendar__cell--clickable:hover,
+  [data-theme='dark'] .annual-calendar__cell--clickable:hover {
+    filter: none;
+  }
+
+  .annual-calendar__event-bar:hover {
+    filter: none;
+  }
+}
