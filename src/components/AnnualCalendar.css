@@ -17,6 +17,27 @@
   gap: 12px;
 }
 
+/* ─── Brand (logo + title) ───────────────────────────────────────────────── */
+.annual-calendar__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.annual-calendar__brand-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+}
+
+.annual-calendar__brand-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--header-color, #111827);
+  white-space: nowrap;
+}
+
 /* ─── Header action buttons (theme toggle, export, import) ───────────────── */
 .annual-calendar__header-actions {
   display: flex;

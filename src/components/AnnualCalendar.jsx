@@ -72,6 +72,17 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
     <div className="annual-calendar">
       {/* ── Top header bar ─────────────────────────────────────────────────── */}
       <div className="annual-calendar__header">
+        {/* Brand: logo + app title */}
+        <div className="annual-calendar__brand">
+          <img
+            src="/favicon.svg"
+            className="annual-calendar__brand-logo"
+            alt=""
+            aria-hidden="true"
+          />
+          <span className="annual-calendar__brand-title">Annual Calendar</span>
+        </div>
+
         <YearSwitcher year={year} onYearChange={onChangeYear} />
 
         <div className="annual-calendar__header-actions">
