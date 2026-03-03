@@ -182,7 +182,6 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
 
                 {/* Events row */}
                 <div className="annual-calendar__row">
-                  <div className="annual-calendar__events-spacer" />
                   <div className="annual-calendar__events-container">
                     {monthEvents.map(ev => (
                       <div

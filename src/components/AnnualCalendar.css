@@ -139,6 +139,9 @@
 }
 
 /* ─── Month label column ─────────────────────────────────────────────────────
+   grid-row: span 2 makes each label cover both the date row and the events row
+   for that month. align-items: flex-start (from the shared rule) keeps the text
+   pinned to the top of the spanned area.
    position: sticky; left: 0 keeps month names pinned when the grid scrolls
    horizontally on narrow viewports. */
 .annual-calendar__month-label {
@@ -153,6 +156,7 @@
   left: 0;
   z-index: 1;
   color: var(--month-label-color, #6b7280);
+  grid-row: span 2;
 }
 
 /* ─── Date cells ─────────────────────────────────────────────────────────────*/
@@ -210,15 +214,6 @@
   line-height: 1;
 }
 
-/* ─── Events spacer (month-label column in events row) ──────────────────────*/
-.annual-calendar__events-spacer {
-  background-color: var(--month-label-bg, #f9fafb);
-  border-right: 2px solid var(--month-label-border, #e5e7eb);
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
-  position: sticky;
-  left: 0;
-  z-index: 1;
-}
 
 /* ─── Events container (spans all 37 date columns) ──────────────────────────
    CSS subgrid inherits the exact column widths from the parent grid, allowing
