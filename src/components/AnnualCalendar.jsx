@@ -2,7 +2,7 @@ import { Fragment, useMemo, useState, useRef } from 'react'
 import {
   buildMonthRow,
   getMonthName,
-  DAY_NAMES,
+  DAY_ABBRS,
   GRID_COLS,
   isToday,
   isWeekendColumn,
@@ -134,26 +134,6 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
       <div className="annual-calendar__grid-wrapper">
         <div className="annual-calendar__grid">
 
-          {/* ── Column-header row: S M T W T F S repeating ─────────────────── */}
-          <div className="annual-calendar__row">
-            {/* Top-left corner cell (above the month label column) */}
-            <div className="annual-calendar__corner-cell" />
-
-            {COL_INDICES.map((colIndex) => (
-              <div
-                key={colIndex}
-                className={[
-                  'annual-calendar__col-header',
-                  isWeekendColumn(colIndex)
-                    ? 'annual-calendar__col-header--weekend'
-                    : '',
-                ].filter(Boolean).join(' ')}
-              >
-                {DAY_NAMES[colIndex % 7]}
-              </div>
-            ))}
-          </div>
-
           {/* ── One pair of rows per month ────────────────────────────────── */}
           {monthRows.map(({ monthIndex, name, cells }) => {
             const monthEvents = getEventsForMonth(events, year, monthIndex)
@@ -183,10 +163,17 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
                         className={cellClass}
                         onClick={empty ? undefined : () => setModalState({ mode: 'create', initialDate: dateKey })}
                       >
-                        {today
-                          ? <span className="annual-calendar__today-dot">{day}</span>
-                          : (!empty ? day : null)
-                        }
+                        {!empty && (
+                          <>
+                            {today
+                              ? <span className="annual-calendar__today-dot">{day}</span>
+                              : <span className="annual-calendar__cell-day">{day}</span>
+                            }
+                            <span className="annual-calendar__cell-dow">
+                              {DAY_ABBRS[colIndex % 7]}
+                            </span>
+                          </>
+                        )}
                       </div>
                     )
                   })}

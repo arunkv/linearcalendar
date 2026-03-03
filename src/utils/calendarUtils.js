@@ -2,6 +2,9 @@
 
 export const DAY_NAMES = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 
+/** Two-letter day abbreviations, index 0 = Sunday … 6 = Saturday */
+export const DAY_ABBRS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April',
   'May', 'June', 'July', 'August',

@@ -96,8 +96,6 @@
 
 /* ─── Shared cell base ───────────────────────────────────────────────────────
    All cells share the same border, font, and alignment base. */
-.annual-calendar__corner-cell,
-.annual-calendar__col-header,
 .annual-calendar__month-label,
 .annual-calendar__cell {
   display: flex;
@@ -110,30 +108,6 @@
   min-width: 0; /* prevent cell text from forcing grid column to widen */
 }
 
-/* ─── Corner cell (top-left intersection of header row and label column) ───── */
-.annual-calendar__corner-cell {
-  background-color: var(--header-bg, #ffffff);
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 3; /* above both the col-header (z:2) and month-label (z:1) sticky layers */
-}
-
-/* ─── Column headers (S M T W T F S repeating) ───────────────────────────── */
-.annual-calendar__col-header {
-  background-color: var(--header-bg, #ffffff);
-  color: var(--month-label-color, #6b7280);
-  font-weight: 700;
-  padding: 5px 0;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-
-.annual-calendar__col-header--weekend {
-  background-color: var(--header-bg-weekend, #f9fafb);
-}
-
 /* ─── Month label column ─────────────────────────────────────────────────────
    grid-row: span 2 makes each label cover both the date row and the events row
    for that month. align-items: flex-start (from the shared rule) keeps the text
@@ -144,28 +118,56 @@
   background-color: var(--month-label-bg, #f9fafb);
   font-weight: 700;
   font-size: clamp(0.6rem, 1.1vw, 0.875rem);
-  padding: 4px 10px 0;
+  padding: 4px 7px;
   white-space: nowrap;
-  justify-content: flex-start; /* left-align month names */
+  justify-content: center;
+  align-items: center;
   border-right: 2px solid var(--month-label-border, #e5e7eb);
   position: sticky;
   left: 0;
   z-index: 1;
   color: var(--month-label-color, #6b7280);
   grid-row: span 2;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg); /* bottom-to-top so text reads upward */
 }
 
 /* ─── Date cells ─────────────────────────────────────────────────────────────*/
 .annual-calendar__cell {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   background-color: var(--cell-bg, #ffffff);
   cursor: default;
   user-select: none;
   color: var(--cell-color, #111827);
+  position: relative;
+  min-height: 24px;
+  padding: 2px 1px;
+  gap: 2px;
+}
+
+/* ─── Day-of-month number ─────────────────────────────────────────────────── */
+.annual-calendar__cell-day {
+  font-size: clamp(0.6rem, 1.05vw, 0.875rem);
+  font-weight: 700;
+  color: var(--cell-color, #111827);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  flex-shrink: 0;
+}
+
+/* ─── Two-letter day-of-week label ──────────────────────────────────────────
+   Sits beside the date number; intentionally faded to keep the number dominant. */
+.annual-calendar__cell-dow {
+  font-size: clamp(0.35rem, 0.55vw, 0.5rem);
   font-weight: 500;
-  position: relative; /* for entry dot absolute positioning */
-  min-height: 0;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  color: var(--month-label-color, #6b7280);
+  line-height: 1;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
 }
 
 /* Clickable cells (non-empty) show pointer cursor */
@@ -201,13 +203,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: clamp(15px, 1.9vw, 20px);
+  height: clamp(15px, 1.9vw, 20px);
   background-color: var(--today-bg, #f97316);
   color: var(--today-color, #ffffff);
+  font-size: clamp(0.6rem, 1.05vw, 0.875rem);
   font-weight: 800;
   border-radius: 50%;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
 }
 
 
@@ -307,26 +312,36 @@
   }
 
   /* ── Remove sticky positioning (irrelevant without scrolling) ── */
-  .annual-calendar__corner-cell,
-  .annual-calendar__col-header {
-    position: static;
-  }
-
   .annual-calendar__month-label {
     position: static;
   }
 
   /* ── Tighter font sizes for print ── */
-  .annual-calendar__corner-cell,
-  .annual-calendar__col-header,
   .annual-calendar__month-label,
   .annual-calendar__cell {
     font-size: 7px;
+    min-height: 20px;
+    padding-top: 2px;
+    padding-bottom: 1px;
   }
 
   .annual-calendar__month-label {
     font-size: 7.5px;
     padding: 3px 6px 0;
+  }
+
+  .annual-calendar__cell-day {
+    font-size: 7px;
+  }
+
+  .annual-calendar__cell-dow {
+    font-size: 4.5px;
+  }
+
+  .annual-calendar__today-dot {
+    width: 14px;
+    height: 14px;
+    font-size: 7px;
   }
 
   /* ── Compact event rows ── */
