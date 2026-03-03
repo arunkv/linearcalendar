@@ -1,0 +1,38 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --header-bg: #2c3e50;
+  --header-color: #ffffff;
+  --header-bg-weekend: #3d5270;
+  --weekend-bg: #f0f4ff;
+  --today-bg: #e8450a;
+  --today-color: #ffffff;
+  --border-color: #d0d7de;
+  --month-label-bg: #f6f8fa;
+  --month-label-border: #b0bac5;
+  --empty-cell-bg: #fafbfc;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #f0f2f5;
+  color: #1a1a2e;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}

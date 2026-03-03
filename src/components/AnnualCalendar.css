@@ -1,0 +1,195 @@
+/* ─── Outer shell ────────────────────────────────────────────────────────────
+   flex: 1 lets this component fill all available height below the app root.
+   min-height: 0 is the standard fix that lets a flex child shrink below its
+   natural content size (without it, overflowing content would push the layout). */
+.annual-calendar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ─── Top header bar ─────────────────────────────────────────────────────────
+   flex-shrink: 0 keeps the header at a fixed height so the grid can take all
+   remaining vertical space. */
+.annual-calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background-color: var(--header-bg, #2c3e50);
+  color: var(--header-color, #ffffff);
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.annual-calendar__year-title {
+  font-size: 1.375rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.annual-calendar__back-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: inherit;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.annual-calendar__back-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Invisible spacer — same flex-basis as the back button so the year title
+   stays centred by symmetry. */
+.annual-calendar__header-spacer {
+  flex: 0 0 120px;
+}
+
+/* ─── Grid wrapper ───────────────────────────────────────────────────────────
+   flex: 1 + min-height: 0 → takes all remaining height after the header.
+   overflow-x: auto → fallback horizontal scroll on very narrow viewports
+   (the sticky month labels still work correctly with this). */
+.annual-calendar__grid-wrapper {
+  flex: 1;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: auto;
+  padding: 8px 12px 12px;
+}
+
+/* ─── The CSS Grid ───────────────────────────────────────────────────────────
+   grid-template-columns: auto repeat(37, 1fr)
+     • "auto"        → month-label column (sizes to content, ~80 px)
+     • "repeat(37, 1fr)" → 37 equal-width date columns filling all remaining space
+
+   grid-template-rows: auto repeat(12, 1fr)
+     • first row (auto) → the day-of-week column header row
+     • 12 "1fr" rows    → one row per month, equal height, filling container
+
+   height: 100% ensures the grid stretches to fill .annual-calendar__grid-wrapper.
+   min-height prevents rows collapsing below ~40px on small viewports. */
+.annual-calendar__grid {
+  display: grid;
+  grid-template-columns: auto repeat(37, 1fr);
+  grid-template-rows: auto repeat(12, 1fr);
+  height: 100%;
+  min-height: 540px;
+  border: 1px solid var(--border-color, #d0d7de);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* ─── Row wrapper ────────────────────────────────────────────────────────────
+   display: contents makes the row <div> invisible to the CSS Grid layout —
+   its children (the cells) participate directly in the parent grid.
+   This gives us true 2D grid alignment across all rows without an extra wrapper
+   element affecting column widths. */
+.annual-calendar__row {
+  display: contents;
+}
+
+/* ─── Shared cell base ───────────────────────────────────────────────────────
+   All cells share the same border, font, and flex-centering base.
+   font-size uses clamp() to scale from 0.55rem at narrow widths to 0.85rem at
+   wide widths (1vw is the viewport-relative midpoint). */
+.annual-calendar__corner-cell,
+.annual-calendar__col-header,
+.annual-calendar__month-label,
+.annual-calendar__cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border-color, #d0d7de);
+  border-bottom: 1px solid var(--border-color, #d0d7de);
+  font-size: clamp(0.55rem, 1vw, 0.83rem);
+  min-width: 0; /* prevent cell text from forcing grid column to widen */
+}
+
+/* ─── Corner cell (top-left intersection of header row and label column) ───── */
+.annual-calendar__corner-cell {
+  background-color: var(--header-bg, #2c3e50);
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 3; /* above both the col-header (z:2) and month-label (z:1) sticky layers */
+}
+
+/* ─── Column headers (S M T W T F S repeating) ───────────────────────────── */
+.annual-calendar__col-header {
+  background-color: var(--header-bg, #2c3e50);
+  color: var(--header-color, #ffffff);
+  font-weight: 700;
+  padding: 5px 0;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.annual-calendar__col-header--weekend {
+  background-color: var(--header-bg-weekend, #3d5270);
+}
+
+/* ─── Month label column ─────────────────────────────────────────────────────
+   position: sticky; left: 0 keeps month names pinned when the grid scrolls
+   horizontally on narrow viewports. */
+.annual-calendar__month-label {
+  background-color: var(--month-label-bg, #f6f8fa);
+  font-weight: 700;
+  font-size: clamp(0.6rem, 1.1vw, 0.875rem);
+  padding: 0 10px;
+  white-space: nowrap;
+  justify-content: flex-start; /* left-align month names */
+  border-right: 2px solid var(--month-label-border, #b0bac5); /* thicker separator */
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  color: #374151;
+}
+
+/* ─── Date cells ─────────────────────────────────────────────────────────────*/
+.annual-calendar__cell {
+  background-color: #ffffff;
+  cursor: default;
+  user-select: none;
+  color: #1f2937;
+  font-weight: 500;
+}
+
+/* Empty cells (before the 1st and after the last day of a month) */
+.annual-calendar__cell--empty {
+  background-color: var(--empty-cell-bg, #fafbfc);
+}
+
+/* Weekend columns get a subtle blue tint */
+.annual-calendar__cell--weekend:not(.annual-calendar__cell--empty) {
+  background-color: var(--weekend-bg, #f0f4ff);
+}
+
+/* ─── Today highlight ────────────────────────────────────────────────────────
+   The cell itself stays neutral; the inner <span> carries the orange circle.
+   Using an inner span + border-radius: 50% with min(100%, 28px) ensures the
+   circle is always circular regardless of the cell's aspect ratio. */
+.annual-calendar__cell--today {
+  background-color: #ffffff;
+}
+
+.annual-calendar__today-dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 26px);
+  height: min(100%, 26px);
+  background-color: var(--today-bg, #e8450a);
+  color: var(--today-color, #ffffff);
+  font-weight: 800;
+  border-radius: 50%;
+  line-height: 1;
+}
