@@ -2,9 +2,16 @@ import { useState, useEffect } from 'react'
 import YearPicker from './components/YearPicker.jsx'
 import AnnualCalendar from './components/AnnualCalendar.jsx'
 
+/** Read ?year=YYYY from the current URL. Returns the integer or null. */
+function getYearFromUrl() {
+  const y = parseInt(new URLSearchParams(window.location.search).get('year'), 10)
+  return y >= 1 && y <= 9999 ? y : null
+}
+
 export default function App() {
   const currentYear = new Date().getFullYear()
-  const [selectedYear, setSelectedYear] = useState(null)
+  // Initialise from URL so a bookmarked ?year=YYYY loads directly
+  const [selectedYear, setSelectedYear] = useState(getYearFromUrl)
   const [theme, setTheme] = useState(
     () => localStorage.getItem('theme') || 'light'
   )
@@ -22,6 +29,21 @@ export default function App() {
       : 'Annual Calendar'
   }, [selectedYear])
 
+  // Keep URL in sync with year state and handle browser back/forward
+  function selectYear(year) {
+    const url = year == null
+      ? window.location.pathname
+      : `${window.location.pathname}?year=${year}`
+    window.history.pushState({ year }, '', url)
+    setSelectedYear(year)
+  }
+
+  useEffect(() => {
+    function onPop() { setSelectedYear(getYearFromUrl()) }
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
+
   function toggleTheme() {
     setTheme(t => (t === 'light' ? 'dark' : 'light'))
   }
@@ -30,7 +52,7 @@ export default function App() {
     return (
       <YearPicker
         defaultYear={currentYear}
-        onYearSelect={setSelectedYear}
+        onYearSelect={selectYear}
         theme={theme}
         onToggleTheme={toggleTheme}
       />
@@ -40,7 +62,7 @@ export default function App() {
   return (
     <AnnualCalendar
       year={selectedYear}
-      onChangeYear={() => setSelectedYear(null)}
+      onChangeYear={() => selectYear(null)}
       theme={theme}
       onToggleTheme={toggleTheme}
     />
