@@ -174,7 +174,7 @@
   color: var(--cell-color, #111827);
   font-weight: 500;
   position: relative; /* for entry dot absolute positioning */
-  min-height: 34px;
+  min-height: 24px;
 }
 
 /* Clickable cells (non-empty) show pointer cursor */
