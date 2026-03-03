@@ -182,6 +182,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
                         className="annual-calendar__event-bar"
                         style={{
                           gridColumn: `${ev.startCol + 1} / ${ev.endCol + 2}`,
+                          gridRow: ev.row,
                           backgroundColor: ev.color,
                         }}
                         onClick={(e) => {

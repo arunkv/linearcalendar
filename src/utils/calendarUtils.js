@@ -203,7 +203,7 @@ export function getEventsForMonth(events, year, monthIndex) {
   const monthEnd = new Date(year, monthIndex + 1, 0)
   const startCol = getMonthStartDay(year, monthIndex)
 
-  return events
+  const positioned = events
     .filter(ev => {
       const s = new Date(ev.startDate)
       const e = new Date(ev.endDate)
@@ -218,6 +218,26 @@ export function getEventsForMonth(events, year, monthIndex) {
         ...ev,
         startCol: startCol + clampedStart.getDate() - 1,
         endCol:   startCol + clampedEnd.getDate() - 1,
+      }
+    })
+
+  // Greedy row packing: assign each event the lowest row with no column overlap.
+  // rowSlots[r] = array of [startCol, endCol] ranges already placed in row r.
+  const rowSlots = []
+  return positioned
+    .sort((a, b) => a.startCol - b.startCol)
+    .map(ev => {
+      let row = 0
+      while (true) {
+        if (!rowSlots[row]) rowSlots[row] = []
+        const overlaps = rowSlots[row].some(
+          ([s, e]) => ev.startCol <= e && ev.endCol >= s
+        )
+        if (!overlaps) {
+          rowSlots[row].push([ev.startCol, ev.endCol])
+          return { ...ev, row: row + 1 } // 1-based for CSS grid-row
+        }
+        row++
       }
     })
 }
