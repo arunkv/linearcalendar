@@ -1,0 +1,190 @@
+/* ─── Overlay ───────────────────────────────────────────────────────────────── */
+.event-modal__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+/* ─── Dialog box ─────────────────────────────────────────────────────────────── */
+.event-modal {
+  background: var(--cell-bg, #ffffff);
+  color: var(--cell-color, #111827);
+  border-radius: 10px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────────── */
+.event-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.event-modal__title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.event-modal__close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--month-label-color, #6b7280);
+  font-size: 1rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: background 0.12s;
+}
+
+.event-modal__close-btn:hover {
+  background: var(--border-color, #e5e7eb);
+}
+
+/* ─── Body ───────────────────────────────────────────────────────────────────── */
+.event-modal__body {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.event-modal__label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--month-label-color, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.event-modal__input {
+  font-size: 0.9rem;
+  font-family: inherit;
+  padding: 7px 10px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 6px;
+  background: var(--cell-bg, #ffffff);
+  color: var(--cell-color, #111827);
+  outline: none;
+  transition: border-color 0.12s;
+  width: 100%;
+}
+
+.event-modal__input:focus {
+  border-color: #3b82f6;
+}
+
+.event-modal__dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* ─── Color swatches ─────────────────────────────────────────────────────────── */
+.event-modal__swatches {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.event-modal__swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.1s, border-color 0.1s;
+  outline: none;
+}
+
+.event-modal__swatch:hover {
+  transform: scale(1.15);
+}
+
+.event-modal__swatch--selected {
+  border-color: var(--cell-color, #111827);
+  transform: scale(1.15);
+}
+
+/* ─── Footer ─────────────────────────────────────────────────────────────────── */
+.event-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--border-color, #e5e7eb);
+  gap: 8px;
+}
+
+.event-modal__footer-right {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.event-modal__btn {
+  padding: 7px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.12s, filter 0.12s;
+  font-family: inherit;
+}
+
+.event-modal__btn--cancel {
+  background: none;
+  border-color: var(--border-color, #e5e7eb);
+  color: var(--cell-color, #111827);
+}
+
+.event-modal__btn--cancel:hover {
+  background: var(--empty-cell-bg, #f9fafb);
+}
+
+.event-modal__btn--save {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+.event-modal__btn--save:hover {
+  filter: brightness(0.92);
+}
+
+.event-modal__btn--save:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.event-modal__btn--delete {
+  background: none;
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.event-modal__btn--delete:hover {
+  background: #fef2f2;
+}
+
+[data-theme="dark"] .event-modal__btn--delete:hover {
+  background: rgba(239, 68, 68, 0.1);
+}

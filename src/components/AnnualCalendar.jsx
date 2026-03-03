@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef } from 'react'
+import { Fragment, useMemo, useState, useRef } from 'react'
 import {
   buildMonthRow,
   getMonthName,
@@ -7,9 +7,10 @@ import {
   isToday,
   isWeekendColumn,
   toDateKey,
+  getEventsForMonth,
 } from '../utils/calendarUtils.js'
-import { useEntries } from '../hooks/useEntries.js'
-import EntryModal from './EntryModal.jsx'
+import { useEvents } from '../hooks/useEvents.js'
+import EventModal from './EventModal.jsx'
 import './AnnualCalendar.css'
 
 // Stable module-level arrays — built once, not on every render
@@ -17,8 +18,12 @@ const MONTH_INDICES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 const COL_INDICES = Array.from({ length: GRID_COLS }, (_, i) => i)
 
 export default function AnnualCalendar({ year, onChangeYear, theme, onToggleTheme }) {
-  const { entries, setEntry, replaceAll } = useEntries()
-  const [modalDateKey, setModalDateKey] = useState(null)
+  const { events, addEvent, updateEvent, deleteEvent, replaceAll } = useEvents()
+  const [modalState, setModalState] = useState(null)
+  // null = closed
+  // { mode: 'create', initialDate: 'YYYY-MM-DD' }
+  // { mode: 'edit', event: {...} }
+
   const importInputRef = useRef(null)
 
   // Pre-compute all 12 month rows; recomputes only when `year` changes
@@ -26,24 +31,24 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
     () =>
       MONTH_INDICES.map((monthIndex) => ({
         monthIndex,
-        name: getMonthName(monthIndex),
+        name: getMonthName(monthIndex).slice(0, 3),
         cells: buildMonthRow(year, monthIndex),
       })),
     [year]
   )
 
-  // ── Export entries as JSON file download ──────────────────────────────────
+  // ── Export events as JSON file download ───────────────────────────────────
   function handleExport() {
-    const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' })
+    const blob = new Blob([JSON.stringify(events, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = 'annual-calendar-entries.json'
+    a.download = 'annual-calendar-events.json'
     a.click()
     URL.revokeObjectURL(url)
   }
 
-  // ── Import entries from a JSON file ──────────────────────────────────────
+  // ── Import events from a JSON file ────────────────────────────────────────
   function handleImportChange(e) {
     const file = e.target.files[0]
     if (!file) return
@@ -51,7 +56,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
     reader.onload = (ev) => {
       try {
         const parsed = JSON.parse(ev.target.result)
-        if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+        if (Array.isArray(parsed)) {
           replaceAll(parsed)
         }
       } catch {
@@ -89,7 +94,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
           <button
             className="annual-calendar__action-btn"
             onClick={handleExport}
-            title="Export entries as JSON"
+            title="Export events as JSON"
           >
             ↓ Export
           </button>
@@ -97,7 +102,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
           <button
             className="annual-calendar__action-btn"
             onClick={() => importInputRef.current?.click()}
-            title="Import entries from JSON"
+            title="Import events from JSON"
           >
             ↑ Import
           </button>
@@ -137,54 +142,88 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
             ))}
           </div>
 
-          {/* ── One row per month ────────────────────────────────────────────── */}
-          {monthRows.map(({ monthIndex, name, cells }) => (
-            <div key={monthIndex} className="annual-calendar__row">
-              {/* Month name label */}
-              <div className="annual-calendar__month-label">{name}</div>
+          {/* ── One pair of rows per month ────────────────────────────────── */}
+          {monthRows.map(({ monthIndex, name, cells }) => {
+            const monthEvents = getEventsForMonth(events, year, monthIndex)
 
-              {/* 37 date cells */}
-              {cells.map((day, colIndex) => {
-                const empty = day === null
-                const weekend = isWeekendColumn(colIndex)
-                const today = !empty && isToday(year, monthIndex, day)
-                const dateKey = !empty ? toDateKey(year, monthIndex, day) : null
-                const hasEntry = dateKey ? Boolean(entries[dateKey]) : false
+            return (
+              <Fragment key={monthIndex}>
+                {/* Date row */}
+                <div className="annual-calendar__row">
+                  <div className="annual-calendar__month-label">{name}</div>
 
-                const cellClass = [
-                  'annual-calendar__cell',
-                  empty       ? 'annual-calendar__cell--empty'     : 'annual-calendar__cell--clickable',
-                  weekend     ? 'annual-calendar__cell--weekend'    : '',
-                  today       ? 'annual-calendar__cell--today'      : '',
-                ].filter(Boolean).join(' ')
+                  {cells.map((day, colIndex) => {
+                    const empty = day === null
+                    const weekend = isWeekendColumn(colIndex)
+                    const today = !empty && isToday(year, monthIndex, day)
+                    const dateKey = !empty ? toDateKey(year, monthIndex, day) : null
 
-                return (
-                  <div
-                    key={colIndex}
-                    className={cellClass}
-                    onClick={empty ? undefined : () => setModalDateKey(dateKey)}
-                  >
-                    {today
-                      ? <span className="annual-calendar__today-dot">{day}</span>
-                      : (!empty ? day : null)
-                    }
-                    {hasEntry && <span className="annual-calendar__entry-dot" aria-hidden="true" />}
+                    const cellClass = [
+                      'annual-calendar__cell',
+                      empty   ? 'annual-calendar__cell--empty'     : 'annual-calendar__cell--clickable',
+                      weekend ? 'annual-calendar__cell--weekend'    : '',
+                      today   ? 'annual-calendar__cell--today'      : '',
+                    ].filter(Boolean).join(' ')
+
+                    return (
+                      <div
+                        key={colIndex}
+                        className={cellClass}
+                        onClick={empty ? undefined : () => setModalState({ mode: 'create', initialDate: dateKey })}
+                      >
+                        {today
+                          ? <span className="annual-calendar__today-dot">{day}</span>
+                          : (!empty ? day : null)
+                        }
+                      </div>
+                    )
+                  })}
+                </div>
+
+                {/* Events row */}
+                <div className="annual-calendar__row">
+                  <div className="annual-calendar__events-spacer" />
+                  <div className="annual-calendar__events-container">
+                    {monthEvents.map(ev => (
+                      <div
+                        key={ev.id}
+                        className="annual-calendar__event-bar"
+                        style={{
+                          gridColumn: `${ev.startCol + 1} / ${ev.endCol + 2}`,
+                          backgroundColor: ev.color,
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setModalState({ mode: 'edit', event: ev })
+                        }}
+                      >
+                        {ev.title}
+                      </div>
+                    ))}
                   </div>
-                )
-              })}
-            </div>
-          ))}
+                </div>
+              </Fragment>
+            )
+          })}
 
         </div>
       </div>
 
-      {/* ── Entry modal ─────────────────────────────────────────────────────── */}
-      {modalDateKey && (
-        <EntryModal
-          dateKey={modalDateKey}
-          initialText={entries[modalDateKey] || ''}
-          onSave={(text) => setEntry(modalDateKey, text)}
-          onClose={() => setModalDateKey(null)}
+      {/* ── Event modal ─────────────────────────────────────────────────────── */}
+      {modalState && (
+        <EventModal
+          event={modalState.mode === 'edit' ? modalState.event : null}
+          initialDate={modalState.mode === 'create' ? modalState.initialDate : null}
+          onSave={(data) => {
+            if (modalState.mode === 'edit') updateEvent(modalState.event.id, data)
+            else addEvent(data)
+            setModalState(null)
+          }}
+          onDelete={modalState.mode === 'edit'
+            ? () => { deleteEvent(modalState.event.id); setModalState(null) }
+            : undefined
+          }
+          onClose={() => setModalState(null)}
         />
       )}
     </div>

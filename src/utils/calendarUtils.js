@@ -102,3 +102,34 @@ export function buildMonthRow(year, monthIndex) {
   }
   return cells
 }
+
+/**
+ * Returns events that overlap with the given month, with column indices
+ * clamped to the month's date range.
+ * @param {Array} events - array of { id, title, startDate, endDate, color }
+ * @param {number} year
+ * @param {number} monthIndex - 0 = January … 11 = December
+ */
+export function getEventsForMonth(events, year, monthIndex) {
+  const monthStart = new Date(year, monthIndex, 1)
+  const monthEnd = new Date(year, monthIndex + 1, 0)
+  const startCol = getMonthStartDay(year, monthIndex)
+
+  return events
+    .filter(ev => {
+      const s = new Date(ev.startDate)
+      const e = new Date(ev.endDate)
+      return s <= monthEnd && e >= monthStart
+    })
+    .map(ev => {
+      const s = new Date(ev.startDate)
+      const e = new Date(ev.endDate)
+      const clampedStart = s < monthStart ? monthStart : s
+      const clampedEnd   = e > monthEnd   ? monthEnd   : e
+      return {
+        ...ev,
+        startCol: startCol + clampedStart.getDate() - 1,
+        endCol:   startCol + clampedEnd.getDate() - 1,
+      }
+    })
+}
