@@ -228,7 +228,7 @@
   padding: 2px 0;
   background-color: var(--cell-bg, #ffffff);
   border-bottom: 1px solid var(--border-color, #e5e7eb);
-  min-height: 24px;
+  min-height: 42px;
 }
 
 /* ─── Event bars ─────────────────────────────────────────────────────────────*/
@@ -347,7 +347,7 @@
   /* ── Compact event rows ── */
   .annual-calendar__events-container {
     grid-auto-rows: 13px;
-    min-height: 15px;
+    min-height: 32px;
   }
 
   .annual-calendar__event-bar {
