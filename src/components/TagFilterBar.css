@@ -1,0 +1,91 @@
+/* ─── Tag filter bar ──────────────────────────────────────────────────────── */
+.tag-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--header-border, #e5e7eb);
+  background-color: var(--header-bg, #ffffff);
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.tag-filter-bar__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--month-label-color, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.tag-filter-bar__chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* ─── Individual chip ─────────────────────────────────────────────────────── */
+.tag-filter-bar__chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px 3px 6px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  background: var(--cell-bg, #ffffff);
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.8rem;
+  color: var(--cell-color, #111827);
+  transition: opacity 0.15s, background 0.12s;
+}
+
+.tag-filter-bar__chip:hover {
+  background: var(--empty-cell-bg, #f9fafb);
+}
+
+/* Hidden = toggled off */
+.tag-filter-bar__chip--hidden {
+  opacity: 0.42;
+}
+
+.tag-filter-bar__chip--hidden .tag-filter-bar__chip-label {
+  text-decoration: line-through;
+}
+
+/* ─── Color dot ───────────────────────────────────────────────────────────── */
+.tag-filter-bar__chip-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─── Label ───────────────────────────────────────────────────────────────── */
+.tag-filter-bar__chip-label {
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* ─── Delete button (×) ───────────────────────────────────────────────────── */
+.tag-filter-bar__chip-delete {
+  font-size: 0.95rem;
+  line-height: 1;
+  color: var(--month-label-color, #6b7280);
+  padding: 0 1px;
+  border-radius: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.1s;
+}
+
+.tag-filter-bar__chip-delete:hover {
+  color: #ef4444;
+}
+
+@media print {
+  .tag-filter-bar {
+    display: none;
+  }
+}

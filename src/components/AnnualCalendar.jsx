@@ -12,20 +12,37 @@ import {
   icsToEvents,
 } from '../utils/calendarUtils.js'
 import { useEvents } from '../hooks/useEvents.js'
+import { useTags } from '../hooks/useTags.js'
 import EventModal from './EventModal.jsx'
 import YearSwitcher from './YearSwitcher.jsx'
+import TagFilterBar from './TagFilterBar.jsx'
 import './AnnualCalendar.css'
 
 // Stable module-level arrays — built once, not on every render
 const MONTH_INDICES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-const COL_INDICES = Array.from({ length: GRID_COLS }, (_, i) => i)
+const COL_INDICES = Array.from({ length: GRID_COLS }, (_, i) => i) // eslint-disable-line no-unused-vars
+
+// ── Color resolution ──────────────────────────────────────────────────────────
+// 1. Tagged event  → use tag's current color
+// 2. Legacy event  → use ev.color (raw swatch pick)
+// 3. Fallback      → neutral gray
+function resolveEventColor(ev, tagsById) {
+  if (ev.tagId && tagsById[ev.tagId]) return tagsById[ev.tagId].color
+  if (ev.color) return ev.color
+  return '#6b7280'
+}
 
 export default function AnnualCalendar({ year, onChangeYear, theme, onToggleTheme }) {
   const { events, addEvent, updateEvent, deleteEvent, replaceAll } = useEvents()
+  const { tags, addTag, deleteTag } = useTags()
+
   const [modalState, setModalState] = useState(null)
   // null = closed
   // { mode: 'create', initialDate: 'YYYY-MM-DD' }
   // { mode: 'edit', event: {...} }
+
+  // ephemeral — not persisted; Set of tag IDs whose events are hidden
+  const [hiddenTagIds, setHiddenTagIds] = useState(() => new Set())
 
   const importInputRef = useRef(null)
 
@@ -39,6 +56,52 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
       })),
     [year]
   )
+
+  // Fast lookup: { [tagId]: tag }
+  const tagsById = useMemo(
+    () => Object.fromEntries(tags.map(t => [t.id, t])),
+    [tags]
+  )
+
+  // Filter before passing to getEventsForMonth so row-packing sees only visible
+  // events (no ghost rows from hidden-tag events).
+  const visibleEvents = useMemo(() => {
+    if (hiddenTagIds.size === 0) return events
+    return events.filter(ev => !ev.tagId || !hiddenTagIds.has(ev.tagId))
+  }, [events, hiddenTagIds])
+
+  // ── Tag visibility toggle ─────────────────────────────────────────────────
+  function toggleTagVisibility(tagId) {
+    setHiddenTagIds(prev => {
+      const next = new Set(prev)
+      if (next.has(tagId)) next.delete(tagId)
+      else next.add(tagId)
+      return next
+    })
+  }
+
+  // ── Tag deletion (with guard if events use the tag) ───────────────────────
+  function handleDeleteTag(tagId) {
+    const affected = events.filter(ev => ev.tagId === tagId)
+    if (
+      affected.length > 0 &&
+      !window.confirm(
+        `${affected.length} event${affected.length === 1 ? '' : 's'} use this tag. ` +
+        `Remove the tag from those events and delete it?`
+      )
+    ) {
+      return
+    }
+    // Batch-clear tagId from every affected event
+    affected.forEach(ev => updateEvent(ev.id, { tagId: null }))
+    // Remove from hidden set if present
+    setHiddenTagIds(prev => {
+      const next = new Set(prev)
+      next.delete(tagId)
+      return next
+    })
+    deleteTag(tagId)
+  }
 
   // ── Export events as .ics file download ───────────────────────────────────
   function handleExport() {
@@ -98,7 +161,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
           <button
             className="annual-calendar__action-btn"
             onClick={handleExport}
-            title="Export events as JSON"
+            title="Export events as .ics"
           >
             ↓ Export
           </button>
@@ -106,7 +169,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
           <button
             className="annual-calendar__action-btn"
             onClick={() => importInputRef.current?.click()}
-            title="Import events from JSON"
+            title="Import events from .ics"
           >
             ↑ Import
           </button>
@@ -130,13 +193,21 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
         </div>
       </div>
 
+      {/* ── Tag filter bar (hidden when no tags exist) ──────────────────────── */}
+      <TagFilterBar
+        tags={tags}
+        hiddenTagIds={hiddenTagIds}
+        onToggle={toggleTagVisibility}
+        onDelete={handleDeleteTag}
+      />
+
       {/* ── Grid wrapper (handles fallback scroll on narrow viewports) ──────── */}
       <div className="annual-calendar__grid-wrapper">
         <div className="annual-calendar__grid">
 
           {/* ── One pair of rows per month ────────────────────────────────── */}
           {monthRows.map(({ monthIndex, name, cells }) => {
-            const monthEvents = getEventsForMonth(events, year, monthIndex)
+            const monthEvents = getEventsForMonth(visibleEvents, year, monthIndex)
 
             return (
               <Fragment key={monthIndex}>
@@ -189,7 +260,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
                         style={{
                           gridColumn: `${ev.startCol + 1} / ${ev.endCol + 2}`,
                           gridRow: ev.row,
-                          backgroundColor: ev.color,
+                          backgroundColor: resolveEventColor(ev, tagsById),
                         }}
                         onClick={(e) => {
                           e.stopPropagation()
@@ -220,6 +291,8 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
         <EventModal
           event={modalState.mode === 'edit' ? modalState.event : null}
           initialDate={modalState.mode === 'create' ? modalState.initialDate : null}
+          tags={tags}
+          onAddTag={addTag}
           onSave={(data) => {
             if (modalState.mode === 'edit') updateEvent(modalState.event.id, data)
             else addEvent(data)

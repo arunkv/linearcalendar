@@ -20,8 +20,8 @@ export function useEvents() {
     return updated
   }
 
-  function addEvent({ title, startDate, endDate, color }) {
-    const ev = { id: genId(), title, startDate, endDate, color }
+  function addEvent({ title, startDate, endDate, color, tagId }) {
+    const ev = { id: genId(), title, startDate, endDate, color, tagId }
     setEvents(prev => _persist([...prev, ev]))
   }
 
