@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const STORAGE_KEY = 'annualcalendar-events'
+const STORAGE_KEY = 'linearcalendar-events'
 
 function genId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2)

@@ -1,16 +1,16 @@
-# AGENTS.md — Annual Calendar
+# AGENTS.md — Linear Calendar
 
-This file contains context and guidelines for AI agents working on the Annual Calendar project.
+This file contains context and guidelines for AI agents working on the Linear Calendar project.
 
 ---
 
 ## Project Overview
 
-**Annual Calendar** is a React-based web application for displaying and managing year-specific calendar data. Unlike perpetual calendars, it focuses on a single calendar year with accurate day-of-week assignments for that specific year.
+**Linear Calendar** is a React-based web application for displaying and managing year-specific calendar data. Unlike perpetual calendars, it focuses on a single calendar year with accurate day-of-week assignments for that specific year.
 
-- **Repository**: `annualcalendar`
+- **Repository**: `linearcalendar`
 - **License**: Apache 2.0
-- **Base URL**: `/annualcalendar/` (configured in Vite)
+- **Base URL**: `/linearcalendar/` (configured in Vite)
 
 ---
 
@@ -31,15 +31,15 @@ This file contains context and guidelines for AI agents working on the Annual Ca
 ```
 /
 ├── index.html              # Entry HTML
-├── vite.config.js          # Vite configuration (base: '/annualcalendar/')
+├── vite.config.js          # Vite configuration (base: '/linearcalendar/')
 ├── package.json
 ├── src/
 │   ├── main.jsx            # React entry point
 │   ├── App.jsx             # Root component, manages year/theme state
 │   ├── index.css           # Global styles
 │   ├── components/         # React components
-│   │   ├── AnnualCalendar.jsx      # Main calendar grid
-│   │   ├── AnnualCalendar.css
+│   │   ├── LinearCalendar.jsx      # Main calendar grid
+│   │   ├── LinearCalendar.css
 │   │   ├── EventModal.jsx          # Create/edit event modal
 │   │   ├── EventModal.css
 │   │   ├── TagFilterBar.jsx        # Tag filtering UI
@@ -114,14 +114,14 @@ npm run preview
 ## Code Conventions
 
 ### File Naming
-- Components: PascalCase (e.g., `AnnualCalendar.jsx`)
+- Components: PascalCase (e.g., `LinearCalendar.jsx`)
 - Hooks: camelCase with `use` prefix (e.g., `useEvents.js`)
 - Utils: camelCase (e.g., `calendarUtils.js`)
-- Styles: Same name as component (e.g., `AnnualCalendar.css`)
+- Styles: Same name as component (e.g., `LinearCalendar.css`)
 
 ### CSS Classes
 - BEM-like naming: `component-name__element--modifier`
-- Example: `annual-calendar__cell--today`
+- Example: `linear-calendar__cell--today`
 
 ### Component Structure
 - Functional components with hooks

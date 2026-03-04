@@ -16,7 +16,7 @@ import { useTags } from '../hooks/useTags.js'
 import EventModal from './EventModal.jsx'
 import YearSwitcher from './YearSwitcher.jsx'
 import TagFilterBar from './TagFilterBar.jsx'
-import './AnnualCalendar.css'
+import './LinearCalendar.css'
 
 // Stable module-level arrays — built once, not on every render
 const MONTH_INDICES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
@@ -29,7 +29,7 @@ function resolveEventColor(ev, tagsById) {
   return '#6b7280'
 }
 
-export default function AnnualCalendar({ year, onChangeYear, theme, onToggleTheme }) {
+export default function LinearCalendar({ year, onChangeYear, theme, onToggleTheme }) {
   const { events, addEvent, updateEvent, deleteEvent, replaceAll } = useEvents()
   const { tags, addTag, updateTag, deleteTag } = useTags()
 
@@ -106,7 +106,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = 'annual-calendar-events.ics'
+    a.download = 'linear-calendar-events.ics'
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -129,25 +129,25 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
   }
 
   return (
-    <div className="annual-calendar">
+    <div className="linear-calendar">
       {/* ── Top header bar ─────────────────────────────────────────────────── */}
-      <div className="annual-calendar__header">
+      <div className="linear-calendar__header">
         {/* Brand: logo + app title */}
-        <div className="annual-calendar__brand">
+        <div className="linear-calendar__brand">
           <img
             src={`${import.meta.env.BASE_URL}favicon.svg`}
-            className="annual-calendar__brand-logo"
+            className="linear-calendar__brand-logo"
             alt=""
             aria-hidden="true"
           />
-          <span className="annual-calendar__brand-title">Annual Calendar</span>
+          <span className="linear-calendar__brand-title">Linear Calendar</span>
         </div>
 
         <YearSwitcher year={year} onYearChange={onChangeYear} />
 
-        <div className="annual-calendar__header-actions">
+        <div className="linear-calendar__header-actions">
           <button
-            className="annual-calendar__action-btn"
+            className="linear-calendar__action-btn"
             onClick={onToggleTheme}
             aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
@@ -156,7 +156,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
           </button>
 
           <button
-            className="annual-calendar__action-btn"
+            className="linear-calendar__action-btn"
             onClick={handleExport}
             title="Export events as .ics"
           >
@@ -164,7 +164,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
           </button>
 
           <button
-            className="annual-calendar__action-btn"
+            className="linear-calendar__action-btn"
             onClick={() => importInputRef.current?.click()}
             title="Import events from .ics"
           >
@@ -172,7 +172,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
           </button>
 
           <button
-            className="annual-calendar__action-btn"
+            className="linear-calendar__action-btn"
             onClick={() => window.print()}
             title="Print calendar"
           >
@@ -200,8 +200,8 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
       />
 
       {/* ── Grid wrapper (handles fallback scroll on narrow viewports) ──────── */}
-      <div className="annual-calendar__grid-wrapper">
-        <div className="annual-calendar__grid">
+      <div className="linear-calendar__grid-wrapper">
+        <div className="linear-calendar__grid">
 
           {/* ── One pair of rows per month ────────────────────────────────── */}
           {monthRows.map(({ monthIndex, name, cells }) => {
@@ -210,8 +210,8 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
             return (
               <Fragment key={monthIndex}>
                 {/* Date row */}
-                <div className="annual-calendar__row">
-                  <div className="annual-calendar__month-label">{name}</div>
+                <div className="linear-calendar__row">
+                  <div className="linear-calendar__month-label">{name}</div>
 
                   {cells.map((day, colIndex) => {
                     const empty = day === null
@@ -220,10 +220,10 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
                     const dateKey = !empty ? toDateKey(year, monthIndex, day) : null
 
                     const cellClass = [
-                      'annual-calendar__cell',
-                      empty   ? 'annual-calendar__cell--empty'     : 'annual-calendar__cell--clickable',
-                      weekend ? 'annual-calendar__cell--weekend'    : '',
-                      today   ? 'annual-calendar__cell--today'      : '',
+                      'linear-calendar__cell',
+                      empty   ? 'linear-calendar__cell--empty'     : 'linear-calendar__cell--clickable',
+                      weekend ? 'linear-calendar__cell--weekend'    : '',
+                      today   ? 'linear-calendar__cell--today'      : '',
                     ].filter(Boolean).join(' ')
 
                     return (
@@ -235,10 +235,10 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
                         {!empty && (
                           <>
                             {today
-                              ? <span className="annual-calendar__today-dot">{day}</span>
-                              : <span className="annual-calendar__cell-day">{day}</span>
+                              ? <span className="linear-calendar__today-dot">{day}</span>
+                              : <span className="linear-calendar__cell-day">{day}</span>
                             }
-                            <span className="annual-calendar__cell-dow">
+                            <span className="linear-calendar__cell-dow">
                               {DAY_ABBRS[colIndex % 7]}
                             </span>
                           </>
@@ -249,12 +249,12 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
                 </div>
 
                 {/* Events row */}
-                <div className="annual-calendar__row">
-                  <div className="annual-calendar__events-container">
+                <div className="linear-calendar__row">
+                  <div className="linear-calendar__events-container">
                     {monthEvents.map(ev => (
                       <div
                         key={ev.id}
-                        className="annual-calendar__event-bar"
+                        className="linear-calendar__event-bar"
                         style={{
                           gridColumn: `${ev.startCol + 1} / ${ev.endCol + 2}`,
                           gridRow: ev.row,
@@ -278,9 +278,9 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
       </div>
 
       {/* ── Footer ──────────────────────────────────────────────────────────── */}
-      <footer className="annual-calendar__footer">
+      <footer className="linear-calendar__footer">
         <span>© {year} Arun K Viswanathan</span>
-        <span className="annual-calendar__footer-sep">·</span>
+        <span className="linear-calendar__footer-sep">·</span>
         <span>Built with <a href="https://claude.ai" target="_blank" rel="noreferrer">Claude</a></span>
       </footer>
 

@@ -142,7 +142,7 @@ export function eventsToIcs(events) {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Annual Calendar//EN',
+    'PRODID:-//Linear Calendar//EN',
     'CALSCALE:GREGORIAN',
   ]
   for (const ev of events) {
@@ -152,7 +152,7 @@ export function eventsToIcs(events) {
     dtEnd.setDate(dtEnd.getDate() + 1)
     lines.push(
       'BEGIN:VEVENT',
-      `UID:${ev.id}@annualcalendar`,
+      `UID:${ev.id}@linearcalendar`,
       `SUMMARY:${ev.title}`,
       `DTSTART;VALUE=DATE:${dtStartStr}`,
       `DTEND;VALUE=DATE:${fmtIcsDate(dtEnd)}`,
@@ -194,7 +194,7 @@ export function icsToEvents(text) {
     const endDate = fmtIsoDate(endRaw)
 
     const color = get('X-APPLE-CALENDAR-COLOR') || '#3b82f6'
-    const uid = get('UID').replace('@annualcalendar', '')
+    const uid = get('UID').replace('@linearcalendar', '')
     const id = uid || (Date.now().toString(36) + Math.random().toString(36).slice(2))
     events.push({ id, title, startDate, endDate, color })
   }

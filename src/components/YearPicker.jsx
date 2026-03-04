@@ -39,7 +39,7 @@ export default function YearPicker({ defaultYear, onYearSelect, theme, onToggleT
 
       <div className="year-picker__card">
         <div className="year-picker__icon" aria-hidden="true">📅</div>
-        <h1 className="year-picker__title">Annual Calendar</h1>
+        <h1 className="year-picker__title">Linear Calendar</h1>
         <p className="year-picker__subtitle">Choose a year to get started</p>
 
         <form className="year-picker__form" onSubmit={handleSubmit}>

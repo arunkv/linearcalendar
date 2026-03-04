@@ -1,12 +1,12 @@
 /* ─── Outer shell ──────────────────────────────────────────────────────────── */
-.annual-calendar {
+.linear-calendar {
   display: flex;
   flex-direction: column;
 }
 
 /* ─── Top header bar ─────────────────────────────────────────────────────────
    Light palette: white background, dark text, bottom border. */
-.annual-calendar__header {
+.linear-calendar__header {
   display: flex;
   align-items: center;
   padding: 10px 16px;
@@ -18,20 +18,20 @@
 }
 
 /* ─── Brand (logo + title) ───────────────────────────────────────────────── */
-.annual-calendar__brand {
+.linear-calendar__brand {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
 }
 
-.annual-calendar__brand-logo {
+.linear-calendar__brand-logo {
   width: 28px;
   height: 28px;
   border-radius: 6px;
 }
 
-.annual-calendar__brand-title {
+.linear-calendar__brand-title {
   font-size: 0.9375rem;
   font-weight: 700;
   color: var(--header-color, #111827);
@@ -39,7 +39,7 @@
 }
 
 /* ─── Header action buttons (theme toggle, export, import) ───────────────── */
-.annual-calendar__header-actions {
+.linear-calendar__header-actions {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -47,7 +47,7 @@
   margin-left: auto; /* push action buttons to the right */
 }
 
-.annual-calendar__action-btn {
+.linear-calendar__action-btn {
   background: transparent;
   border: 1px solid var(--border-color, #e5e7eb);
   color: var(--header-color, #111827);
@@ -60,13 +60,13 @@
   transition: background 0.15s;
 }
 
-.annual-calendar__action-btn:hover {
+.linear-calendar__action-btn:hover {
   background: var(--empty-cell-bg, #f9fafb);
 }
 
 /* ─── Grid wrapper ───────────────────────────────────────────────────────────
    overflow-x: auto → horizontal scroll on very narrow viewports. */
-.annual-calendar__grid-wrapper {
+.linear-calendar__grid-wrapper {
   overflow-x: auto;
   padding: 8px 12px 12px;
 }
@@ -78,7 +78,7 @@
 
    grid-auto-rows: auto → rows size to their content (date cells have min-height
    set below; events rows expand to fit bars). */
-.annual-calendar__grid {
+.linear-calendar__grid {
   display: grid;
   grid-template-columns: auto repeat(37, 1fr);
   grid-auto-rows: auto;
@@ -90,14 +90,14 @@
 /* ─── Row wrapper ────────────────────────────────────────────────────────────
    display: contents makes the row <div> invisible to the CSS Grid layout —
    its children (the cells) participate directly in the parent grid. */
-.annual-calendar__row {
+.linear-calendar__row {
   display: contents;
 }
 
 /* ─── Shared cell base ───────────────────────────────────────────────────────
    All cells share the same border, font, and alignment base. */
-.annual-calendar__month-label,
-.annual-calendar__cell {
+.linear-calendar__month-label,
+.linear-calendar__cell {
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -114,7 +114,7 @@
    pinned to the top of the spanned area.
    position: sticky; left: 0 keeps month names pinned when the grid scrolls
    horizontally on narrow viewports. */
-.annual-calendar__month-label {
+.linear-calendar__month-label {
   background-color: var(--month-label-bg, #f9fafb);
   font-weight: 700;
   font-size: clamp(0.6rem, 1.1vw, 0.875rem);
@@ -134,7 +134,7 @@
 }
 
 /* ─── Date cells ─────────────────────────────────────────────────────────────*/
-.annual-calendar__cell {
+.linear-calendar__cell {
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -149,7 +149,7 @@
 }
 
 /* ─── Day-of-month number ─────────────────────────────────────────────────── */
-.annual-calendar__cell-day {
+.linear-calendar__cell-day {
   font-size: clamp(0.6rem, 1.05vw, 0.875rem);
   font-weight: 700;
   color: var(--cell-color, #111827);
@@ -161,7 +161,7 @@
 
 /* ─── Two-letter day-of-week label ──────────────────────────────────────────
    Sits beside the date number; intentionally faded to keep the number dominant. */
-.annual-calendar__cell-dow {
+.linear-calendar__cell-dow {
   font-size: clamp(0.35rem, 0.55vw, 0.5rem);
   font-weight: 500;
   color: var(--month-label-color, #6b7280);
@@ -171,35 +171,35 @@
 }
 
 /* Clickable cells (non-empty) show pointer cursor */
-.annual-calendar__cell--clickable {
+.linear-calendar__cell--clickable {
   cursor: pointer;
 }
 
-.annual-calendar__cell--clickable:hover {
+.linear-calendar__cell--clickable:hover {
   filter: brightness(0.96);
 }
 
-[data-theme="dark"] .annual-calendar__cell--clickable:hover {
+[data-theme="dark"] .linear-calendar__cell--clickable:hover {
   filter: brightness(1.15);
 }
 
 /* Empty cells (before the 1st and after the last day of a month) */
-.annual-calendar__cell--empty {
+.linear-calendar__cell--empty {
   background-color: var(--empty-cell-bg, #f9fafb);
 }
 
 /* Weekend columns get a subtle tint */
-.annual-calendar__cell--weekend:not(.annual-calendar__cell--empty) {
+.linear-calendar__cell--weekend:not(.linear-calendar__cell--empty) {
   background-color: var(--weekend-bg, #f9fafb);
 }
 
 /* ─── Today highlight ────────────────────────────────────────────────────────
    The cell itself stays neutral; the inner <span> carries the orange circle. */
-.annual-calendar__cell--today {
+.linear-calendar__cell--today {
   background-color: var(--cell-bg, #ffffff);
 }
 
-.annual-calendar__today-dot {
+.linear-calendar__today-dot {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -219,7 +219,7 @@
 /* ─── Events container (spans all 37 date columns) ──────────────────────────
    CSS subgrid inherits the exact column widths from the parent grid, allowing
    event bars to be positioned with grid-column: startCol / endCol+1. */
-.annual-calendar__events-container {
+.linear-calendar__events-container {
   display: grid;
   grid-template-columns: subgrid;
   grid-column: 2 / 39;
@@ -232,7 +232,7 @@
 }
 
 /* ─── Event bars ─────────────────────────────────────────────────────────────*/
-.annual-calendar__event-bar {
+.linear-calendar__event-bar {
   border-radius: 3px;
   padding: 0 5px;
   font-size: clamp(0.48rem, 0.75vw, 0.68rem);
@@ -247,12 +247,12 @@
   transition: filter 0.1s;
 }
 
-.annual-calendar__event-bar:hover {
+.linear-calendar__event-bar:hover {
   filter: brightness(0.88);
 }
 
 /* ─── Footer ─────────────────────────────────────────────────────────────────*/
-.annual-calendar__footer {
+.linear-calendar__footer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -265,17 +265,17 @@
   flex-shrink: 0;
 }
 
-.annual-calendar__footer a {
+.linear-calendar__footer a {
   color: var(--month-label-color, #6b7280);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.annual-calendar__footer a:hover {
+.linear-calendar__footer a:hover {
   color: var(--header-color, #111827);
 }
 
-.annual-calendar__footer-sep {
+.linear-calendar__footer-sep {
   opacity: 0.4;
 }
 
@@ -322,17 +322,17 @@
   }
 
   /* ── Hide interactive header buttons (theme / export / import / print) ── */
-  .annual-calendar__header-actions {
+  .linear-calendar__header-actions {
     display: none;
   }
 
   /* ── Grid: fill the full printable width, no clipping ── */
-  .annual-calendar__grid-wrapper {
+  .linear-calendar__grid-wrapper {
     overflow: visible;
     padding: 4px 0 0;
   }
 
-  .annual-calendar__grid {
+  .linear-calendar__grid {
     width: 100%;
     /* Prevent the grid from being split across pages */
     page-break-inside: avoid;
@@ -340,12 +340,12 @@
   }
 
   /* ── Remove sticky positioning (irrelevant without scrolling) ── */
-  .annual-calendar__month-label {
+  .linear-calendar__month-label {
     position: static;
   }
 
   /* ── Tighter font sizes for print ── */
-  .annual-calendar__month-label,
+  .linear-calendar__month-label,
   .annual-calendar__cell {
     font-size: 7px;
     min-height: 20px;
@@ -358,48 +358,48 @@
     padding: 3px 6px 0;
   }
 
-  .annual-calendar__cell-day {
+  .linear-calendar__cell-day {
     font-size: 7px;
   }
 
-  .annual-calendar__cell-dow {
+  .linear-calendar__cell-dow {
     font-size: 4.5px;
   }
 
-  .annual-calendar__today-dot {
+  .linear-calendar__today-dot {
     width: 14px;
     height: 14px;
     font-size: 7px;
   }
 
   /* ── Compact event rows ── */
-  .annual-calendar__events-container {
+  .linear-calendar__events-container {
     grid-auto-rows: 13px;
     min-height: 32px;
   }
 
-  .annual-calendar__event-bar {
+  .linear-calendar__event-bar {
     font-size: 5.5px;
     cursor: default;
     transition: none;
   }
 
   /* ── Hide footer ── */
-  .annual-calendar__footer {
+  .linear-calendar__footer {
     display: none;
   }
 
   /* ── Strip hover effects ── */
-  .annual-calendar__cell--clickable {
+  .linear-calendar__cell--clickable {
     cursor: default;
   }
 
-  .annual-calendar__cell--clickable:hover,
-  [data-theme='dark'] .annual-calendar__cell--clickable:hover {
+  .linear-calendar__cell--clickable:hover,
+  [data-theme='dark'] .linear-calendar__cell--clickable:hover {
     filter: none;
   }
 
-  .annual-calendar__event-bar:hover {
+  .linear-calendar__event-bar:hover {
     filter: none;
   }
 }

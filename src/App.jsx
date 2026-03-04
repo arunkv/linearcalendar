@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import AnnualCalendar from './components/AnnualCalendar.jsx'
+import LinearCalendar from './components/LinearCalendar.jsx'
 
 /** Read ?year=YYYY from the current URL. Returns the integer or null. */
 function getYearFromUrl() {
@@ -25,7 +25,7 @@ export default function App() {
 
   // Keep the browser tab title in sync with the selected year
   useEffect(() => {
-    document.title = `${selectedYear} — Annual Calendar`
+    document.title = `${selectedYear} — Linear Calendar`
   }, [selectedYear])
 
   // Keep URL in sync with year state and handle browser back/forward
@@ -48,7 +48,7 @@ export default function App() {
   }
 
   return (
-    <AnnualCalendar
+    <LinearCalendar
       year={selectedYear}
       onChangeYear={selectYear}
       theme={theme}
