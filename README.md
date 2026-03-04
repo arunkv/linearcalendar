@@ -26,17 +26,49 @@ This project provides an open source implementation of an annual calendar. It ai
 
 ### Features
 
-- [ ] Generate a full annual calendar for any given year
-- [ ] Display month-by-month and year-at-a-glance views
-- [ ] Correct weekday-to-date mapping per year
-- [ ] Leap year support
-- [ ] Exportable output formats
+- [x] Generate a full annual calendar for any given year
+- [x] Display month-by-month and year-at-a-glance views
+- [x] Correct weekday-to-date mapping per year
+- [x] Leap year support
+- [x] Exportable output formats (.ics)
 
 ---
 
 ## Getting Started
 
-> Documentation and setup instructions coming soon.
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) ≥ 18
+
+### Install dependencies
+
+```sh
+npm install
+```
+
+### Run the dev server
+
+```sh
+npm run dev
+```
+
+Opens at http://localhost:5173 with hot module replacement.
+
+### Build for production
+
+```sh
+npm run build
+```
+
+Output is written to `dist/`.
+
+### Preview the production build
+
+```sh
+npm run preview
+```
+
+Serves the `dist/` folder at http://localhost:4173.
 
 ---
 
