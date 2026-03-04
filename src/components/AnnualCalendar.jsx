@@ -23,12 +23,9 @@ const MONTH_INDICES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 const COL_INDICES = Array.from({ length: GRID_COLS }, (_, i) => i) // eslint-disable-line no-unused-vars
 
 // ── Color resolution ──────────────────────────────────────────────────────────
-// 1. Tagged event  → use tag's current color
-// 2. Legacy event  → use ev.color (raw swatch pick)
-// 3. Fallback      → neutral gray
+// Tagged event → use tag's current color; otherwise neutral gray
 function resolveEventColor(ev, tagsById) {
   if (ev.tagId && tagsById[ev.tagId]) return tagsById[ev.tagId].color
-  if (ev.color) return ev.color
   return '#6b7280'
 }
 

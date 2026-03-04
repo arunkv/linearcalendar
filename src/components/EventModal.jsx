@@ -27,8 +27,6 @@ export default function EventModal({
   const [startDate, setStart]         = useState(event?.startDate ?? initialDate ?? '')
   const [endDate, setEnd]             = useState(event?.endDate   ?? initialDate ?? '')
   const [tagId, setTagId]             = useState(event?.tagId     ?? null)
-  // legacyColor: used by the "None" chip dot and by old events that have a raw color
-  const [legacyColor, setLegacyColor] = useState(event?.color     ?? PRESET_COLORS[0])
 
   // Inline new-tag form state
   const [showNewTagForm, setShowNewTagForm] = useState(false)
@@ -71,15 +69,8 @@ export default function EventModal({
   function handleSave() {
     if (!title.trim() || !startDate || !endDate) return
     const finalEnd = endDate < startDate ? startDate : endDate
-    // Pass both tagId and color (belt-and-suspenders: color used as fallback
-    // if this event is later viewed without its tag in the store).
-    onSave({ title: title.trim(), startDate, endDate: finalEnd, color: legacyColor, tagId })
+    onSave({ title: title.trim(), startDate, endDate: finalEnd, tagId })
   }
-
-  // Show legacy color swatches only when editing an old event that has a raw
-  // color but no tagId (so the user can still change the swatch color).
-  const showLegacyColors =
-    tagId === null && isEditing && Boolean(event?.color) && !event?.tagId
 
   return (
     <div className="event-modal__overlay" onClick={onClose}>
@@ -137,7 +128,7 @@ export default function EventModal({
           <div className="event-modal__label">
             Tag
             <div className="event-modal__tag-picker">
-              {/* "None" chip — keeps event using its legacyColor */}
+              {/* "None" chip — event renders as default gray */}
               <button
                 type="button"
                 className={[
@@ -148,7 +139,7 @@ export default function EventModal({
               >
                 <span
                   className="event-modal__tag-dot"
-                  style={{ backgroundColor: legacyColor }}
+                  style={{ backgroundColor: '#6b7280' }}
                 />
                 None
               </button>
@@ -237,28 +228,6 @@ export default function EventModal({
             )}
           </div>
 
-          {/* ── Legacy color swatches (editing old event with raw color) ── */}
-          {showLegacyColors && (
-            <div className="event-modal__label">
-              Color
-              <div className="event-modal__swatches">
-                {PRESET_COLORS.map(c => (
-                  <button
-                    key={c}
-                    type="button"
-                    className={[
-                      'event-modal__swatch',
-                      c === legacyColor ? 'event-modal__swatch--selected' : '',
-                    ].filter(Boolean).join(' ')}
-                    style={{ backgroundColor: c }}
-                    onClick={() => setLegacyColor(c)}
-                    aria-label={c}
-                    title={c}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
         <div className="event-modal__footer">
