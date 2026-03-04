@@ -208,6 +208,13 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
         </div>
       </div>
 
+      {/* ── Footer ──────────────────────────────────────────────────────────── */}
+      <footer className="annual-calendar__footer">
+        <span>© {year} Arun K Viswanathan</span>
+        <span className="annual-calendar__footer-sep">·</span>
+        <span>Built with <a href="https://claude.ai" target="_blank" rel="noreferrer">Claude</a></span>
+      </footer>
+
       {/* ── Event modal ─────────────────────────────────────────────────────── */}
       {modalState && (
         <EventModal

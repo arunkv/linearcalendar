@@ -251,6 +251,34 @@
   filter: brightness(0.88);
 }
 
+/* ─── Footer ─────────────────────────────────────────────────────────────────*/
+.annual-calendar__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 0.75rem;
+  color: var(--month-label-color, #6b7280);
+  background-color: var(--header-bg, #ffffff);
+  border-top: 1px solid var(--header-border, #e5e7eb);
+  flex-shrink: 0;
+}
+
+.annual-calendar__footer a {
+  color: var(--month-label-color, #6b7280);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.annual-calendar__footer a:hover {
+  color: var(--header-color, #111827);
+}
+
+.annual-calendar__footer-sep {
+  opacity: 0.4;
+}
+
 /* ─── Print styles ───────────────────────────────────────────────────────────
    • Landscape orientation, 1 cm margins
    • Light palette forced regardless of user's dark-mode preference
@@ -354,6 +382,11 @@
     font-size: 5.5px;
     cursor: default;
     transition: none;
+  }
+
+  /* ── Hide footer ── */
+  .annual-calendar__footer {
+    display: none;
   }
 
   /* ── Strip hover effects ── */
