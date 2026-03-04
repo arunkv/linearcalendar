@@ -31,7 +31,7 @@ function resolveEventColor(ev, tagsById) {
 
 export default function AnnualCalendar({ year, onChangeYear, theme, onToggleTheme }) {
   const { events, addEvent, updateEvent, deleteEvent, replaceAll } = useEvents()
-  const { tags, addTag, deleteTag } = useTags()
+  const { tags, addTag, updateTag, deleteTag } = useTags()
 
   const [modalState, setModalState] = useState(null)
   // null = closed
@@ -135,7 +135,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
         {/* Brand: logo + app title */}
         <div className="annual-calendar__brand">
           <img
-            src="/favicon.svg"
+            src={`${import.meta.env.BASE_URL}favicon.svg`}
             className="annual-calendar__brand-logo"
             alt=""
             aria-hidden="true"
@@ -195,6 +195,7 @@ export default function AnnualCalendar({ year, onChangeYear, theme, onToggleThem
         tags={tags}
         hiddenTagIds={hiddenTagIds}
         onToggle={toggleTagVisibility}
+        onEditTag={updateTag}
         onDelete={handleDeleteTag}
       />
 

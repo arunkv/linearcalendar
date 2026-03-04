@@ -1,14 +1,101 @@
+import { useState, useEffect, useRef } from 'react'
 import './TagFilterBar.css'
 
-export default function TagFilterBar({ tags, hiddenTagIds, onToggle, onDelete }) {
+const PRESET_COLORS = [
+  '#3b82f6', '#10b981', '#f97316', '#ef4444',
+  '#8b5cf6', '#06b6d4', '#f59e0b', '#6b7280',
+]
+
+export default function TagFilterBar({ tags, hiddenTagIds, onToggle, onEditTag, onDelete }) {
+  const [editingTagId, setEditingTagId] = useState(null)
+  const [editName,     setEditName]     = useState('')
+  const [editColor,    setEditColor]    = useState(PRESET_COLORS[0])
+  const editInputRef = useRef(null)
+
+  // Auto-focus edit input when form opens
+  useEffect(() => {
+    if (editingTagId) editInputRef.current?.focus()
+  }, [editingTagId])
+
   // Render nothing when there are no tags yet
   if (tags.length === 0) return null
+
+  function startEdit(tag, e) {
+    e.stopPropagation()
+    setEditingTagId(tag.id)
+    setEditName(tag.name)
+    setEditColor(tag.color)
+  }
+
+  function handleSaveEdit() {
+    if (!editName.trim()) return
+    onEditTag(editingTagId, { name: editName.trim(), color: editColor })
+    setEditingTagId(null)
+  }
+
+  function handleCancelEdit() {
+    setEditingTagId(null)
+  }
 
   return (
     <div className="tag-filter-bar">
       <span className="tag-filter-bar__label">Tags:</span>
       <div className="tag-filter-bar__chips">
         {tags.map(tag => {
+          // ── Inline edit form ───────────────────────────────────────────────
+          if (editingTagId === tag.id) {
+            return (
+              <div key={tag.id} className="tag-filter-bar__edit-form">
+                <input
+                  ref={editInputRef}
+                  className="tag-filter-bar__edit-input"
+                  type="text"
+                  value={editName}
+                  onChange={e => setEditName(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') handleSaveEdit()
+                    if (e.key === 'Escape') handleCancelEdit()
+                  }}
+                  placeholder="Tag name"
+                />
+                <div className="tag-filter-bar__edit-swatches">
+                  {PRESET_COLORS.map(c => (
+                    <button
+                      key={c}
+                      type="button"
+                      className={[
+                        'tag-filter-bar__edit-swatch',
+                        c === editColor ? 'tag-filter-bar__edit-swatch--selected' : '',
+                      ].filter(Boolean).join(' ')}
+                      style={{ backgroundColor: c }}
+                      onClick={() => setEditColor(c)}
+                      aria-label={c}
+                      title={c}
+                    />
+                  ))}
+                </div>
+                <div className="tag-filter-bar__edit-actions">
+                  <button
+                    type="button"
+                    className="tag-filter-bar__edit-btn tag-filter-bar__edit-btn--save"
+                    disabled={!editName.trim()}
+                    onClick={handleSaveEdit}
+                  >
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    className="tag-filter-bar__edit-btn tag-filter-bar__edit-btn--cancel"
+                    onClick={handleCancelEdit}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )
+          }
+
+          // ── Normal chip ────────────────────────────────────────────────────
           const isHidden = hiddenTagIds.has(tag.id)
           return (
             <div
@@ -28,7 +115,18 @@ export default function TagFilterBar({ tags, hiddenTagIds, onToggle, onDelete })
                 style={{ backgroundColor: tag.color }}
               />
               <span className="tag-filter-bar__chip-label">{tag.name}</span>
-              {/* Use span (not button) to avoid nested interactive element */}
+              {/* ✏ edit icon */}
+              <span
+                className="tag-filter-bar__chip-edit"
+                role="button"
+                tabIndex={0}
+                aria-label={`Edit tag ${tag.name}`}
+                onClick={e => startEdit(tag, e)}
+                onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && startEdit(tag, e)}
+              >
+                ✏
+              </span>
+              {/* × delete icon */}
               <span
                 className="tag-filter-bar__chip-delete"
                 role="button"

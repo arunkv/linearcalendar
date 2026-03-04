@@ -89,3 +89,76 @@
     display: none;
   }
 }
+
+/* ─── Edit icon on chip ────────────────────────────────────────────────────── */
+.tag-filter-bar__chip-edit {
+  font-size: 0.7rem;
+  line-height: 1;
+  color: var(--month-label-color, #6b7280);
+  padding: 0 1px;
+  border-radius: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.1s;
+}
+.tag-filter-bar__chip-edit:hover { color: var(--cell-color, #111827); }
+
+/* ─── Inline edit form ─────────────────────────────────────────────────────── */
+.tag-filter-bar__edit-form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 4px 8px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 8px;
+  background: var(--empty-cell-bg, #f9fafb);
+}
+.tag-filter-bar__edit-input {
+  font-size: 0.8rem;
+  font-family: inherit;
+  padding: 3px 7px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 5px;
+  background: var(--cell-bg, #ffffff);
+  color: var(--cell-color, #111827);
+  outline: none;
+  width: 120px;
+}
+.tag-filter-bar__edit-input:focus { border-color: #3b82f6; }
+.tag-filter-bar__edit-swatches { display: flex; gap: 4px; flex-shrink: 0; }
+.tag-filter-bar__edit-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  outline: none;
+  flex-shrink: 0;
+  transition: transform 0.1s, border-color 0.1s;
+}
+.tag-filter-bar__edit-swatch:hover { transform: scale(1.15); }
+.tag-filter-bar__edit-swatch--selected {
+  border-color: var(--cell-color, #111827);
+  transform: scale(1.15);
+}
+.tag-filter-bar__edit-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.tag-filter-bar__edit-btn {
+  padding: 3px 10px;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-family: inherit;
+  transition: background 0.12s, filter 0.12s;
+}
+.tag-filter-bar__edit-btn--save { background: #3b82f6; color: #ffffff; }
+.tag-filter-bar__edit-btn--save:hover { filter: brightness(0.92); }
+.tag-filter-bar__edit-btn--save:disabled { opacity: 0.4; cursor: not-allowed; filter: none; }
+.tag-filter-bar__edit-btn--cancel {
+  background: none;
+  border-color: var(--border-color, #e5e7eb);
+  color: var(--cell-color, #111827);
+}
+.tag-filter-bar__edit-btn--cancel:hover { background: var(--cell-bg, #ffffff); }
