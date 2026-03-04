@@ -89,6 +89,12 @@ npm run build
 
 # Preview production build (http://localhost:4173)
 npm run preview
+
+# Run tests
+npm test              # Watch mode
+npm run test:run      # Single run (CI)
+npm run test:coverage # With coverage report
+npm run test:ui       # With interactive UI
 ```
 
 ---
@@ -144,21 +150,68 @@ npm run preview
 
 ---
 
+## Testing
+
+The project uses **Vitest** for testing with **React Testing Library**.
+
+### Test File Structure
+```
+src/test/
+├── setup.js                    # Test setup and mocks
+├── calendarUtils.test.js       # Pure utility tests (47 tests)
+├── useEvents.test.js           # Event hook tests (12 tests)
+├── useTags.test.js             # Tag hook tests (11 tests)
+├── YearSwitcher.test.jsx       # Component tests (10 tests)
+├── TagFilterBar.test.jsx       # Component tests (13 tests)
+├── EventModal.test.jsx         # Component tests (16 tests)
+└── App.test.jsx                # Integration tests (10 tests)
+```
+
+### Running Tests
+```bash
+npm test              # Watch mode for development
+npm run test:run      # Single run for CI
+npm run test:coverage # Generate coverage report
+npm run test:ui       # Interactive UI mode
+```
+
+### Writing Tests
+- Use `describe` and `it` blocks from `vitest`
+- Use `render`, `screen`, `fireEvent` from `@testing-library/react`
+- Use `renderHook` and `act` for testing hooks
+- Mock `localStorage` automatically via `setup.js`
+
+### Common Test Patterns
+```javascript
+// Component test
+import { render, screen, fireEvent } from '@testing-library/react'
+render(<Component {...props} />)
+fireEvent.click(screen.getByText('Button'))
+
+// Hook test  
+import { renderHook, act } from '@testing-library/react'
+const { result } = renderHook(() => useHook())
+act(() => { result.current.function() })
+```
+
 ## Common Tasks
 
 ### Adding a New Component
 1. Create `src/components/ComponentName.jsx`
 2. Create `src/components/ComponentName.css`
 3. Import and use in parent component
+4. Create `src/test/ComponentName.test.jsx` with tests
 
 ### Modifying Calendar Logic
 - Calendar calculations (leap year, day of week, etc.) live in `calendarUtils.js`
 - Month grid building happens in `buildMonthRow()`
+- Run tests: `npm test -- calendarUtils`
 
 ### Adding Event Properties
 - Update the event shape in `useEvents.js`
 - Update modal form in `EventModal.jsx`
 - Update ICS parsing in `calendarUtils.js` (both export and import)
+- Update corresponding tests
 
 ---
 
