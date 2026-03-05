@@ -186,15 +186,27 @@ const sanitizeText = (s) => s.replace(/[\x00-\x1F\x7F]/g, '').slice(0, 500)
 // Validate hex color; reject anything else to prevent CSS/ICS injection
 const sanitizeColor = (s) => /^#[0-9a-fA-F]{6}$/.test(s) ? s : '#6b7280'
 
+const ICS_MAX_BYTES = 5 * 1024 * 1024 // 5 MB
+
 export function icsToEvents(text) {
+  if (text.length > ICS_MAX_BYTES) throw new Error('ICS file too large')
   const events = []
   const tagsMap = {} // keyed by tag id to deduplicate
   const blocks = text.split('BEGIN:VEVENT')
   for (let i = 1; i < blocks.length; i++) {
     const block = blocks[i]
+    // Plain string scan — no dynamic regex, no backtracking risk
     const get = (key) => {
-      const m = block.match(new RegExp(`^${key}[^:]*:(.+)`, 'm'))
-      return m ? m[1].trim() : ''
+      const prefix1 = key + ':'
+      const prefix2 = key + ';'
+      for (const raw of block.split('\n')) {
+        const line = raw.trimEnd()
+        if (line.startsWith(prefix1) || line.startsWith(prefix2)) {
+          const colon = line.indexOf(':')
+          return colon >= 0 ? line.slice(colon + 1).trim() : ''
+        }
+      }
+      return ''
     }
     const title = sanitizeText(get('SUMMARY'))
     const dtStart = get('DTSTART')
