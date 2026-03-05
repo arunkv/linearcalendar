@@ -90,6 +90,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
 
   const [modalState, setModalState] = useState(null)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
+  const [deleteTagConfirm, setDeleteTagConfirm] = useState(null) // tagId pending deletion
   // null = closed
   // { mode: 'create', initialDate: 'YYYY-MM-DD' }
   // { mode: 'edit', event: {...} }
@@ -136,15 +137,15 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
   // ── Tag deletion (with guard if events use the tag) ───────────────────────
   function handleDeleteTag(tagId) {
     const affected = events.filter(ev => ev.tagId === tagId)
-    if (
-      affected.length > 0 &&
-      !window.confirm(
-        `${affected.length} event${affected.length === 1 ? '' : 's'} use this tag. ` +
-        `Remove the tag from those events and delete it?`
-      )
-    ) {
+    if (affected.length > 0) {
+      setDeleteTagConfirm(tagId)
       return
     }
+    confirmDeleteTag(tagId)
+  }
+
+  function confirmDeleteTag(tagId) {
+    const affected = events.filter(ev => ev.tagId === tagId)
     // Batch-clear tagId from every affected event
     affected.forEach(ev => updateEvent(ev.id, { tagId: null }))
     // Remove from hidden set if present
@@ -154,6 +155,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
       return next
     })
     deleteTag(tagId)
+    setDeleteTagConfirm(null)
   }
 
   // ── Clear all events and tags ─────────────────────────────────────────────
@@ -399,6 +401,43 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
           </div>
         </div>
       )}
+
+      {/* ── Delete tag confirmation dialog ──────────────────────────────────── */}
+      {deleteTagConfirm && (() => {
+        const affected = events.filter(ev => ev.tagId === deleteTagConfirm)
+        const tag = tagsById[deleteTagConfirm]
+        return (
+          <div className="linear-calendar__overlay" onClick={() => setDeleteTagConfirm(null)}>
+            <div
+              className="linear-calendar__confirm-dialog"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Delete tag confirmation"
+              onClick={e => e.stopPropagation()}
+            >
+              <h2>Delete tag{tag ? ` "${tag.name}"` : ''}?</h2>
+              <p>
+                <strong>{affected.length} event{affected.length !== 1 ? 's' : ''}</strong>{' '}
+                use this tag. The tag will be removed from{' '}
+                {affected.length === 1 ? 'that event' : 'those events'} and deleted.
+              </p>
+              <div className="linear-calendar__confirm-actions">
+                <div className="linear-calendar__confirm-actions-right">
+                  <button className="linear-calendar__action-btn" onClick={() => setDeleteTagConfirm(null)}>
+                    Cancel
+                  </button>
+                  <button
+                    className="linear-calendar__action-btn linear-calendar__action-btn--danger"
+                    onClick={() => confirmDeleteTag(deleteTagConfirm)}
+                  >
+                    Delete tag
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      })()}
 
       {/* ── Event modal ─────────────────────────────────────────────────────── */}
       {modalState && (
