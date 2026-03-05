@@ -41,5 +41,9 @@ export function useTags() {
     setTags(_persist([]))
   }
 
-  return { tags, addTag, updateTag, deleteTag, clearAll }
+  function replaceAll(newTags) {
+    setTags(_persist(newTags))
+  }
+
+  return { tags, addTag, updateTag, deleteTag, clearAll, replaceAll }
 }

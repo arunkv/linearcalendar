@@ -140,7 +140,7 @@ function fmtIsoDate(d) {
   )
 }
 
-export function eventsToIcs(events) {
+export function eventsToIcs(events, tagsById = {}) {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
@@ -152,28 +152,38 @@ export function eventsToIcs(events) {
     // DTEND is exclusive: endDate + 1 day (use local date arithmetic, not UTC)
     const dtEnd = new Date(ev.endDate + 'T00:00:00')
     dtEnd.setDate(dtEnd.getDate() + 1)
+    const tag = ev.tagId ? tagsById[ev.tagId] : null
+    const color = tag ? tag.color : DEFAULT_EVENT_COLOR
     lines.push(
       'BEGIN:VEVENT',
       `UID:${ev.id}@linearcalendar`,
       `SUMMARY:${ev.title}`,
       `DTSTART;VALUE=DATE:${dtStartStr}`,
       `DTEND;VALUE=DATE:${fmtIcsDate(dtEnd)}`,
-      `X-APPLE-CALENDAR-COLOR:${ev.color}`,
-      'END:VEVENT',
+      `X-APPLE-CALENDAR-COLOR:${color}`,
     )
+    if (tag) {
+      lines.push(
+        `X-LC-TAG-ID:${tag.id}`,
+        `X-LC-TAG-NAME:${tag.name}`,
+        `X-LC-TAG-COLOR:${tag.color}`,
+      )
+    }
+    lines.push('END:VEVENT')
   }
   lines.push('END:VCALENDAR')
   return lines.join('\r\n')
 }
 
 /**
- * Parses an iCalendar (.ics) text string into an events array.
+ * Parses an iCalendar (.ics) text string into events and tags.
  * Handles all-day events (VALUE=DATE). DTEND is exclusive per RFC 5545.
  * @param {string} text - raw .ics file content
- * @returns {Array} array of { id, title, startDate, endDate, color }
+ * @returns {{ events: Array, tags: Array }} events with tagId refs and reconstructed tags
  */
 export function icsToEvents(text) {
   const events = []
+  const tagsMap = {} // keyed by tag id to deduplicate
   const blocks = text.split('BEGIN:VEVENT')
   for (let i = 1; i < blocks.length; i++) {
     const block = blocks[i]
@@ -195,12 +205,19 @@ export function icsToEvents(text) {
     endRaw.setDate(endRaw.getDate() - 1)
     const endDate = fmtIsoDate(endRaw)
 
-    const color = get('X-APPLE-CALENDAR-COLOR') || DEFAULT_EVENT_COLOR
     const uid = get('UID').replace('@linearcalendar', '')
     const id = uid || (Date.now().toString(36) + Math.random().toString(36).slice(2))
-    events.push({ id, title, startDate, endDate, color })
+
+    const tagId = get('X-LC-TAG-ID')
+    const tagName = get('X-LC-TAG-NAME')
+    const tagColor = get('X-LC-TAG-COLOR')
+    if (tagId && tagName && tagColor && !tagsMap[tagId]) {
+      tagsMap[tagId] = { id: tagId, name: tagName, color: tagColor }
+    }
+
+    events.push({ id, title, startDate, endDate, tagId: tagId || null })
   }
-  return events
+  return { events, tags: Object.values(tagsMap) }
 }
 
 export function getEventsForMonth(events, year, monthIndex) {

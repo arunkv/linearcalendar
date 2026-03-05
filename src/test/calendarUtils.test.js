@@ -181,15 +181,19 @@ describe('calendarUtils', () => {
         title: 'Test Event',
         startDate: '2024-03-15',
         endDate: '2024-03-15',
-        color: '#ff0000'
+        tagId: 'tag-1',
       }]
-      const ics = eventsToIcs(events)
+      const tagsById = { 'tag-1': { id: 'tag-1', name: 'Work', color: '#ff0000' } }
+      const ics = eventsToIcs(events, tagsById)
       expect(ics).toContain('BEGIN:VEVENT')
       expect(ics).toContain('UID:test-123@linearcalendar')
       expect(ics).toContain('SUMMARY:Test Event')
       expect(ics).toContain('DTSTART;VALUE=DATE:20240315')
       expect(ics).toContain('DTEND;VALUE=DATE:20240316') // Exclusive end date
       expect(ics).toContain('X-APPLE-CALENDAR-COLOR:#ff0000')
+      expect(ics).toContain('X-LC-TAG-ID:tag-1')
+      expect(ics).toContain('X-LC-TAG-NAME:Work')
+      expect(ics).toContain('X-LC-TAG-COLOR:#ff0000')
       expect(ics).toContain('END:VEVENT')
     })
 
@@ -226,18 +230,22 @@ UID:test-123@linearcalendar
 SUMMARY:Test Event
 DTSTART;VALUE=DATE:20240315
 DTEND;VALUE=DATE:20240316
-X-APPLE-CALENDAR-COLOR:#ff0000
+X-LC-TAG-ID:tag-1
+X-LC-TAG-NAME:Work
+X-LC-TAG-COLOR:#ff0000
 END:VEVENT
 END:VCALENDAR`
-      
-      const events = icsToEvents(ics)
+
+      const { events, tags } = icsToEvents(ics)
       expect(events).toHaveLength(1)
       expect(events[0]).toMatchObject({
         title: 'Test Event',
         startDate: '2024-03-15',
         endDate: '2024-03-15',
-        color: '#ff0000'
+        tagId: 'tag-1',
       })
+      expect(tags).toHaveLength(1)
+      expect(tags[0]).toEqual({ id: 'tag-1', name: 'Work', color: '#ff0000' })
     })
 
     it('should parse multi-day event with exclusive end date', () => {
@@ -249,8 +257,8 @@ DTSTART;VALUE=DATE:20240315
 DTEND;VALUE=DATE:20240318
 END:VEVENT
 END:VCALENDAR`
-      
-      const events = icsToEvents(ics)
+
+      const { events } = icsToEvents(ics)
       expect(events[0].startDate).toBe('2024-03-15')
       expect(events[0].endDate).toBe('2024-03-17') // Converted to inclusive
     })
@@ -270,25 +278,53 @@ DTSTART;VALUE=DATE:20240102
 DTEND;VALUE=DATE:20240103
 END:VEVENT
 END:VCALENDAR`
-      
-      const events = icsToEvents(ics)
+
+      const { events } = icsToEvents(ics)
       expect(events).toHaveLength(2)
       expect(events[0].title).toBe('Event 1')
       expect(events[1].title).toBe('Event 2')
     })
 
-    it('should use default color when not specified', () => {
+    it('should set tagId to null when no tag properties present', () => {
       const ics = `BEGIN:VCALENDAR
 BEGIN:VEVENT
 UID:test@linearcalendar
-SUMMARY:No Color Event
+SUMMARY:No Tag Event
 DTSTART;VALUE=DATE:20240101
 DTEND;VALUE=DATE:20240102
 END:VEVENT
 END:VCALENDAR`
-      
-      const events = icsToEvents(ics)
-      expect(events[0].color).toBe(DEFAULT_EVENT_COLOR)
+
+      const { events, tags } = icsToEvents(ics)
+      expect(events[0].tagId).toBeNull()
+      expect(tags).toHaveLength(0)
+    })
+
+    it('should deduplicate tags shared across multiple events', () => {
+      const ics = `BEGIN:VCALENDAR
+BEGIN:VEVENT
+UID:1@linearcalendar
+SUMMARY:Event 1
+DTSTART;VALUE=DATE:20240101
+DTEND;VALUE=DATE:20240102
+X-LC-TAG-ID:tag-1
+X-LC-TAG-NAME:Work
+X-LC-TAG-COLOR:#ff0000
+END:VEVENT
+BEGIN:VEVENT
+UID:2@linearcalendar
+SUMMARY:Event 2
+DTSTART;VALUE=DATE:20240103
+DTEND;VALUE=DATE:20240104
+X-LC-TAG-ID:tag-1
+X-LC-TAG-NAME:Work
+X-LC-TAG-COLOR:#ff0000
+END:VEVENT
+END:VCALENDAR`
+
+      const { events, tags } = icsToEvents(ics)
+      expect(events).toHaveLength(2)
+      expect(tags).toHaveLength(1)
     })
 
     it('should generate id if UID is not present', () => {
@@ -299,8 +335,8 @@ DTSTART;VALUE=DATE:20240101
 DTEND;VALUE=DATE:20240102
 END:VEVENT
 END:VCALENDAR`
-      
-      const events = icsToEvents(ics)
+
+      const { events } = icsToEvents(ics)
       expect(events[0].id).toBeDefined()
       expect(typeof events[0].id).toBe('string')
     })
@@ -312,8 +348,8 @@ UID:test@linearcalendar
 SUMMARY:Missing Dates
 END:VEVENT
 END:VCALENDAR`
-      
-      const events = icsToEvents(ics)
+
+      const { events } = icsToEvents(ics)
       expect(events).toHaveLength(0)
     })
   })

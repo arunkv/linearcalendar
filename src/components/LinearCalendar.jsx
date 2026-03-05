@@ -31,7 +31,7 @@ function resolveEventColor(ev, tagsById) {
 
 export default function LinearCalendar({ year, onChangeYear, theme, onToggleTheme }) {
   const { events, addEvent, updateEvent, deleteEvent, replaceAll } = useEvents()
-  const { tags, addTag, updateTag, deleteTag, clearAll: clearAllTags } = useTags()
+  const { tags, addTag, updateTag, deleteTag, clearAll: clearAllTags, replaceAll: replaceAllTags } = useTags()
 
   const [modalState, setModalState] = useState(null)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
@@ -111,7 +111,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
 
   // ── Export events as .ics file download ───────────────────────────────────
   function handleExport() {
-    const blob = new Blob([eventsToIcs(events)], { type: 'text/calendar' })
+    const blob = new Blob([eventsToIcs(events, tagsById)], { type: 'text/calendar' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
@@ -127,8 +127,12 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
     const reader = new FileReader()
     reader.onload = (ev) => {
       try {
-        const parsed = icsToEvents(ev.target.result)
-        if (parsed.length > 0) replaceAll(parsed)
+        const { events: parsed, tags: parsedTags } = icsToEvents(ev.target.result)
+        if (parsed.length > 0) {
+          replaceAll(parsed)
+          replaceAllTags(parsedTags)
+          setHiddenTagIds(new Set())
+        }
       } catch {
         // ignore invalid .ics
       }
