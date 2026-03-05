@@ -1,0 +1,134 @@
+.help-modal__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.help-modal {
+  background: var(--cell-bg, #fff);
+  color: var(--cell-color, #111827);
+  border-radius: 12px;
+  padding: 0;
+  max-width: 480px;
+  width: 90%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.help-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--header-border, #e5e7eb);
+  flex-shrink: 0;
+}
+
+.help-modal__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cell-color, #111827);
+}
+
+.help-modal__close-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--month-label-color, #6b7280);
+  font-size: 0.875rem;
+  padding: 4px;
+  line-height: 1;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.help-modal__close-btn:hover {
+  background: var(--empty-cell-bg, #f3f4f6);
+  color: var(--cell-color, #111827);
+}
+
+.help-modal__body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.help-modal__intro {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--month-label-color, #6b7280);
+  line-height: 1.5;
+}
+
+.help-modal__section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.help-modal__section h3 {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--cell-color, #111827);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.help-modal__section ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.help-modal__section li {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--cell-color, #111827);
+}
+
+.help-modal__section code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+  background: var(--empty-cell-bg, #f3f4f6);
+  padding: 1px 4px;
+  border-radius: 3px;
+  color: var(--cell-color, #111827);
+}
+
+.help-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 24px;
+  border-top: 1px solid var(--header-border, #e5e7eb);
+  flex-shrink: 0;
+}
+
+.help-modal__btn {
+  background: var(--cell-color, #111827);
+  color: var(--cell-bg, #fff);
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: opacity 0.15s;
+}
+
+.help-modal__btn:hover {
+  opacity: 0.85;
+}

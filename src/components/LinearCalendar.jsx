@@ -71,6 +71,7 @@ import { useTags } from '../hooks/useTags.js'
 import EventModal from './EventModal.jsx'
 import YearSwitcher from './YearSwitcher.jsx'
 import TagFilterBar from './TagFilterBar.jsx'
+import HelpModal from './HelpModal.jsx'
 import './LinearCalendar.css'
 
 // Stable module-level arrays — built once, not on every render
@@ -92,6 +93,16 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [deleteTagConfirm, setDeleteTagConfirm] = useState(null) // tagId pending deletion
   const [importError, setImportError] = useState(null)
+  const [showHelp, setShowHelp] = useState(
+    () => !localStorage.getItem('helpSeen')
+  )
+
+  function openHelp() { setShowHelp(true) }
+  function closeHelp() {
+    localStorage.setItem('helpSeen', '1')
+    setShowHelp(false)
+  }
+
   // null = closed
   // { mode: 'create', initialDate: 'YYYY-MM-DD' }
   // { mode: 'edit', event: {...} }
@@ -231,6 +242,15 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
           >
             {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+          </button>
+
+          <button
+            className="linear-calendar__action-btn linear-calendar__action-btn--icon-only"
+            onClick={openHelp}
+            aria-label="Help"
+            title="Help"
+          >
+            ?
           </button>
 
           <button
@@ -451,6 +471,9 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
           </div>
         )
       })()}
+
+      {/* ── Help / welcome modal ────────────────────────────────────────────── */}
+      {showHelp && <HelpModal onClose={closeHelp} />}
 
       {/* ── Event modal ─────────────────────────────────────────────────────── */}
       {modalState && (
