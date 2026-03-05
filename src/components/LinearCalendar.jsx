@@ -91,6 +91,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
   const [modalState, setModalState] = useState(null)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [deleteTagConfirm, setDeleteTagConfirm] = useState(null) // tagId pending deletion
+  const [importError, setImportError] = useState(null)
   // null = closed
   // { mode: 'create', initialDate: 'YYYY-MM-DD' }
   // { mode: 'edit', event: {...} }
@@ -181,18 +182,24 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
   function handleImportChange(e) {
     const file = e.target.files[0]
     if (!file) return
-    if (!file.name.toLowerCase().endsWith('.ics')) return
+    if (!file.name.toLowerCase().endsWith('.ics')) {
+      setImportError('Invalid file type — please select a .ics file.')
+      return
+    }
+    setImportError(null)
     const reader = new FileReader()
     reader.onload = (ev) => {
       try {
         const { events: parsed, tags: parsedTags } = icsToEvents(ev.target.result)
-        if (parsed.length > 0) {
+        if (parsed.length === 0) {
+          setImportError('No valid events found in the file.')
+        } else {
           replaceAll(parsed)
           replaceAllTags(parsedTags)
           setHiddenTagIds(new Set())
         }
-      } catch {
-        // ignore invalid .ics
+      } catch (err) {
+        setImportError(err.message === 'ICS file too large' ? 'File too large (max 5 MB).' : 'Failed to parse .ics file.')
       }
     }
     reader.readAsText(file)
@@ -236,11 +243,16 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
 
           <button
             className="linear-calendar__action-btn"
-            onClick={() => importInputRef.current?.click()}
+            onClick={() => { setImportError(null); importInputRef.current?.click() }}
             title="Import events from .ics"
           >
             <UploadIcon /> Import
           </button>
+          {importError && (
+            <span className="linear-calendar__action-btn--danger" role="alert">
+              {importError}
+            </span>
+          )}
 
           <button
             className="linear-calendar__action-btn linear-calendar__action-btn--danger"
