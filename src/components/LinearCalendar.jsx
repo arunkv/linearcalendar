@@ -181,6 +181,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
   function handleImportChange(e) {
     const file = e.target.files[0]
     if (!file) return
+    if (!file.name.toLowerCase().endsWith('.ics')) return
     const reader = new FileReader()
     reader.onload = (ev) => {
       try {
