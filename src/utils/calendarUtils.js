@@ -181,6 +181,11 @@ export function eventsToIcs(events, tagsById = {}) {
  * @param {string} text - raw .ics file content
  * @returns {{ events: Array, tags: Array }} events with tagId refs and reconstructed tags
  */
+// Strip control characters (newlines, carriage returns, etc.) to prevent ICS injection on re-export
+const sanitizeText = (s) => s.replace(/[\x00-\x1F\x7F]/g, '').slice(0, 500)
+// Validate hex color; reject anything else to prevent CSS/ICS injection
+const sanitizeColor = (s) => /^#[0-9a-fA-F]{6}$/.test(s) ? s : '#6b7280'
+
 export function icsToEvents(text) {
   const events = []
   const tagsMap = {} // keyed by tag id to deduplicate
@@ -191,7 +196,7 @@ export function icsToEvents(text) {
       const m = block.match(new RegExp(`^${key}[^:]*:(.+)`, 'm'))
       return m ? m[1].trim() : ''
     }
-    const title = get('SUMMARY')
+    const title = sanitizeText(get('SUMMARY'))
     const dtStart = get('DTSTART')
     const dtEnd = get('DTEND')
     if (!title || !dtStart || !dtEnd) continue
@@ -209,9 +214,9 @@ export function icsToEvents(text) {
     const id = uid || (Date.now().toString(36) + Math.random().toString(36).slice(2))
 
     const tagId = get('X-LC-TAG-ID')
-    const tagName = get('X-LC-TAG-NAME')
-    const tagColor = get('X-LC-TAG-COLOR')
-    if (tagId && tagName && tagColor && !tagsMap[tagId]) {
+    const tagName = sanitizeText(get('X-LC-TAG-NAME'))
+    const tagColor = sanitizeColor(get('X-LC-TAG-COLOR'))
+    if (tagId && tagName && !tagsMap[tagId]) {
       tagsMap[tagId] = { id: tagId, name: tagName, color: tagColor }
     }
 
