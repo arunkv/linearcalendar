@@ -8,15 +8,23 @@ An open source linear calendar application.
 
 ## What is a Linear Calendar?
 
-A **linear calendar** is a representation of a single calendar year — spanning January through December — that is specific to one particular year. Unlike a *perpetual calendar*, which is designed to function indefinitely across many years, an annual calendar is year-specific: the day-of-week assignment for each date is fixed to that year and must be replaced or updated when the year ends.
+The concept was popularized by [Nick Milo](https://www.linkingyourthinking.com/) of *Linking Your Thinking* (LYT), who introduced the linear calendar as a core planning tool in his YouTube video [*The Most Useful Calendar View in 2025 That No One Told You About*](https://www.youtube.com/live/SQHYj7x-t3A) and made a downloadable version available at [linkingyourthinking.com](https://www.linkingyourthinking.com/thank-you/download-the-linear-calendar).
 
-### Key Characteristics
+A **linear calendar** is a single-page view of your entire year — all twelve months laid out horizontally so that time flows left to right, continuously, without the hard breaks imposed by a traditional grid calendar. Rather than toggling between disconnected weekly or monthly views, you see January through December at once.
 
-- **Single-year scope** — covers exactly one calendar year (Jan 1 through Dec 31)
-- **Year-specific layout** — weekday assignments (e.g., "March 3 falls on a Monday") are accurate only for that year, because the Gregorian calendar's weekday-to-date mapping shifts each year
-- **Requires annual renewal** — unlike perpetual calendars, a linear calendar becomes inaccurate the following year and must be updated
-- **Leap year awareness** — February has 28 days in common years and 29 in leap years; a linear calendar reflects the correct count for its specific year
-- **At-a-glance visibility** — designed to present the full year or individual months clearly, making it easy to plan and track events, deadlines, and milestones
+### Why it matters
+
+Most digital calendars train you to think in weeks. A weekly view is great for day-to-day scheduling, but it hides the larger shape of your year: seasons of high demand, stretches of empty space, clusters of back-to-back commitments that look manageable one week at a time but are crushing when seen together.
+
+The linear layout fixes this by making three things immediately visible:
+
+- **Perspective** — you plan in seasons and quarters, not just the next seven days
+- **Energy** — you can spot overloaded periods before they arrive and protect time for rest
+- **Memory** — a marked-up linear calendar becomes a visual record of your year; glancing at it brings back context that a list of events never could
+
+### Year-specific by design
+
+Each linear calendar is bound to a single year. Weekday-to-date assignments (e.g., "March 3 falls on a Monday") are accurate only for that year, because the Gregorian calendar shifts each year. Leap years add a day to February. A new year means a new calendar — which is also what makes it a meaningful annual ritual.
 
 ---
 
@@ -72,12 +80,6 @@ Serves the `dist/` folder at http://localhost:4173.
 
 ---
 
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
-
----
-
 ## License
 
 This project is licensed under the [Apache License, Version 2.0](LICENSE).
@@ -86,4 +88,4 @@ This project is licensed under the [Apache License, Version 2.0](LICENSE).
 
 ## References
 
-TODO
+- Nick Milo — [*The Most Useful Calendar View in 2025 That No One Told You About*](https://www.youtube.com/live/SQHYj7x-t3A) (YouTube, Linking Your Thinking)
