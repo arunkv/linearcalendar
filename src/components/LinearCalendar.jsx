@@ -1,4 +1,59 @@
 import { Fragment, useMemo, useState, useRef } from 'react'
+
+// ── Inline SVG icons ──────────────────────────────────────────────────────────
+const SunIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="4"/>
+    <line x1="12" y1="2" x2="12" y2="5"/>
+    <line x1="12" y1="19" x2="12" y2="22"/>
+    <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
+    <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+    <line x1="2" y1="12" x2="5" y2="12"/>
+    <line x1="19" y1="12" x2="22" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
+    <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+  </svg>
+)
+
+const MoonIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+)
+
+const DownloadIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+    <polyline points="7 10 12 15 17 10"/>
+    <line x1="12" y1="15" x2="12" y2="3"/>
+  </svg>
+)
+
+const UploadIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+    <polyline points="17 8 12 3 7 8"/>
+    <line x1="12" y1="3" x2="12" y2="15"/>
+  </svg>
+)
+
+const PrintIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="6 9 6 2 18 2 18 9"/>
+    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+    <rect x="6" y="14" width="12" height="8"/>
+  </svg>
+)
+
+const TrashIcon = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <polyline points="3 6 5 6 21 6"/>
+    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+    <path d="M10 11v6"/>
+    <path d="M14 11v6"/>
+    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+  </svg>
+)
 import {
   buildMonthRow,
   getMonthName,
@@ -160,12 +215,12 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
 
         <div className="linear-calendar__header-actions">
           <button
-            className="linear-calendar__action-btn"
+            className="linear-calendar__action-btn linear-calendar__action-btn--icon-only"
             onClick={onToggleTheme}
             aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
           >
-            {theme === 'dark' ? '☀' : '☾'}
+            {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
           </button>
 
           <button
@@ -173,7 +228,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             onClick={handleExport}
             title="Export events as .ics"
           >
-            ↓ Export
+            <DownloadIcon /> Export
           </button>
 
           <button
@@ -181,7 +236,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             onClick={() => importInputRef.current?.click()}
             title="Import events from .ics"
           >
-            ↑ Import
+            <UploadIcon /> Import
           </button>
 
           <button
@@ -189,7 +244,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             onClick={() => setShowClearConfirm(true)}
             title="Clear all events and tags"
           >
-            ✕ Clear
+            <TrashIcon /> Clear
           </button>
 
           <button
@@ -197,7 +252,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             onClick={() => window.print()}
             title="Print calendar"
           >
-            ⎙ Print
+            <PrintIcon /> Print
           </button>
 
           {/* Hidden file input for import */}
@@ -327,7 +382,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             </p>
             <div className="linear-calendar__confirm-actions">
               <button className="linear-calendar__action-btn" onClick={handleExport}>
-                ↓ Export first
+                <DownloadIcon /> Export first
               </button>
               <div className="linear-calendar__confirm-actions-right">
                 <button className="linear-calendar__action-btn" onClick={() => setShowClearConfirm(false)}>

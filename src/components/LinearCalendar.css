@@ -48,6 +48,9 @@
 }
 
 .linear-calendar__action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   background: transparent;
   border: 1px solid var(--border-color, #e5e7eb);
   color: var(--header-color, #111827);
@@ -62,6 +65,10 @@
 
 .linear-calendar__action-btn:hover {
   background: var(--empty-cell-bg, #f9fafb);
+}
+
+.linear-calendar__action-btn--icon-only {
+  padding: 6px 9px;
 }
 
 .linear-calendar__action-btn--danger {
