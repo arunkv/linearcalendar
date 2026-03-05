@@ -78,6 +78,16 @@ import './LinearCalendar.css'
 const MONTH_INDICES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 const COL_INDICES = Array.from({ length: GRID_COLS }, (_, i) => i) // eslint-disable-line no-unused-vars
 
+// ── Date formatting for tooltip ───────────────────────────────────────────────
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+function formatDate(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number)
+  return `${MONTH_NAMES[m - 1]} ${d}, ${y}`
+}
+function formatDateRange(start, end) {
+  return start === end ? formatDate(start) : `${formatDate(start)} – ${formatDate(end)}`
+}
+
 // ── Color resolution ──────────────────────────────────────────────────────────
 // Tagged event → use tag's current color; otherwise neutral gray
 function resolveEventColor(ev, tagsById) {
@@ -96,6 +106,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
   const [showHelp, setShowHelp] = useState(
     () => !localStorage.getItem('helpSeen')
   )
+  const [tooltip, setTooltip] = useState(null) // { event, x, y }
 
   function openHelp() { setShowHelp(true) }
   function closeHelp() {
@@ -373,8 +384,12 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
                         }}
                         onClick={(e) => {
                           e.stopPropagation()
+                          setTooltip(null)
                           setModalState({ mode: 'edit', event: ev })
                         }}
+                        onMouseEnter={(e) => setTooltip({ event: ev, x: e.clientX, y: e.clientY })}
+                        onMouseMove={(e) => setTooltip(t => t ? { ...t, x: e.clientX, y: e.clientY } : null)}
+                        onMouseLeave={() => setTooltip(null)}
                       >
                         {ev.title}
                       </div>
@@ -471,6 +486,28 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
           </div>
         )
       })()}
+
+      {/* ── Event tooltip ───────────────────────────────────────────────────── */}
+      {tooltip && !modalState && (
+        <div
+          className="linear-calendar__event-tooltip"
+          style={{ left: tooltip.x + 14, top: tooltip.y + 14 }}
+        >
+          <span className="linear-calendar__event-tooltip-title">{tooltip.event.title}</span>
+          <span className="linear-calendar__event-tooltip-dates">
+            {formatDateRange(tooltip.event.startDate, tooltip.event.endDate)}
+          </span>
+          {tooltip.event.tagId && tagsById[tooltip.event.tagId] && (
+            <span className="linear-calendar__event-tooltip-tag">
+              <span
+                className="linear-calendar__event-tooltip-tag-dot"
+                style={{ background: tagsById[tooltip.event.tagId].color }}
+              />
+              {tagsById[tooltip.event.tagId].name}
+            </span>
+          )}
+        </div>
+      )}
 
       {/* ── Help / welcome modal ────────────────────────────────────────────── */}
       {showHelp && <HelpModal onClose={closeHelp} />}
