@@ -90,6 +90,10 @@
   border-color: #3b82f6;
 }
 
+[data-theme="dark"] .event-modal__input[type="date"] {
+  color-scheme: dark;
+}
+
 .event-modal__dates {
   display: grid;
   grid-template-columns: 1fr 1fr;
