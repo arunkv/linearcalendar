@@ -6,10 +6,20 @@ function genId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2)
 }
 
+function parseTag(raw) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null
+  const { id, name, color } = raw
+  if (typeof id !== 'string' || !id) return null
+  if (typeof name !== 'string' || !name) return null
+  if (typeof color !== 'string' || !/^#[0-9a-fA-F]{6}$/.test(color)) return null
+  return { id, name, color }
+}
+
 export function useTags() {
   const [tags, setTags] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+      return Array.isArray(parsed) ? parsed.map(parseTag).filter(Boolean) : []
     } catch {
       return []
     }

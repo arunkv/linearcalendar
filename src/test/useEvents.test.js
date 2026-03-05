@@ -16,7 +16,7 @@ describe('useEvents', () => {
 
   it('should initialize with data from localStorage', () => {
     const storedEvents = [
-      { id: '1', title: 'Test Event', startDate: '2024-01-01', endDate: '2024-01-01' }
+      { id: '1', title: 'Test Event', startDate: '2024-01-01', endDate: '2024-01-01', tagId: null }
     ]
     localStorage.getItem.mockReturnValue(JSON.stringify(storedEvents))
     const { result } = renderHook(() => useEvents())

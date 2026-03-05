@@ -6,10 +6,21 @@ function genId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2)
 }
 
+function parseEvent(raw) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null
+  const { id, title, startDate, endDate, tagId } = raw
+  if (typeof id !== 'string' || !id) return null
+  if (typeof title !== 'string') return null
+  if (typeof startDate !== 'string') return null
+  if (typeof endDate !== 'string') return null
+  return { id, title, startDate, endDate, tagId: typeof tagId === 'string' ? tagId : null }
+}
+
 export function useEvents() {
   const [events, setEvents] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+      return Array.isArray(parsed) ? parsed.map(parseEvent).filter(Boolean) : []
     } catch {
       return []
     }
