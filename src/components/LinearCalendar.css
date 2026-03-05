@@ -2,6 +2,7 @@
 .linear-calendar {
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 /* ─── Top header bar ─────────────────────────────────────────────────────────
