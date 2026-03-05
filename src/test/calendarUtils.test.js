@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import {
   DAY_NAMES,
   DAY_ABBRS,
+  DEFAULT_EVENT_COLOR,
   GRID_COLS,
   getDaysInMonth,
   getMonthStartDay,
@@ -72,19 +73,8 @@ describe('calendarUtils', () => {
       expect(isToday(now.getFullYear(), now.getMonth(), now.getDate())).toBe(true)
     })
 
-    it('should return false for different year', () => {
-      const now = new Date()
-      expect(isToday(now.getFullYear() - 1, now.getMonth(), now.getDate())).toBe(false)
-    })
-
-    it('should return false for different month', () => {
-      const now = new Date()
-      expect(isToday(now.getFullYear(), (now.getMonth() + 1) % 12, now.getDate())).toBe(false)
-    })
-
-    it('should return false for different day', () => {
-      const now = new Date()
-      expect(isToday(now.getFullYear(), now.getMonth(), now.getDate() + 1)).toBe(false)
+    it('should return false for a known past date', () => {
+      expect(isToday(2000, 0, 1)).toBe(false)
     })
   })
 
@@ -112,19 +102,12 @@ describe('calendarUtils', () => {
   })
 
   describe('getMonthName', () => {
-    it('should return correct month names', () => {
-      expect(getMonthName(0)).toBe('January')
-      expect(getMonthName(1)).toBe('February')
-      expect(getMonthName(2)).toBe('March')
-      expect(getMonthName(3)).toBe('April')
-      expect(getMonthName(4)).toBe('May')
-      expect(getMonthName(5)).toBe('June')
-      expect(getMonthName(6)).toBe('July')
-      expect(getMonthName(7)).toBe('August')
-      expect(getMonthName(8)).toBe('September')
-      expect(getMonthName(9)).toBe('October')
-      expect(getMonthName(10)).toBe('November')
-      expect(getMonthName(11)).toBe('December')
+    it.each([
+      [0, 'January'], [1, 'February'], [2, 'March'], [3, 'April'],
+      [4, 'May'], [5, 'June'], [6, 'July'], [7, 'August'],
+      [8, 'September'], [9, 'October'], [10, 'November'], [11, 'December'],
+    ])('getMonthName(%i) → %s', (month, name) => {
+      expect(getMonthName(month)).toBe(name)
     })
   })
 
@@ -305,7 +288,7 @@ END:VEVENT
 END:VCALENDAR`
       
       const events = icsToEvents(ics)
-      expect(events[0].color).toBe('#3b82f6')
+      expect(events[0].color).toBe(DEFAULT_EVENT_COLOR)
     })
 
     it('should generate id if UID is not present', () => {

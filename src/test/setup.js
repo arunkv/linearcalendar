@@ -1,4 +1,4 @@
-import { expect, afterEach, vi } from 'vitest'
+import { expect, afterEach, beforeEach, vi } from 'vitest'
 import { cleanup } from '@testing-library/react'
 import * as matchers from '@testing-library/jest-dom/matchers'
 
@@ -8,6 +8,11 @@ expect.extend(matchers)
 // Clean up after each test
 afterEach(() => {
   cleanup()
+})
+
+// Reset localStorage mock return value before each test so tests don't leak state
+beforeEach(() => {
+  localStorage.getItem.mockReturnValue(null)
 })
 
 // Mock localStorage

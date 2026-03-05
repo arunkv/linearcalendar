@@ -81,12 +81,9 @@ describe('App', () => {
     
     // Find a clickable date cell (contains a day number)
     const dayCells = screen.getAllByText(/^[1-9]$/)
-    if (dayCells.length > 0) {
-      fireEvent.click(dayCells[0])
-      
-      // Modal should appear with "New event" title
-      expect(screen.getByText('New event')).toBeInTheDocument()
-    }
+    expect(dayCells.length).toBeGreaterThan(0)
+    fireEvent.click(dayCells[0])
+    expect(screen.getByText('New event')).toBeInTheDocument()
   })
 
   it('should close modal when clicking cancel', () => {

@@ -11,6 +11,8 @@ const MONTH_NAMES = [
   'September', 'October', 'November', 'December',
 ]
 
+export const DEFAULT_EVENT_COLOR = '#3b82f6'
+
 // Total date-columns in the grid.
 // Max offset (6) + max days in a month (31) = 37.
 // A month starting on Saturday (col 6) with 31 days fills columns 6–36 (index 36).
@@ -193,7 +195,7 @@ export function icsToEvents(text) {
     endRaw.setDate(endRaw.getDate() - 1)
     const endDate = fmtIsoDate(endRaw)
 
-    const color = get('X-APPLE-CALENDAR-COLOR') || '#3b82f6'
+    const color = get('X-APPLE-CALENDAR-COLOR') || DEFAULT_EVENT_COLOR
     const uid = get('UID').replace('@linearcalendar', '')
     const id = uid || (Date.now().toString(36) + Math.random().toString(36).slice(2))
     events.push({ id, title, startDate, endDate, color })
