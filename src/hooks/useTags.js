@@ -37,5 +37,9 @@ export function useTags() {
     setTags(prev => _persist(prev.filter(t => t.id !== id)))
   }
 
-  return { tags, addTag, updateTag, deleteTag }
+  function clearAll() {
+    setTags(_persist([]))
+  }
+
+  return { tags, addTag, updateTag, deleteTag, clearAll }
 }

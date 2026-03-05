@@ -119,6 +119,23 @@ describe('App', () => {
     expect(screen.queryByText('New event')).not.toBeInTheDocument()
   })
 
+  it('should have a Clear button', () => {
+    localStorage.getItem.mockReturnValue(null)
+    render(<App />)
+
+    expect(screen.getByTitle('Clear all events and tags')).toBeInTheDocument()
+  })
+
+  it('should show confirmation dialog when Clear is clicked', () => {
+    localStorage.getItem.mockReturnValue(null)
+    render(<App />)
+
+    fireEvent.click(screen.getByTitle('Clear all events and tags'))
+
+    expect(screen.getByRole('dialog', { name: 'Clear calendar confirmation' })).toBeInTheDocument()
+    expect(screen.getByText('Clear everything')).toBeInTheDocument()
+  })
+
   it('should change year when using year switcher', () => {
     localStorage.getItem.mockReturnValue(null)
     render(<App />)

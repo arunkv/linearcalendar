@@ -143,6 +143,16 @@ describe('useTags', () => {
     expect(result.current.tags[0].id).not.toBe(result.current.tags[1].id)
   })
 
+  it('should clear all tags', () => {
+    localStorage.getItem.mockReturnValue(JSON.stringify([
+      { id: '1', name: 'Work', color: '#ff0000' }
+    ]))
+    const { result } = renderHook(() => useTags())
+    act(() => { result.current.clearAll() })
+    expect(result.current.tags).toEqual([])
+    expect(localStorage.setItem).toHaveBeenCalledWith('linearcalendar-tags', '[]')
+  })
+
   it('should handle multiple tag operations in sequence', () => {
     localStorage.getItem.mockReturnValue(null)
     const { result } = renderHook(() => useTags())

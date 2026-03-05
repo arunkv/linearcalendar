@@ -31,9 +31,10 @@ function resolveEventColor(ev, tagsById) {
 
 export default function LinearCalendar({ year, onChangeYear, theme, onToggleTheme }) {
   const { events, addEvent, updateEvent, deleteEvent, replaceAll } = useEvents()
-  const { tags, addTag, updateTag, deleteTag } = useTags()
+  const { tags, addTag, updateTag, deleteTag, clearAll: clearAllTags } = useTags()
 
   const [modalState, setModalState] = useState(null)
+  const [showClearConfirm, setShowClearConfirm] = useState(false)
   // null = closed
   // { mode: 'create', initialDate: 'YYYY-MM-DD' }
   // { mode: 'edit', event: {...} }
@@ -98,6 +99,14 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
       return next
     })
     deleteTag(tagId)
+  }
+
+  // ── Clear all events and tags ─────────────────────────────────────────────
+  function handleClearAll() {
+    replaceAll([])
+    clearAllTags()
+    setHiddenTagIds(new Set())
+    setShowClearConfirm(false)
   }
 
   // ── Export events as .ics file download ───────────────────────────────────
@@ -169,6 +178,14 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             title="Import events from .ics"
           >
             ↑ Import
+          </button>
+
+          <button
+            className="linear-calendar__action-btn linear-calendar__action-btn--danger"
+            onClick={() => setShowClearConfirm(true)}
+            title="Clear all events and tags"
+          >
+            ✕ Clear
           </button>
 
           <button
@@ -283,6 +300,46 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
         <span className="linear-calendar__footer-sep">·</span>
         <span>Built with <a href="https://claude.ai" target="_blank" rel="noreferrer">Claude</a></span>
       </footer>
+
+      {/* ── Clear confirmation dialog ────────────────────────────────────────── */}
+      {showClearConfirm && (
+        <div className="linear-calendar__overlay" onClick={() => setShowClearConfirm(false)}>
+          <div
+            className="linear-calendar__confirm-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Clear calendar confirmation"
+            onClick={e => e.stopPropagation()}
+          >
+            <h2>Clear calendar?</h2>
+            <p>
+              This will permanently delete{' '}
+              <strong>{events.length} event{events.length !== 1 ? 's' : ''}</strong> and{' '}
+              <strong>{tags.length} tag{tags.length !== 1 ? 's' : ''}</strong>.
+              This cannot be undone.
+            </p>
+            <p className="linear-calendar__confirm-export-hint">
+              💡 We recommend exporting your data before clearing.
+            </p>
+            <div className="linear-calendar__confirm-actions">
+              <button className="linear-calendar__action-btn" onClick={handleExport}>
+                ↓ Export first
+              </button>
+              <div className="linear-calendar__confirm-actions-right">
+                <button className="linear-calendar__action-btn" onClick={() => setShowClearConfirm(false)}>
+                  Cancel
+                </button>
+                <button
+                  className="linear-calendar__action-btn linear-calendar__action-btn--danger"
+                  onClick={handleClearAll}
+                >
+                  Clear everything
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Event modal ─────────────────────────────────────────────────────── */}
       {modalState && (
