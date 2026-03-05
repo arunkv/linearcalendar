@@ -25,6 +25,16 @@ This project provides an open source implementation of a linear calendar. It aim
 
 ---
 
+## Screenshots
+
+### Light Mode
+![Linear Calendar - Light Mode](linear-calendar-light-mode.jpeg)
+
+### Dark Mode
+![Linear Calendar - Dark Mode](linear-calendar-dark-mode.jpeg)
+
+---
+
 ## Getting Started
 
 ### Prerequisites
