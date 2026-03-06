@@ -113,7 +113,7 @@ describe('App', () => {
     expect(screen.getByText('New event')).toBeInTheDocument()
     
     // Click overlay (outside the modal)
-    const overlay = screen.getByRole('dialog').parentElement
+    const overlay = screen.getByRole('dialog', { name: 'New event' }).parentElement
     fireEvent.click(overlay)
     
     expect(screen.queryByText('New event')).not.toBeInTheDocument()

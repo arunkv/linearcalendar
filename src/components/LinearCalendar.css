@@ -384,6 +384,172 @@
   opacity: 0.4;
 }
 
+/* ─── Mobile: portrait (≤768 px) ────────────────────────────────────────────
+   Full-screen fixed layout: header + footer anchored, grid fills remaining
+   height and scrolls left-to-right. All 12 months fit vertically via
+   grid-auto-rows: 1fr distributing height across all 24 rows.              */
+@media (max-width: 768px) {
+  /* Lock to full viewport height so header/footer stay fixed */
+  .linear-calendar {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  /* Compact header */
+  .linear-calendar__header {
+    padding: 6px 10px;
+    gap: 6px;
+  }
+
+  /* Hide brand title to save horizontal space */
+  .linear-calendar__brand-title {
+    display: none;
+  }
+
+  /* Show only icons on action buttons */
+  .linear-calendar__action-btn-label {
+    display: none;
+  }
+
+  .linear-calendar__action-btn:not(.linear-calendar__action-btn--icon-only) {
+    padding: 6px 8px;
+  }
+
+  /* Grid wrapper: take all remaining height, scroll horizontally.
+     overflow: auto (not overflow-x/y separately) avoids a Safari bug where
+     mixing overflow-y: hidden with overflow-x: auto blocks touch scrolling.
+     The grid's fixed height prevents vertical overflow anyway. */
+  .linear-calendar__grid-wrapper {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: 4px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Grid: fill wrapper height; date rows get 1fr, event rows get 2fr per month */
+  .linear-calendar__grid {
+    height: 100%;
+    grid-template-rows: repeat(12, 1fr 2fr);
+    /* min 20px per day column ensures readability; 1fr fills available width */
+    grid-template-columns: auto repeat(37, minmax(20px, 1fr));
+  }
+
+  /* Remove min-height so grid-auto-rows: 1fr can distribute freely */
+  .linear-calendar__cell {
+    min-height: unset;
+    padding: 1px;
+  }
+
+  /* Compact event rows; overflow hidden clips extra bars gracefully */
+  .linear-calendar__events-container {
+    min-height: unset;
+    grid-auto-rows: 11px;
+    gap: 1px 0;
+    padding: 1px 0;
+    overflow: hidden;
+  }
+
+  .linear-calendar__event-bar {
+    font-size: 0.5rem;
+    padding: 0 3px;
+    border-radius: 2px;
+  }
+
+  /* Compact footer */
+  .linear-calendar__footer {
+    flex-shrink: 0;
+    padding: 4px 12px;
+    font-size: 0.7rem;
+  }
+}
+
+/* ─── Mobile: landscape (≤1024 px wide, landscape orientation) ──────────────
+   Same fixed-chrome layout; rows are tighter (~12 px each) so months still
+   all fit. Month label font shrinks to keep 3-letter names readable.        */
+@media (max-width: 1024px) and (orientation: landscape) {
+  .linear-calendar {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .linear-calendar__header {
+    padding: 4px 10px;
+    gap: 6px;
+  }
+
+  .linear-calendar__brand-title {
+    display: none;
+  }
+
+  .linear-calendar__action-btn-label {
+    display: none;
+  }
+
+  .linear-calendar__action-btn:not(.linear-calendar__action-btn--icon-only) {
+    padding: 4px 7px;
+  }
+
+  .linear-calendar__grid-wrapper {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: 2px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .linear-calendar__grid {
+    height: 100%;
+    grid-template-rows: repeat(12, 1fr 2fr);
+    grid-template-columns: auto repeat(37, minmax(18px, 1fr));
+  }
+
+  /* Smaller month labels so 3-letter name fits in the tighter row span */
+  .linear-calendar__month-label {
+    font-size: 0.45rem;
+    padding: 3px 4px;
+  }
+
+  .linear-calendar__cell {
+    min-height: unset;
+    padding: 1px;
+  }
+
+  .linear-calendar__cell-day,
+  .linear-calendar__today-dot {
+    font-size: 0.42rem;
+  }
+
+  .linear-calendar__cell-dow {
+    font-size: 0.3rem;
+  }
+
+  .linear-calendar__today-dot {
+    width: 12px;
+    height: 12px;
+  }
+
+  .linear-calendar__events-container {
+    min-height: unset;
+    grid-auto-rows: 9px;
+    gap: 1px 0;
+    padding: 1px 0;
+    overflow: hidden;
+  }
+
+  .linear-calendar__event-bar {
+    font-size: 0.42rem;
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+
+  .linear-calendar__footer {
+    flex-shrink: 0;
+    padding: 2px 12px;
+    font-size: 0.65rem;
+  }
+}
+
 /* ─── Print styles ───────────────────────────────────────────────────────────
    • Landscape orientation, 1 cm margins
    • Light palette forced regardless of user's dark-mode preference

@@ -53,7 +53,7 @@ npm install
 npm run dev
 ```
 
-Opens at http://localhost:5173 with hot module replacement.
+Opens at http://localhost:4174 with hot module replacement.
 
 ### Build for production
 

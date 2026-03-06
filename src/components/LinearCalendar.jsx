@@ -269,7 +269,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             onClick={handleExport}
             title="Export events as .ics"
           >
-            <DownloadIcon /> Export
+            <DownloadIcon /> <span className="linear-calendar__action-btn-label">Export</span>
           </button>
 
           <button
@@ -277,7 +277,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             onClick={() => { setImportError(null); importInputRef.current?.click() }}
             title="Import events from .ics"
           >
-            <UploadIcon /> Import
+            <UploadIcon /> <span className="linear-calendar__action-btn-label">Import</span>
           </button>
           {importError && (
             <span className="linear-calendar__action-btn--danger" role="alert">
@@ -290,7 +290,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             onClick={() => setShowClearConfirm(true)}
             title="Clear all events and tags"
           >
-            <TrashIcon /> Clear
+            <TrashIcon /> <span className="linear-calendar__action-btn-label">Clear</span>
           </button>
 
           <button
@@ -298,7 +298,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             onClick={() => window.print()}
             title="Print calendar"
           >
-            <PrintIcon /> Print
+            <PrintIcon /> <span className="linear-calendar__action-btn-label">Print</span>
           </button>
 
           {/* Hidden file input for import */}
