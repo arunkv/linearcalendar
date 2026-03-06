@@ -1,12 +1,16 @@
 # Linear Calendar
 
-An open source linear calendar application.
+An open source linear calendar application
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+Try it out at https://linearcalendar.element77.com
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE) [![Netlify Status](https://api.netlify.com/api/v1/badges/64775e20-bdea-465c-a2d3-37c4d7203de4/deploy-status)](https://app.netlify.com/projects/polite-banoffee-bc527c/deploys)
 
 ---
 
 ## What is a Linear Calendar?
+
+A linear calendar displays time sequentially in a straight line, unlike traditional grid-based monthly views, to better visualize the continuous flow of days, weeks, or an entire year.
 
 The concept was popularized by [Nick Milo](https://www.linkingyourthinking.com/) of *Linking Your Thinking* (LYT), who introduced the linear calendar as a core planning tool in his YouTube video [*The Most Useful Calendar View in 2025 That No One Told You About*](https://www.youtube.com/live/SQHYj7x-t3A).
 
@@ -35,7 +39,7 @@ This project provides an open source implementation of a linear calendar. It aim
 
 ---
 
-## Getting Started
+## Developer Notes
 
 ### Prerequisites
 
@@ -70,9 +74,3 @@ npm run preview
 ```
 
 Serves the `dist/` folder at http://localhost:4173.
-
----
-
-## License
-
-This project is licensed under the [Apache License, Version 2.0](LICENSE).
