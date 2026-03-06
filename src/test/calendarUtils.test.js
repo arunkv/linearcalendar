@@ -421,6 +421,27 @@ END:VCALENDAR`
       expect(result[0].endCol).toBe(5)   // Jan 5th
     })
 
+    it('should place event on the 1st at the month start column (UTC-safe)', () => {
+      // new Date('2024-01-01') is parsed as UTC midnight; in UTC- timezones
+      // .getDate() would return 31 (Dec), shifting the event out of January.
+      // parseDateLocal ensures the date string is always read as local midnight.
+      const events = [{ id: '1', title: 'New Year', startDate: '2024-01-01', endDate: '2024-01-01' }]
+      const result = getEventsForMonth(events, 2024, 0)
+      expect(result).toHaveLength(1)
+      expect(result[0].startCol).toBe(1) // Jan 1, 2024 = Monday = col 1
+      expect(result[0].endCol).toBe(1)
+    })
+
+    it('should place event on the last day of month at correct column (UTC-safe)', () => {
+      // new Date('2024-01-31') in UTC is Jan 31; in UTC- zones getDate() could
+      // return 30, placing the event one column too early.
+      const events = [{ id: '1', title: 'Last Day', startDate: '2024-01-31', endDate: '2024-01-31' }]
+      const result = getEventsForMonth(events, 2024, 0)
+      expect(result).toHaveLength(1)
+      expect(result[0].startCol).toBe(31) // col 1 (Mon) + 31 - 1 = 31
+      expect(result[0].endCol).toBe(31)
+    })
+
     it('should assign rows without overlap', () => {
       const events = [
         { id: '1', title: 'Event 1', startDate: '2024-01-01', endDate: '2024-01-05' },

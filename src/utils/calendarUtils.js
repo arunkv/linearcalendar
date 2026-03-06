@@ -98,6 +98,19 @@ export function toDateKey(year, monthIndex, day) {
   return `${year}-${m}-${d}`
 }
 
+/**
+ * Parses a "YYYY-MM-DD" string as local midnight.
+ * `new Date(string)` treats ISO date-only strings as UTC midnight per spec,
+ * which shifts the date by one day for users in UTC- timezones.
+ * Using the 3-argument constructor avoids this.
+ * @param {string} dateStr
+ * @returns {Date}
+ */
+function parseDateLocal(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number)
+  return new Date(y, m - 1, d)
+}
+
 export function buildMonthRow(year, monthIndex) {
   const startCol = getMonthStartDay(year, monthIndex)
   const daysInMonth = getDaysInMonth(year, monthIndex)
@@ -244,13 +257,13 @@ export function getEventsForMonth(events, year, monthIndex) {
 
   const positioned = events
     .filter(ev => {
-      const s = new Date(ev.startDate)
-      const e = new Date(ev.endDate)
+      const s = parseDateLocal(ev.startDate)
+      const e = parseDateLocal(ev.endDate)
       return s <= monthEnd && e >= monthStart
     })
     .map(ev => {
-      const s = new Date(ev.startDate)
-      const e = new Date(ev.endDate)
+      const s = parseDateLocal(ev.startDate)
+      const e = parseDateLocal(ev.endDate)
       const clampedStart = s < monthStart ? monthStart : s
       const clampedEnd   = e > monthEnd   ? monthEnd   : e
       return {
