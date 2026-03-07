@@ -15,6 +15,7 @@ const PRESET_COLORS = [
 export default function EventModal({
   event,
   initialDate,
+  initialEndDate,
   onSave,
   onDelete,
   onClose,
@@ -25,7 +26,7 @@ export default function EventModal({
 
   const [title, setTitle]             = useState(event?.title     ?? '')
   const [startDate, setStart]         = useState(event?.startDate ?? initialDate ?? '')
-  const [endDate, setEnd]             = useState(event?.endDate   ?? initialDate ?? '')
+  const [endDate, setEnd]             = useState(event?.endDate   ?? initialEndDate ?? initialDate ?? '')
   const [tagId, setTagId]             = useState(event?.tagId     ?? null)
 
   // Inline new-tag form state

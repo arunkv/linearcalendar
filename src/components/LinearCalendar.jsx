@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState, useRef } from 'react'
+import { Fragment, useMemo, useState, useRef, useEffect, useCallback } from 'react'
 
 // ── Inline SVG icons ──────────────────────────────────────────────────────────
 const SunIcon = () => (
@@ -65,6 +65,9 @@ import {
   getEventsForMonth,
   eventsToIcs,
   icsToEvents,
+  parseDateLocal,
+  colToDateKey,
+  clampCol,
 } from '../utils/calendarUtils.js'
 import { useEvents } from '../hooks/useEvents.js'
 import { useTags } from '../hooks/useTags.js'
@@ -122,6 +125,161 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
   const [hiddenTagIds, setHiddenTagIds] = useState(() => new Set())
 
   const importInputRef = useRef(null)
+
+  // ── Drag state ──────────────────────────────────────────────────────────────
+  // dragRef is mutable (not state) so pointermove doesn't cause 60fps re-renders.
+  // Only dragVisual (which drives rendering) is real state.
+  const dragRef          = useRef(null)
+  const [dragVisual, setDragVisual] = useState(null)
+  const suppressClickRef = useRef(null) // holds eventId to swallow post-drag click
+  const gridRootRef      = useRef(null)
+
+  // Stable refs so useCallback([], []) closures can read the latest values
+  const yearRef        = useRef(year)
+  const updateEventRef = useRef(updateEvent)
+  useEffect(() => { yearRef.current = year }, [year])
+  useEffect(() => { updateEventRef.current = updateEvent }, [updateEvent])
+
+  const handlePointerMove = useCallback((e) => {
+    const drag = dragRef.current
+    if (!drag) return
+    const dx = e.clientX - drag.startClientX
+    const dy = e.clientY - drag.startClientY
+    if (!drag.hasMoved) {
+      if (Math.hypot(dx, dy) <= 4) return
+      drag.hasMoved = true
+    }
+    const rawCol = Math.floor((e.clientX - drag.colStartX) / drag.colWidth)
+    const col = clampCol(rawCol, yearRef.current, drag.monthIndex)
+    if (drag.type === 'create') {
+      if (col !== drag.currentCol) {
+        drag.currentCol = col
+        setDragVisual({
+          type: 'create',
+          monthIndex: drag.monthIndex,
+          startCol: Math.min(drag.anchorCol, col),
+          endCol:   Math.max(drag.anchorCol, col),
+        })
+      }
+    } else if (drag.type === 'resize') {
+      let newStart = drag.currentStartCol
+      let newEnd   = drag.currentEndCol
+      if (drag.edge === 'start') newStart = Math.min(col, drag.currentEndCol)
+      else                       newEnd   = Math.max(col, drag.currentStartCol)
+      if (newStart !== drag.currentStartCol || newEnd !== drag.currentEndCol) {
+        drag.currentStartCol = newStart
+        drag.currentEndCol   = newEnd
+        setDragVisual({
+          type: 'resize',
+          eventId:    drag.event.id,
+          monthIndex: drag.monthIndex,
+          startCol:   newStart,
+          endCol:     newEnd,
+        })
+      }
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handlePointerUp = useCallback(() => {
+    const drag = dragRef.current
+    if (!drag) return
+    // Remove drag CSS classes
+    const gridEl = gridRootRef.current
+    if (gridEl) {
+      gridEl.classList.remove(
+        'linear-calendar--dragging',
+        'linear-calendar--drag-create',
+        'linear-calendar--drag-resize',
+      )
+    }
+    if (drag.type === 'create') {
+      if (!drag.hasMoved) {
+        // Single tap — preserve original click-to-create behaviour
+        const dateKey = colToDateKey(yearRef.current, drag.monthIndex, drag.anchorCol)
+        setModalState({ mode: 'create', initialDate: dateKey })
+      } else {
+        // Drag — open modal with pre-filled date range
+        const startCol = Math.min(drag.anchorCol, drag.currentCol)
+        const endCol   = Math.max(drag.anchorCol, drag.currentCol)
+        setModalState({
+          mode: 'create',
+          initialDate:    colToDateKey(yearRef.current, drag.monthIndex, startCol),
+          initialEndDate: colToDateKey(yearRef.current, drag.monthIndex, endCol),
+        })
+      }
+    } else if (drag.type === 'resize') {
+      if (drag.hasMoved) {
+        const col     = drag.edge === 'start' ? drag.currentStartCol : drag.currentEndCol
+        const newDate = colToDateKey(yearRef.current, drag.monthIndex, col)
+        const field   = drag.edge === 'start' ? 'startDate' : 'endDate'
+        // Guard: don't produce an inverted range
+        const newStart = drag.edge === 'start' ? newDate : drag.event.startDate
+        const newEnd   = drag.edge === 'end'   ? newDate : drag.event.endDate
+        if (newStart <= newEnd) {
+          updateEventRef.current(drag.event.id, { [field]: newDate })
+        }
+        // Suppress the synthetic click that fires after pointer-capture release
+        suppressClickRef.current = drag.event.id
+      }
+    }
+    dragRef.current = null
+    setDragVisual(null)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Register document-level pointer handlers once
+  useEffect(() => {
+    document.addEventListener('pointermove', handlePointerMove)
+    document.addEventListener('pointerup',     handlePointerUp)
+    document.addEventListener('pointercancel', handlePointerUp)
+    return () => {
+      document.removeEventListener('pointermove', handlePointerMove)
+      document.removeEventListener('pointerup',     handlePointerUp)
+      document.removeEventListener('pointercancel', handlePointerUp)
+    }
+  }, [handlePointerMove, handlePointerUp])
+
+  // Read column geometry once at drag-start (all 1fr columns are equal width)
+  function getColGeometry() {
+    const root = gridRootRef.current
+    if (!root) return { colStartX: 0, colWidth: 1 }
+    const firstCell = root.querySelector('[data-col="0"]')
+    if (!firstCell) return { colStartX: 0, colWidth: 1 }
+    const rect = firstCell.getBoundingClientRect()
+    return { colStartX: rect.left, colWidth: rect.width || 1 }
+  }
+
+  function handleCellPointerDown(e, monthIndex, colIndex) {
+    if (e.button !== 0) return
+    e.currentTarget.setPointerCapture?.(e.pointerId)
+    const { colStartX, colWidth } = getColGeometry()
+    dragRef.current = {
+      type: 'create', monthIndex,
+      anchorCol: colIndex, currentCol: colIndex,
+      colStartX, colWidth,
+      hasMoved: false,
+      startClientX: e.clientX, startClientY: e.clientY,
+    }
+    const gridEl = gridRootRef.current
+    if (gridEl) gridEl.classList.add('linear-calendar--dragging', 'linear-calendar--drag-create')
+    setTooltip(null)
+  }
+
+  function handleResizePointerDown(e, ev, edge, monthIndex) {
+    e.stopPropagation()
+    e.preventDefault()
+    e.currentTarget.setPointerCapture?.(e.pointerId)
+    const { colStartX, colWidth } = getColGeometry()
+    dragRef.current = {
+      type: 'resize', edge, event: ev, monthIndex,
+      currentStartCol: ev.startCol, currentEndCol: ev.endCol,
+      colStartX, colWidth,
+      hasMoved: false,
+      startClientX: e.clientX, startClientY: e.clientY,
+    }
+    const gridEl = gridRootRef.current
+    if (gridEl) gridEl.classList.add('linear-calendar--dragging', 'linear-calendar--drag-resize')
+    setTooltip(null)
+  }
 
   // Pre-compute all 12 month rows; recomputes only when `year` changes
   const monthRows = useMemo(
@@ -229,7 +387,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
   }
 
   return (
-    <div className="linear-calendar">
+    <div className="linear-calendar" ref={gridRootRef}>
       {/* ── Top header bar ─────────────────────────────────────────────────── */}
       <div className="linear-calendar__header">
         {/* Brand: logo + app title */}
@@ -352,7 +510,9 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
                       <div
                         key={colIndex}
                         className={cellClass}
-                        onClick={empty ? undefined : () => setModalState({ mode: 'create', initialDate: dateKey })}
+                        data-col={colIndex}
+                        data-month={monthIndex}
+                        onPointerDown={empty ? undefined : (e) => handleCellPointerDown(e, monthIndex, colIndex)}
                       >
                         {!empty && (
                           <>
@@ -373,27 +533,72 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
                 {/* Events row */}
                 <div className="linear-calendar__row">
                   <div className="linear-calendar__events-container">
-                    {monthEvents.map(ev => (
+                    {/* Ghost bar for drag-to-create */}
+                    {dragVisual?.type === 'create' && dragVisual.monthIndex === monthIndex && (
                       <div
-                        key={ev.id}
-                        className="linear-calendar__event-bar"
+                        className="linear-calendar__ghost-bar"
                         style={{
-                          gridColumn: `${ev.startCol + 1} / ${ev.endCol + 2}`,
-                          gridRow: ev.row,
-                          backgroundColor: resolveEventColor(ev, tagsById),
+                          gridColumn: `${dragVisual.startCol + 1} / ${dragVisual.endCol + 2}`,
+                          gridRow: 1,
                         }}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setTooltip(null)
-                          setModalState({ mode: 'edit', event: ev })
-                        }}
-                        onMouseEnter={(e) => setTooltip({ event: ev, x: e.clientX, y: e.clientY })}
-                        onMouseMove={(e) => setTooltip(t => t ? { ...t, x: e.clientX, y: e.clientY } : null)}
-                        onMouseLeave={() => setTooltip(null)}
-                      >
-                        {ev.title}
-                      </div>
-                    ))}
+                        aria-hidden="true"
+                      />
+                    )}
+
+                    {monthEvents.map(ev => {
+                      const evStartDate = parseDateLocal(ev.startDate)
+                      const evEndDate   = parseDateLocal(ev.endDate)
+                      const monthStart  = new Date(year, monthIndex, 1)
+                      const monthEnd    = new Date(year, monthIndex + 1, 0)
+                      // Show left handle only when the event actually starts in this month
+                      const showLeft  = evStartDate >= monthStart
+                      // Show right handle only when the event actually ends in this month
+                      const showRight = evEndDate   <= monthEnd
+                      // During a resize, override the displayed columns for this bar
+                      const isResizing   = dragVisual?.type === 'resize' && dragVisual.eventId === ev.id && dragVisual.monthIndex === monthIndex
+                      const dispStartCol = isResizing ? dragVisual.startCol : ev.startCol
+                      const dispEndCol   = isResizing ? dragVisual.endCol   : ev.endCol
+
+                      return (
+                        <div
+                          key={ev.id}
+                          className="linear-calendar__event-bar"
+                          style={{
+                            gridColumn: `${dispStartCol + 1} / ${dispEndCol + 2}`,
+                            gridRow: ev.row,
+                            backgroundColor: resolveEventColor(ev, tagsById),
+                          }}
+                          onClick={(e) => {
+                            if (suppressClickRef.current === ev.id) {
+                              suppressClickRef.current = null
+                              return
+                            }
+                            e.stopPropagation()
+                            setTooltip(null)
+                            setModalState({ mode: 'edit', event: ev })
+                          }}
+                          onMouseEnter={(e) => { if (!dragRef.current) setTooltip({ event: ev, x: e.clientX, y: e.clientY }) }}
+                          onMouseMove={(e)  => { if (!dragRef.current) setTooltip(t => t ? { ...t, x: e.clientX, y: e.clientY } : null) }}
+                          onMouseLeave={() => setTooltip(null)}
+                        >
+                          {showLeft && (
+                            <div
+                              className="linear-calendar__resize-handle linear-calendar__resize-handle--left"
+                              onPointerDown={(e) => handleResizePointerDown(e, ev, 'start', monthIndex)}
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          )}
+                          <span className="linear-calendar__event-bar-title">{ev.title}</span>
+                          {showRight && (
+                            <div
+                              className="linear-calendar__resize-handle linear-calendar__resize-handle--right"
+                              onPointerDown={(e) => handleResizePointerDown(e, ev, 'end', monthIndex)}
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          )}
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
               </Fragment>
@@ -517,6 +722,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
         <EventModal
           event={modalState.mode === 'edit' ? modalState.event : null}
           initialDate={modalState.mode === 'create' ? modalState.initialDate : null}
+          initialEndDate={modalState.mode === 'create' ? (modalState.initialEndDate ?? null) : null}
           tags={tags}
           onAddTag={addTag}
           onSave={(data) => {

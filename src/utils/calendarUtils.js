@@ -106,9 +106,33 @@ export function toDateKey(year, monthIndex, day) {
  * @param {string} dateStr
  * @returns {Date}
  */
-function parseDateLocal(dateStr) {
+export function parseDateLocal(dateStr) {
   const [y, m, d] = dateStr.split('-').map(Number)
   return new Date(y, m - 1, d)
+}
+
+/**
+ * Returns the date key ("YYYY-MM-DD") for a given column index in a month's grid row.
+ * Inverse of the column math in buildMonthRow / getEventsForMonth.
+ * @param {number} year
+ * @param {number} monthIndex - 0 = January … 11 = December
+ * @param {number} col - 0-based column index (startCol … startCol + daysInMonth - 1)
+ */
+export function colToDateKey(year, monthIndex, col) {
+  const startCol = getMonthStartDay(year, monthIndex)
+  const day = col - startCol + 1
+  return toDateKey(year, monthIndex, day)
+}
+
+/**
+ * Clamps a column index to the valid day range for the given month.
+ * @param {number} col
+ * @param {number} year
+ * @param {number} monthIndex
+ */
+export function clampCol(col, year, monthIndex) {
+  const start = getMonthStartDay(year, monthIndex)
+  return Math.max(start, Math.min(start + getDaysInMonth(year, monthIndex) - 1, col))
 }
 
 export function buildMonthRow(year, monthIndex) {

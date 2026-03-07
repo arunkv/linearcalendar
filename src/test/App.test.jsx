@@ -78,44 +78,48 @@ describe('App', () => {
   it('should open event modal when clicking a date cell', () => {
     localStorage.getItem.mockReturnValue(null)
     render(<App />)
-    
+
     // Find a clickable date cell (contains a day number)
     const dayCells = screen.getAllByText(/^[1-9]$/)
     expect(dayCells.length).toBeGreaterThan(0)
-    fireEvent.click(dayCells[0])
+    // Cells now use onPointerDown; a tap fires pointerdown then pointerup (no movement)
+    fireEvent.pointerDown(dayCells[0], { button: 0, pointerId: 1 })
+    fireEvent.pointerUp(document, { pointerId: 1 })
     expect(screen.getByText('New event')).toBeInTheDocument()
   })
 
   it('should close modal when clicking cancel', () => {
     localStorage.getItem.mockReturnValue(null)
     render(<App />)
-    
+
     // Open modal
     const dayCells = screen.getAllByText(/^[1-9]$/)
-    fireEvent.click(dayCells[0])
-    
+    fireEvent.pointerDown(dayCells[0], { button: 0, pointerId: 1 })
+    fireEvent.pointerUp(document, { pointerId: 1 })
+
     expect(screen.getByText('New event')).toBeInTheDocument()
-    
+
     // Close modal
     fireEvent.click(screen.getByText('Cancel'))
-    
+
     expect(screen.queryByText('New event')).not.toBeInTheDocument()
   })
 
   it('should close modal when clicking overlay', () => {
     localStorage.getItem.mockReturnValue(null)
     render(<App />)
-    
+
     // Open modal
     const dayCells = screen.getAllByText(/^[1-9]$/)
-    fireEvent.click(dayCells[0])
-    
+    fireEvent.pointerDown(dayCells[0], { button: 0, pointerId: 1 })
+    fireEvent.pointerUp(document, { pointerId: 1 })
+
     expect(screen.getByText('New event')).toBeInTheDocument()
-    
+
     // Click overlay (outside the modal)
     const overlay = screen.getByRole('dialog', { name: 'New event' }).parentElement
     fireEvent.click(overlay)
-    
+
     expect(screen.queryByText('New event')).not.toBeInTheDocument()
   })
 

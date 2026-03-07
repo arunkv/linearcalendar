@@ -295,14 +295,13 @@
 
 /* ─── Event bars ─────────────────────────────────────────────────────────────*/
 .linear-calendar__event-bar {
+  position: relative;
   border-radius: 3px;
-  padding: 0 5px;
+  padding: 0;
   font-size: clamp(0.48rem, 0.75vw, 0.68rem);
   display: flex;
   align-items: center;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   color: #ffffff;
   cursor: pointer;
   user-select: none;
@@ -312,6 +311,66 @@
 .linear-calendar__event-bar:hover {
   filter: brightness(0.88);
 }
+
+/* Title text: fills bar, clips with ellipsis, leaves room for handles */
+.linear-calendar__event-bar-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0 6px;
+}
+
+/* ─── Resize handles ─────────────────────────────────────────────────────────*/
+.linear-calendar__resize-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  cursor: ew-resize;
+  opacity: 0;
+  transition: opacity 0.1s;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 3px;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.linear-calendar__resize-handle--left  { left: 0; }
+.linear-calendar__resize-handle--right { right: 0; }
+
+/* Show handles on bar hover */
+.linear-calendar__event-bar:hover .linear-calendar__resize-handle { opacity: 1; }
+
+/* Keep handles visible during any active drag */
+.linear-calendar--dragging .linear-calendar__resize-handle { opacity: 1; }
+
+/* ─── Ghost bar (drag-to-create feedback) ────────────────────────────────────*/
+.linear-calendar__ghost-bar {
+  border-radius: 3px;
+  background: rgba(59, 130, 246, 0.25);
+  border: 1.5px dashed #3b82f6;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Drag global state ──────────────────────────────────────────────────────*/
+/* Suppress text selection while dragging */
+.linear-calendar--dragging,
+.linear-calendar--dragging * {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Prevent event bars from capturing pointer events mid-drag
+   (allows column geometry reads from the underlying cell) */
+.linear-calendar--dragging .linear-calendar__event-bar {
+  pointer-events: none;
+}
+
+.linear-calendar--drag-create { cursor: crosshair; }
+.linear-calendar--drag-resize { cursor: ew-resize; }
 
 /* ─── Event tooltip ──────────────────────────────────────────────────────────*/
 .linear-calendar__event-tooltip {
@@ -452,8 +511,12 @@
 
   .linear-calendar__event-bar {
     font-size: 0.5rem;
-    padding: 0 3px;
+    padding: 0;
     border-radius: 2px;
+  }
+
+  .linear-calendar__event-bar-title {
+    padding: 0 3px;
   }
 
   /* Compact footer */
@@ -539,8 +602,12 @@
 
   .linear-calendar__event-bar {
     font-size: 0.42rem;
-    padding: 0 2px;
+    padding: 0;
     border-radius: 2px;
+  }
+
+  .linear-calendar__event-bar-title {
+    padding: 0 2px;
   }
 
   .linear-calendar__footer {
@@ -651,8 +718,15 @@
 
   .linear-calendar__event-bar {
     font-size: 5.5px;
+    padding: 0;
     cursor: default;
     transition: none;
+  }
+
+  /* ── Hide interactive drag elements ── */
+  .linear-calendar__resize-handle,
+  .linear-calendar__ghost-bar {
+    display: none;
   }
 
   /* ── Hide footer ── */
