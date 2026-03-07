@@ -4,6 +4,9 @@
 .LSOverride
 ._*
 
+# Claude Code
+.claude/
+
 # Editor files
 .vscode/
 .idea/
