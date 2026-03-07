@@ -94,6 +94,16 @@ describe('App', () => {
     expect(screen.getByText('New event')).toBeInTheDocument()
   })
 
+  it('should open event modal on a simple click tap', () => {
+    mockStorage({ helpSeen: '1' })
+    render(<App />)
+
+    const dayCells = screen.getAllByText(/^[1-9]$/)
+    fireEvent.click(dayCells[0])
+
+    expect(screen.getByText('New event')).toBeInTheDocument()
+  })
+
   it('should close modal when clicking cancel', () => {
     mockStorage({ helpSeen: '1' })
     render(<App />)

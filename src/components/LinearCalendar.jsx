@@ -106,6 +106,10 @@ function isEditableTarget(target) {
   )
 }
 
+function isTouchPointer(event) {
+  return event.pointerType === 'touch'
+}
+
 // ── Color resolution ──────────────────────────────────────────────────────────
 // Tagged event → use tag's current color; otherwise neutral gray
 function resolveEventColor(ev, tagsById) {
@@ -169,6 +173,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
   const dragRef          = useRef(null)
   const [dragVisual, setDragVisual] = useState(null)
   const suppressClickRef = useRef(null) // holds eventId to swallow post-drag click
+  const suppressCellClickRef = useRef(false)
   const gridRootRef      = useRef(null)
 
   // Stable refs so useCallback([], []) closures can read the latest values
@@ -233,16 +238,15 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
       if (!drag.hasMoved) {
         // Single tap — preserve original click-to-create behaviour
         const dateKey = colToDateKey(yearRef.current, drag.monthIndex, drag.anchorCol)
-        setModalState({ mode: 'create', initialDate: dateKey })
+        openCreateModal(dateKey)
       } else {
         // Drag — open modal with pre-filled date range
         const startCol = Math.min(drag.anchorCol, drag.currentCol)
         const endCol   = Math.max(drag.anchorCol, drag.currentCol)
-        setModalState({
-          mode: 'create',
-          initialDate:    colToDateKey(yearRef.current, drag.monthIndex, startCol),
-          initialEndDate: colToDateKey(yearRef.current, drag.monthIndex, endCol),
-        })
+        openCreateModal(
+          colToDateKey(yearRef.current, drag.monthIndex, startCol),
+          colToDateKey(yearRef.current, drag.monthIndex, endCol),
+        )
       }
     } else if (drag.type === 'resize') {
       if (drag.hasMoved) {
@@ -313,6 +317,8 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
 
   function handleCellPointerDown(e, monthIndex, colIndex) {
     if (e.button !== 0) return
+    if (isTouchPointer(e)) return
+    suppressCellClickRef.current = true
     e.currentTarget.setPointerCapture?.(e.pointerId)
     const { colStartX, colWidth } = getColGeometry()
     dragRef.current = {
@@ -328,6 +334,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
   }
 
   function handleResizePointerDown(e, ev, edge, monthIndex) {
+    if (isTouchPointer(e)) return
     e.stopPropagation()
     e.preventDefault()
     e.currentTarget.setPointerCapture?.(e.pointerId)
@@ -410,8 +417,16 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
     setShowClearConfirm(false)
   }
 
-  function openCreateModal(dateKey = getDefaultCreateDate(year)) {
-    setModalState({ mode: 'create', initialDate: dateKey, initialEndDate: dateKey })
+  function openCreateModal(dateKey = getDefaultCreateDate(year), endDate = dateKey) {
+    setModalState({ mode: 'create', initialDate: dateKey, initialEndDate: endDate })
+  }
+
+  function handleCellClick(dateKey) {
+    if (suppressCellClickRef.current) {
+      suppressCellClickRef.current = false
+      return
+    }
+    openCreateModal(dateKey)
   }
 
   function openImportPicker() {
@@ -634,6 +649,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
                         data-col={colIndex}
                         data-month={monthIndex}
                         onPointerDown={empty ? undefined : (e) => handleCellPointerDown(e, monthIndex, colIndex)}
+                        onClick={empty ? undefined : () => handleCellClick(dateKey)}
                       >
                         {!empty && (
                           <>

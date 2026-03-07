@@ -529,6 +529,7 @@
     min-height: 0;
     overflow: auto;
     padding: 4px 0;
+    touch-action: pan-x;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -604,6 +605,7 @@
     min-height: 0;
     overflow: auto;
     padding: 2px 0;
+    touch-action: pan-x;
     -webkit-overflow-scrolling: touch;
   }
 
