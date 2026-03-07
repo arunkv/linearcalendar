@@ -23,6 +23,7 @@ describe('HelpModal', () => {
     expect(screen.getByText('Getting started')).toBeInTheDocument()
     expect(screen.getByText('Tags')).toBeInTheDocument()
     expect(screen.getByText('Import & Export')).toBeInTheDocument()
+    expect(screen.getByText('Keyboard shortcuts')).toBeInTheDocument()
     expect(screen.getByText('Other')).toBeInTheDocument()
   })
 
@@ -53,6 +54,16 @@ describe('HelpModal', () => {
     renderModal({ onClose })
     fireEvent.click(screen.getByRole('dialog'))
     expect(onClose).not.toHaveBeenCalled()
+  })
+
+  it('renders the keyboard shortcuts list', () => {
+    renderModal()
+    expect(screen.getByText('Keyboard shortcuts')).toBeInTheDocument()
+    expect(screen.getByText((_, node) => node.textContent === '? — open help.')).toBeInTheDocument()
+    expect(screen.getByText((_, node) => node.textContent === 'N — create a new event.')).toBeInTheDocument()
+    expect(screen.getByText((_, node) => node.textContent === 'X — export events as .ics.')).toBeInTheDocument()
+    expect(screen.getByText((_, node) => node.textContent === 'I — import from a .ics file.')).toBeInTheDocument()
+    expect(screen.getByText((_, node) => node.textContent === 'Esc — close the current dialog.')).toBeInTheDocument()
   })
 
   it('calls onClose when Escape key is pressed', () => {

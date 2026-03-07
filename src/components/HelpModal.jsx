@@ -56,6 +56,17 @@ export default function HelpModal({ onClose }) {
           </section>
 
           <section className="help-modal__section">
+            <h3>Keyboard shortcuts</h3>
+            <ul>
+              <li><kbd>?</kbd> — open help.</li>
+              <li><kbd>N</kbd> — create a new event.</li>
+              <li><kbd>X</kbd> — export events as <code>.ics</code>.</li>
+              <li><kbd>I</kbd> — import from a <code>.ics</code> file.</li>
+              <li><kbd>Esc</kbd> — close the current dialog.</li>
+            </ul>
+          </section>
+
+          <section className="help-modal__section">
             <h3>Other</h3>
             <ul>
               <li>Toggle <strong>dark / light mode</strong> with the moon/sun icon.</li>

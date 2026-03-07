@@ -91,6 +91,21 @@ function formatDateRange(start, end) {
   return start === end ? formatDate(start) : `${formatDate(start)} – ${formatDate(end)}`
 }
 
+function getDefaultCreateDate(year) {
+  const now = new Date()
+  if (now.getFullYear() === year) {
+    return toDateKey(year, now.getMonth(), now.getDate())
+  }
+  return toDateKey(year, 0, 1)
+}
+
+function isEditableTarget(target) {
+  return target instanceof HTMLElement && (
+    target.isContentEditable ||
+    ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(target.tagName)
+  )
+}
+
 // ── Color resolution ──────────────────────────────────────────────────────────
 // Tagged event → use tag's current color; otherwise neutral gray
 function resolveEventColor(ev, tagsById) {
@@ -347,6 +362,15 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
     setShowClearConfirm(false)
   }
 
+  function openCreateModal(dateKey = getDefaultCreateDate(year)) {
+    setModalState({ mode: 'create', initialDate: dateKey, initialEndDate: dateKey })
+  }
+
+  function openImportPicker() {
+    setImportError(null)
+    importInputRef.current?.click()
+  }
+
   // ── Export events as .ics file download ───────────────────────────────────
   function handleExport() {
     const blob = new Blob([eventsToIcs(events, tagsById)], { type: 'text/calendar' })
@@ -385,6 +409,44 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
     reader.readAsText(file)
     e.target.value = '' // reset so same file can be re-imported
   }
+
+  useEffect(() => {
+    function onKeyDown(e) {
+      if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) return
+      if (isEditableTarget(e.target)) return
+
+      const isHelpShortcut = e.key === '?' || (e.key === '/' && e.shiftKey)
+      if (isHelpShortcut) {
+        e.preventDefault()
+        if (!showHelp && !modalState && !showClearConfirm && !deleteTagConfirm) {
+          openHelp()
+        }
+        return
+      }
+
+      if (showHelp || modalState || showClearConfirm || deleteTagConfirm) return
+
+      if (e.key === 'n' || e.key === 'N') {
+        e.preventDefault()
+        openCreateModal()
+        return
+      }
+
+      if (e.key === 'x' || e.key === 'X') {
+        e.preventDefault()
+        handleExport()
+        return
+      }
+
+      if (e.key === 'i' || e.key === 'I') {
+        e.preventDefault()
+        openImportPicker()
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [deleteTagConfirm, handleExport, modalState, showClearConfirm, showHelp, year])
 
   return (
     <div className="linear-calendar" ref={gridRootRef}>
@@ -432,7 +494,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
 
           <button
             className="linear-calendar__action-btn"
-            onClick={() => { setImportError(null); importInputRef.current?.click() }}
+            onClick={openImportPicker}
             title="Import events from .ics"
           >
             <UploadIcon /> <span className="linear-calendar__action-btn-label">Import</span>
