@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, act } from '@testing-library/react'
 import App from '../App.jsx'
 
 // Mock URL
@@ -11,6 +11,7 @@ Object.defineProperty(window, 'location', {
     set search(v) { mockSearch = v },
     pathname: '/',
     href: 'http://localhost/',
+    reload: vi.fn(),
   },
 })
 
@@ -26,6 +27,7 @@ describe('App', () => {
     vi.clearAllMocks()
     localStorage.clear()
     mockSearch = '?year=2024'
+    window.location.reload.mockReset()
   })
 
   it('should render the calendar with year from URL', () => {
@@ -217,5 +219,73 @@ describe('App', () => {
 
     expect(createObjectURL).not.toHaveBeenCalled()
     expect(screen.getAllByRole('dialog')).toHaveLength(1)
+  })
+
+  it('should show the install button when install is available', async () => {
+    mockStorage({ helpSeen: '1' })
+    render(<App />)
+
+    const installEvent = new Event('beforeinstallprompt')
+    installEvent.preventDefault = vi.fn()
+    installEvent.prompt = vi.fn()
+    installEvent.userChoice = Promise.resolve({ outcome: 'accepted' })
+
+    act(() => {
+      window.dispatchEvent(installEvent)
+    })
+
+    expect(installEvent.preventDefault).toHaveBeenCalledTimes(1)
+    expect(await screen.findByRole('button', { name: 'Install' })).toBeInTheDocument()
+  })
+
+  it('should prompt installation when clicking Install', async () => {
+    mockStorage({ helpSeen: '1' })
+    render(<App />)
+
+    const installEvent = new Event('beforeinstallprompt')
+    installEvent.preventDefault = vi.fn()
+    installEvent.prompt = vi.fn()
+    installEvent.userChoice = Promise.resolve({ outcome: 'accepted' })
+
+    act(() => {
+      window.dispatchEvent(installEvent)
+    })
+
+    await act(async () => {
+      fireEvent.click(await screen.findByRole('button', { name: 'Install' }))
+      await installEvent.userChoice
+    })
+
+    expect(installEvent.prompt).toHaveBeenCalledTimes(1)
+  })
+
+  it('should show a reload toast when an update is available', async () => {
+    mockStorage({ helpSeen: '1' })
+    render(<App />)
+
+    const registration = { waiting: { postMessage: vi.fn() } }
+    act(() => {
+      window.dispatchEvent(new CustomEvent('linearcalendar:pwa-update-available', { detail: registration }))
+    })
+
+    expect(await screen.findByRole('status')).toHaveTextContent('A new version is available.')
+    expect(await screen.findByRole('button', { name: 'Reload' })).toBeInTheDocument()
+  })
+
+  it('should reload when clicking the update toast action', async () => {
+    mockStorage({ helpSeen: '1' })
+    render(<App />)
+
+    const postMessage = vi.fn()
+    act(() => {
+      window.dispatchEvent(new CustomEvent('linearcalendar:pwa-update-available', {
+        detail: { waiting: { postMessage } },
+      }))
+    })
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Reload' }))
+
+    expect(postMessage).toHaveBeenCalledWith({ type: 'SKIP_WAITING' })
+    expect(window.location.reload).toHaveBeenCalledTimes(1)
   })
 })

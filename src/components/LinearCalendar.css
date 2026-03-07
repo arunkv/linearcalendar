@@ -76,6 +76,16 @@
   color: #dc2626;
   border-color: #fecaca;
 }
+
+.linear-calendar__action-btn--accent {
+  color: #ea580c;
+  border-color: #fdba74;
+  background: rgba(249, 115, 22, 0.08);
+}
+
+.linear-calendar__action-btn--accent:hover {
+  background: rgba(249, 115, 22, 0.16);
+}
 .linear-calendar__action-btn--danger:hover {
   background: #fef2f2;
 }
@@ -123,6 +133,42 @@
 .linear-calendar__confirm-actions-right {
   display: flex;
   gap: 8px;
+}
+
+.linear-calendar__toast {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--cell-bg, #ffffff);
+  color: var(--cell-color, #111827);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+  padding: 10px 12px;
+}
+
+.linear-calendar__toast-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.linear-calendar__toast-btn {
+  border: 0;
+  border-radius: 6px;
+  background: #f97316;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.linear-calendar__toast-btn:hover {
+  background: #ea580c;
 }
 
 /* ─── Grid wrapper ───────────────────────────────────────────────────────────
@@ -177,7 +223,7 @@
    horizontally on narrow viewports. */
 .linear-calendar__month-label {
   background-color: var(--month-label-bg, #f9fafb);
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-weight: 700;
   font-size: clamp(0.6rem, 1.1vw, 0.875rem);
   padding: 4px 7px;
@@ -661,6 +707,10 @@
 
   /* ── Hide interactive header buttons (theme / export / import / print) ── */
   .linear-calendar__header-actions {
+    display: none;
+  }
+
+  .linear-calendar__toast {
     display: none;
   }
 

@@ -125,11 +125,33 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
     () => !localStorage.getItem('helpSeen')
   )
   const [tooltip, setTooltip] = useState(null) // { event, x, y }
+  const [installPrompt, setInstallPrompt] = useState(null)
+  const [updateRegistration, setUpdateRegistration] = useState(null)
+  const [isInstalling, setIsInstalling] = useState(false)
 
   function openHelp() { setShowHelp(true) }
   function closeHelp() {
     localStorage.setItem('helpSeen', '1')
     setShowHelp(false)
+  }
+
+  async function handleInstallApp() {
+    if (!installPrompt || isInstalling) return
+    setIsInstalling(true)
+    installPrompt.prompt()
+    try {
+      await installPrompt.userChoice
+    } finally {
+      setInstallPrompt(null)
+      setIsInstalling(false)
+    }
+  }
+
+  function handleReloadApp() {
+    if (updateRegistration?.waiting) {
+      updateRegistration.waiting.postMessage({ type: 'SKIP_WAITING' })
+    }
+    window.location.reload()
   }
 
   // null = closed
@@ -252,6 +274,32 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
       document.removeEventListener('pointercancel', handlePointerUp)
     }
   }, [handlePointerMove, handlePointerUp])
+
+  useEffect(() => {
+    function onBeforeInstallPrompt(e) {
+      e.preventDefault()
+      setInstallPrompt(e)
+    }
+
+    function onAppInstalled() {
+      setInstallPrompt(null)
+      setIsInstalling(false)
+    }
+
+    function onUpdateAvailable(e) {
+      setUpdateRegistration(e.detail ?? null)
+    }
+
+    window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt)
+    window.addEventListener('appinstalled', onAppInstalled)
+    window.addEventListener('linearcalendar:pwa-update-available', onUpdateAvailable)
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt)
+      window.removeEventListener('appinstalled', onAppInstalled)
+      window.removeEventListener('linearcalendar:pwa-update-available', onUpdateAvailable)
+    }
+  }, [])
 
   // Read column geometry once at drag-start (all 1fr columns are equal width)
   function getColGeometry() {
@@ -484,6 +532,17 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             ?
           </button>
 
+          {installPrompt && (
+            <button
+              className="linear-calendar__action-btn linear-calendar__action-btn--accent"
+              onClick={handleInstallApp}
+              disabled={isInstalling}
+              title="Install app"
+            >
+              Install
+            </button>
+          )}
+
           <button
             className="linear-calendar__action-btn"
             onClick={handleExport}
@@ -669,6 +728,22 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
 
         </div>
       </div>
+
+      {updateRegistration && (
+        <div
+          className="linear-calendar__toast"
+          role="status"
+          aria-live="polite"
+        >
+          <span className="linear-calendar__toast-text">A new version is available.</span>
+          <button
+            className="linear-calendar__toast-btn"
+            onClick={handleReloadApp}
+          >
+            Reload
+          </button>
+        </div>
+      )}
 
       {/* ── Footer ──────────────────────────────────────────────────────────── */}
       <footer className="linear-calendar__footer">

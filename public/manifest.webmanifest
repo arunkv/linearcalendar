@@ -1,0 +1,25 @@
+{
+  "name": "Linear Calendar",
+  "short_name": "Linear Calendar",
+  "description": "A year-at-a-glance calendar for planning and tracking events locally in your browser.",
+  "start_url": ".",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "landscape-primary",
+  "background_color": "#f3f4f6",
+  "theme_color": "#f97316",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
