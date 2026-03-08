@@ -1,0 +1,34 @@
+.language-switcher {
+  background: transparent;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--header-color, #111827);
+  cursor: pointer;
+  outline: none;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
+}
+
+.language-switcher:hover {
+  border-color: var(--header-border, #d1d5db);
+  background-color: var(--empty-cell-bg, #f9fafb);
+}
+
+.language-switcher:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+[data-theme='dark'] .language-switcher {
+  border-color: var(--border-color, #334155);
+  color: var(--header-color, #f1f5f9);
+}
+
+[data-theme='dark'] .language-switcher:hover {
+  border-color: var(--header-border, #475569);
+  background-color: var(--empty-cell-bg, #1e293b);
+}

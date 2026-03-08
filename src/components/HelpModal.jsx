@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import './HelpModal.css'
-import t from '../locales/index.js'
 
-export default function HelpModal({ onClose }) {
+export default function HelpModal({ onClose, t }) {
   const h = t.helpModal
 
   useEffect(() => {

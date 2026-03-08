@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import './EventModal.css'
-import t from '../locales/index.js'
 
 const PRESET_COLORS = [
   '#3b82f6', // blue
@@ -22,6 +21,7 @@ export default function EventModal({
   onClose,
   tags = [],
   onAddTag,
+  t,
 }) {
   const isEditing = Boolean(event)
 

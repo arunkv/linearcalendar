@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import LinearCalendar from './components/LinearCalendar.jsx'
-import t from './locales/index.js'
+import { useLocale } from './hooks/useLocale.js'
 
 /** Read ?year=YYYY from the current URL. Returns the integer or null. */
 function getYearFromUrl() {
@@ -14,6 +14,9 @@ export default function App() {
   const [selectedYear, setSelectedYear] = useState(() => getYearFromUrl() ?? currentYear)
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light')
 
+  // Locale management
+  const { t, locale, setLocale, availableLocales } = useLocale()
+
   // Apply theme to <html> and persist
   useEffect(() => {
     document.documentElement.dataset.theme = theme
@@ -23,7 +26,7 @@ export default function App() {
   // Keep the browser tab title in sync with the selected year
   useEffect(() => {
     document.title = t.pageTitle(selectedYear)
-  }, [selectedYear])
+  }, [selectedYear, t])
 
   // Keep URL in sync with year state and handle browser back/forward
   function selectYear(year) {
@@ -50,6 +53,10 @@ export default function App() {
       onChangeYear={selectYear}
       theme={theme}
       onToggleTheme={toggleTheme}
+      t={t}
+      locale={locale}
+      onChangeLocale={setLocale}
+      availableLocales={availableLocales}
     />
   )
 }

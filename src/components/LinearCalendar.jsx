@@ -114,7 +114,7 @@ const TrashIcon = () => (
     <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
   </svg>
 )
-import t from '../locales/index.js'
+import LanguageSwitcher from './LanguageSwitcher.jsx'
 import {
   buildMonthRow,
   GRID_COLS,
@@ -141,14 +141,14 @@ const MONTH_INDICES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 const COL_INDICES = Array.from({ length: GRID_COLS }, (_, i) => i) // eslint-disable-line no-unused-vars
 
 // ── Date formatting for tooltip ───────────────────────────────────────────────
-function formatDate(dateStr) {
+function formatDate(dateStr, months) {
   const [y, m, d] = dateStr.split('-').map(Number)
-  return `${t.calendar.months[m - 1]} ${d}, ${y}`
+  return `${months[m - 1]} ${d}, ${y}`
 }
-function formatDateRange(start, end) {
+function formatDateRange(start, end, months, separator) {
   return start === end
-    ? formatDate(start)
-    : `${formatDate(start)} ${t.calendar.dateRangeSeparator} ${formatDate(end)}`
+    ? formatDate(start, months)
+    : `${formatDate(start, months)} ${separator} ${formatDate(end, months)}`
 }
 
 function getDefaultCreateDate(year) {
@@ -177,7 +177,16 @@ function resolveEventColor(ev, tagsById) {
   return '#6b7280'
 }
 
-export default function LinearCalendar({ year, onChangeYear, theme, onToggleTheme }) {
+export default function LinearCalendar({
+  year,
+  onChangeYear,
+  theme,
+  onToggleTheme,
+  t,
+  locale,
+  onChangeLocale,
+  availableLocales,
+}) {
   const { events, addEvent, updateEvent, deleteEvent, replaceAll } = useEvents()
   const {
     tags,
@@ -440,7 +449,8 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
         name: t.calendar.months[monthIndex],
         cells: buildMonthRow(year, monthIndex),
       })),
-    [year]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [year, locale]
   )
 
   // Fast lookup: { [tagId]: tag }
@@ -607,7 +617,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
           <span className="linear-calendar__brand-title">{t.appName}</span>
         </div>
 
-        <YearSwitcher year={year} onYearChange={onChangeYear} />
+        <YearSwitcher year={year} onYearChange={onChangeYear} t={t} />
 
         <div className="linear-calendar__header-actions">
           <button
@@ -618,6 +628,12 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
           >
             {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
           </button>
+
+          <LanguageSwitcher
+            currentLocale={locale}
+            onChange={onChangeLocale}
+            availableLocales={availableLocales}
+          />
 
           <button
             className="linear-calendar__action-btn linear-calendar__action-btn--icon-only"
@@ -698,6 +714,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
         onToggle={toggleTagVisibility}
         onEditTag={updateTag}
         onDelete={handleDeleteTag}
+        t={t}
       />
 
       {/* ── Grid wrapper (handles fallback scroll on narrow viewports) ──────── */}
@@ -959,7 +976,12 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
         >
           <span className="linear-calendar__event-tooltip-title">{tooltip.event.title}</span>
           <span className="linear-calendar__event-tooltip-dates">
-            {formatDateRange(tooltip.event.startDate, tooltip.event.endDate)}
+            {formatDateRange(
+              tooltip.event.startDate,
+              tooltip.event.endDate,
+              t.calendar.months,
+              t.calendar.dateRangeSeparator
+            )}
           </span>
           {tooltip.event.tagId && tagsById[tooltip.event.tagId] && (
             <span className="linear-calendar__event-tooltip-tag">
@@ -974,7 +996,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
       )}
 
       {/* ── Help / welcome modal ────────────────────────────────────────────── */}
-      {showHelp && <HelpModal onClose={closeHelp} />}
+      {showHelp && <HelpModal onClose={closeHelp} t={t} />}
 
       {/* ── Event modal ─────────────────────────────────────────────────────── */}
       {modalState && (
@@ -998,6 +1020,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
               : undefined
           }
           onClose={() => setModalState(null)}
+          t={t}
         />
       )}
     </div>

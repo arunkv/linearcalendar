@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import './TagFilterBar.css'
-import t from '../locales/index.js'
 
 const PRESET_COLORS = [
   '#3b82f6',
@@ -13,7 +12,7 @@ const PRESET_COLORS = [
   '#6b7280',
 ]
 
-export default function TagFilterBar({ tags, hiddenTagIds, onToggle, onEditTag, onDelete }) {
+export default function TagFilterBar({ tags, hiddenTagIds, onToggle, onEditTag, onDelete, t }) {
   const [editingTagId, setEditingTagId] = useState(null)
   const [editName, setEditName] = useState('')
   const [editColor, setEditColor] = useState(PRESET_COLORS[0])

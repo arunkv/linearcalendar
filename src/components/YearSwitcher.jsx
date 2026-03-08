@@ -1,6 +1,5 @@
 import { useMemo, useState, useRef } from 'react'
 import './YearSwitcher.css'
-import t from '../locales/index.js'
 
 const TODAY_YEAR = new Date().getFullYear()
 
@@ -8,7 +7,7 @@ function isValidYear(n) {
   return Number.isInteger(n) && n >= 1 && n <= 9999
 }
 
-export default function YearSwitcher({ year, onYearChange }) {
+export default function YearSwitcher({ year, onYearChange, t }) {
   const [customMode, setCustomMode] = useState(false)
   const [customValue, setCustomValue] = useState('')
   const [invalid, setInvalid] = useState(false)

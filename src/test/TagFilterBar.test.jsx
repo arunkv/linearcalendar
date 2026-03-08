@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import TagFilterBar from '../components/TagFilterBar.jsx'
+import { mockT } from './mocks/locale.js'
 
 describe('TagFilterBar', () => {
   const mockTags = [
@@ -15,6 +16,7 @@ describe('TagFilterBar', () => {
     onToggle: vi.fn(),
     onEditTag: vi.fn(),
     onDelete: vi.fn(),
+    t: mockT,
   }
 
   const renderBar = (overrides = {}) => render(<TagFilterBar {...defaultProps} {...overrides} />)

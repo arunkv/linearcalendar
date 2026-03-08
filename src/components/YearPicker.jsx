@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import './YearPicker.css'
-import t from '../locales/index.js'
 
-export default function YearPicker({ defaultYear, onYearSelect, theme, onToggleTheme }) {
+export default function YearPicker({ defaultYear, onYearSelect, theme, onToggleTheme, t }) {
   const [inputValue, setInputValue] = useState(String(defaultYear))
 
   const parsedYear = parseInt(inputValue, 10)

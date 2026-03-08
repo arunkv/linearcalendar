@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import EventModal from '../components/EventModal.jsx'
+import { mockT } from './mocks/locale.js'
 
 describe('EventModal', () => {
   const mockTags = [
@@ -16,6 +17,7 @@ describe('EventModal', () => {
     onClose: vi.fn(),
     tags: mockTags,
     onAddTag: vi.fn(),
+    t: mockT,
   }
 
   const renderModal = (overrides = {}) => render(<EventModal {...defaultProps} {...overrides} />)

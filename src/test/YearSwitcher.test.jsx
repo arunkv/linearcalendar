@@ -1,16 +1,17 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import YearSwitcher from '../components/YearSwitcher.jsx'
+import { mockT } from './mocks/locale.js'
 
 describe('YearSwitcher', () => {
   it('should render the current year', () => {
-    render(<YearSwitcher year={2024} onYearChange={vi.fn()} />)
+    render(<YearSwitcher year={2024} onYearChange={vi.fn()} t={mockT} />)
     expect(screen.getByDisplayValue('2024')).toBeInTheDocument()
   })
 
   it('should call onYearChange with previous year when clicking left arrow', () => {
     const onYearChange = vi.fn()
-    render(<YearSwitcher year={2024} onYearChange={onYearChange} />)
+    render(<YearSwitcher year={2024} onYearChange={onYearChange} t={mockT} />)
 
     const prevButton = screen.getByLabelText('Previous year')
     fireEvent.click(prevButton)
@@ -20,7 +21,7 @@ describe('YearSwitcher', () => {
 
   it('should call onYearChange with next year when clicking right arrow', () => {
     const onYearChange = vi.fn()
-    render(<YearSwitcher year={2024} onYearChange={onYearChange} />)
+    render(<YearSwitcher year={2024} onYearChange={onYearChange} t={mockT} />)
 
     const nextButton = screen.getByLabelText('Next year')
     fireEvent.click(nextButton)
@@ -29,13 +30,13 @@ describe('YearSwitcher', () => {
   })
 
   it('should have year select dropdown', () => {
-    render(<YearSwitcher year={2024} onYearChange={vi.fn()} />)
+    render(<YearSwitcher year={2024} onYearChange={vi.fn()} t={mockT} />)
     expect(screen.getByLabelText('Select year')).toBeInTheDocument()
   })
 
   it('should call onYearChange when selecting a year from dropdown', () => {
     const onYearChange = vi.fn()
-    render(<YearSwitcher year={2024} onYearChange={onYearChange} />)
+    render(<YearSwitcher year={2024} onYearChange={onYearChange} t={mockT} />)
 
     const select = screen.getByLabelText('Select year')
     fireEvent.change(select, { target: { value: '2025' } })
@@ -44,19 +45,19 @@ describe('YearSwitcher', () => {
   })
 
   it('should disable previous button at year 1', () => {
-    render(<YearSwitcher year={1} onYearChange={vi.fn()} />)
+    render(<YearSwitcher year={1} onYearChange={vi.fn()} t={mockT} />)
     const prevButton = screen.getByLabelText('Previous year')
     expect(prevButton).toBeDisabled()
   })
 
   it('should disable next button at year 9999', () => {
-    render(<YearSwitcher year={9999} onYearChange={vi.fn()} />)
+    render(<YearSwitcher year={9999} onYearChange={vi.fn()} t={mockT} />)
     const nextButton = screen.getByLabelText('Next year')
     expect(nextButton).toBeDisabled()
   })
 
   it('should open custom year input when selecting "Enter year…"', () => {
-    render(<YearSwitcher year={2024} onYearChange={vi.fn()} />)
+    render(<YearSwitcher year={2024} onYearChange={vi.fn()} t={mockT} />)
 
     const select = screen.getByLabelText('Select year')
     fireEvent.change(select, { target: { value: '__custom__' } })
@@ -66,7 +67,7 @@ describe('YearSwitcher', () => {
 
   it('should call onYearChange when entering custom year', () => {
     const onYearChange = vi.fn()
-    render(<YearSwitcher year={2024} onYearChange={onYearChange} />)
+    render(<YearSwitcher year={2024} onYearChange={onYearChange} t={mockT} />)
 
     // Open custom input
     fireEvent.change(screen.getByLabelText('Select year'), { target: { value: '__custom__' } })
@@ -80,7 +81,7 @@ describe('YearSwitcher', () => {
   })
 
   it('should handle large year values', () => {
-    render(<YearSwitcher year={9999} onYearChange={vi.fn()} />)
+    render(<YearSwitcher year={9999} onYearChange={vi.fn()} t={mockT} />)
     const select = screen.getByLabelText('Select year')
     expect(select).toHaveValue('9999')
   })

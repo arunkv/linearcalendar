@@ -1,9 +1,11 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import HelpModal from '../components/HelpModal.jsx'
+import { mockT } from './mocks/locale.js'
 
 describe('HelpModal', () => {
-  const renderModal = (overrides = {}) => render(<HelpModal onClose={vi.fn()} {...overrides} />)
+  const renderModal = (overrides = {}) =>
+    render(<HelpModal onClose={vi.fn()} t={mockT} {...overrides} />)
 
   it('renders the dialog with correct role and label', () => {
     renderModal()
