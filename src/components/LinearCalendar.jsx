@@ -882,6 +882,17 @@ export default function LinearCalendar({
             Claude
           </a>
         </span>
+        <span className="linear-calendar__footer-sep">·</span>
+        <span>
+          <a
+            href="https://github.com/arunkv/linearcalendar"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="View source on GitHub"
+          >
+            GitHub
+          </a>
+        </span>
       </footer>
 
       {/* ── Clear confirmation dialog ────────────────────────────────────────── */}
