@@ -1,7 +1,10 @@
 import { useEffect } from 'react'
 import './HelpModal.css'
+import t from '../locales/index.js'
 
 export default function HelpModal({ onClose }) {
+  const h = t.helpModal
+
   useEffect(() => {
     function onKeyDown(e) {
       if (e.key === 'Escape') onClose()
@@ -17,67 +20,87 @@ export default function HelpModal({ onClose }) {
         onClick={e => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
-        aria-label="Help"
+        aria-label={h.ariaLabel}
       >
         <div className="help-modal__header">
-          <h2 className="help-modal__title">Welcome to Linear Calendar</h2>
-          <button className="help-modal__close-btn" onClick={onClose} aria-label="Close">✕</button>
+          <h2 className="help-modal__title">{h.title}</h2>
+          <button className="help-modal__close-btn" onClick={onClose} aria-label={h.close}>✕</button>
         </div>
 
         <div className="help-modal__body">
           <p className="help-modal__intro">
-            A year-at-a-glance calendar where every month is a single horizontal row.
+            {h.intro}
           </p>
 
           <section className="help-modal__section">
-            <h3>Getting started</h3>
+            <h3>{h.gettingStarted.heading}</h3>
             <ul>
-              <li><strong>Add an event</strong> — click any day cell on the calendar.</li>
-              <li><strong>Edit or delete an event</strong> — click the coloured event bar.</li>
-              <li><strong>Change year</strong> — use the year switcher in the header, or bookmark <code>?year=2025</code>.</li>
+              <li><strong>{h.gettingStarted.addEvent}</strong> {h.gettingStarted.addEventText}</li>
+              <li><strong>{h.gettingStarted.editEvent}</strong> {h.gettingStarted.editEventText}</li>
+              <li>
+                <strong>{h.gettingStarted.changeYear}</strong>{' '}
+                {h.gettingStarted.changeYearText}{' '}
+                <code>{h.gettingStarted.changeYearCode}</code>{h.gettingStarted.changeYearSuffix}
+              </li>
             </ul>
           </section>
 
           <section className="help-modal__section">
-            <h3>Tags</h3>
+            <h3>{h.tags.heading}</h3>
             <ul>
-              <li>Assign a <strong>tag</strong> (with a colour) to any event for easy grouping.</li>
-              <li>Create tags inline while adding or editing an event.</li>
-              <li>Toggle tag visibility from the filter bar below the header.</li>
+              <li>
+                {h.tags.assignPrefix} <strong>{h.tags.assignTag}</strong> {h.tags.assignSuffix}
+              </li>
+              <li>{h.tags.createInline}</li>
+              <li>{h.tags.toggleVisibility}</li>
             </ul>
           </section>
 
           <section className="help-modal__section">
-            <h3>Import &amp; Export</h3>
+            <h3>{h.importExport.heading}</h3>
             <ul>
-              <li><strong>Export</strong> — downloads all events as a standard <code>.ics</code> file.</li>
-              <li><strong>Import</strong> — loads events from any <code>.ics</code> file (replaces current data).</li>
+              <li>
+                <strong>{h.importExport.exportLabel}</strong>{' '}
+                {h.importExport.exportText} <code>{h.importExport.exportCode}</code> {h.importExport.exportSuffix}
+              </li>
+              <li>
+                <strong>{h.importExport.importLabel}</strong>{' '}
+                {h.importExport.importText} <code>{h.importExport.importCode}</code> {h.importExport.importSuffix}
+              </li>
             </ul>
           </section>
 
           <section className="help-modal__section">
-            <h3>Keyboard shortcuts</h3>
+            <h3>{h.shortcuts.heading}</h3>
             <ul>
-              <li><kbd>?</kbd> — open help.</li>
-              <li><kbd>N</kbd> — create a new event.</li>
-              <li><kbd>X</kbd> — export events as <code>.ics</code>.</li>
-              <li><kbd>I</kbd> — import from a <code>.ics</code> file.</li>
-              <li><kbd>Esc</kbd> — close the current dialog.</li>
+              <li><kbd>{h.shortcuts.helpKbd}</kbd> {h.shortcuts.helpText}</li>
+              <li><kbd>{h.shortcuts.newEventKbd}</kbd> {h.shortcuts.newEventText}</li>
+              <li>
+                <kbd>{h.shortcuts.exportKbd}</kbd>{' '}
+                {h.shortcuts.exportText} <code>{h.shortcuts.exportCode}</code>{h.shortcuts.exportSuffix}
+              </li>
+              <li>
+                <kbd>{h.shortcuts.importKbd}</kbd>{' '}
+                {h.shortcuts.importText} <code>{h.shortcuts.importCode}</code> {h.shortcuts.importSuffix}
+              </li>
+              <li><kbd>{h.shortcuts.escKbd}</kbd> {h.shortcuts.escText}</li>
             </ul>
           </section>
 
           <section className="help-modal__section">
-            <h3>Other</h3>
+            <h3>{h.other.heading}</h3>
             <ul>
-              <li>Toggle <strong>dark / light mode</strong> with the moon/sun icon.</li>
-              <li><strong>Print</strong> renders a clean, landscape-optimised view.</li>
-              <li>All data is stored locally in your browser — nothing is sent to a server.</li>
+              <li>
+                {h.other.togglePrefix} <strong>{h.other.toggleLabel}</strong> {h.other.toggleSuffix}
+              </li>
+              <li><strong>{h.other.printLabel}</strong> {h.other.printText}</li>
+              <li>{h.other.localStorage}</li>
             </ul>
           </section>
         </div>
 
         <div className="help-modal__footer">
-          <button className="help-modal__btn" onClick={onClose}>Got it</button>
+          <button className="help-modal__btn" onClick={onClose}>{h.gotIt}</button>
         </div>
       </div>
     </div>

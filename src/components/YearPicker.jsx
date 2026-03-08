@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './YearPicker.css'
+import t from '../locales/index.js'
 
 export default function YearPicker({ defaultYear, onYearSelect, theme, onToggleTheme }) {
   const [inputValue, setInputValue] = useState(String(defaultYear))
@@ -31,16 +32,16 @@ export default function YearPicker({ defaultYear, onYearSelect, theme, onToggleT
       <button
         className="year-picker__theme-btn"
         onClick={onToggleTheme}
-        aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-        title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+        aria-label={theme === 'dark' ? t.header.switchToLight : t.header.switchToDark}
+        title={theme === 'dark' ? t.header.lightMode : t.header.darkMode}
       >
         {theme === 'dark' ? '☀' : '☾'}
       </button>
 
       <div className="year-picker__card">
         <div className="year-picker__icon" aria-hidden="true">📅</div>
-        <h1 className="year-picker__title">Linear Calendar</h1>
-        <p className="year-picker__subtitle">Choose a year to get started</p>
+        <h1 className="year-picker__title">{t.appName}</h1>
+        <p className="year-picker__subtitle">{t.yearPicker.subtitle}</p>
 
         <form className="year-picker__form" onSubmit={handleSubmit}>
           <div className="year-picker__input-row">
@@ -48,7 +49,7 @@ export default function YearPicker({ defaultYear, onYearSelect, theme, onToggleT
               type="button"
               className="year-picker__step-btn"
               onClick={() => handleStep(-1)}
-              aria-label="Previous year"
+              aria-label={t.yearPicker.prevYear}
             >
               ‹
             </button>
@@ -60,13 +61,13 @@ export default function YearPicker({ defaultYear, onYearSelect, theme, onToggleT
               value={inputValue}
               onChange={handleChange}
               autoFocus
-              aria-label="Year"
+              aria-label={t.yearPicker.yearLabel}
             />
             <button
               type="button"
               className="year-picker__step-btn"
               onClick={() => handleStep(1)}
-              aria-label="Next year"
+              aria-label={t.yearPicker.nextYear}
             >
               ›
             </button>
@@ -77,7 +78,7 @@ export default function YearPicker({ defaultYear, onYearSelect, theme, onToggleT
             type="submit"
             disabled={!isValid}
           >
-            View Calendar →
+            {t.yearPicker.viewCalendar}
           </button>
         </form>
       </div>

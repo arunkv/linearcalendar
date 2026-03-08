@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import './EventModal.css'
+import t from '../locales/index.js'
 
 const PRESET_COLORS = [
   '#3b82f6', // blue
@@ -80,17 +81,17 @@ export default function EventModal({
         onClick={e => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
-        aria-label={isEditing ? 'Edit event' : 'New event'}
+        aria-label={isEditing ? t.eventModal.editEvent : t.eventModal.newEvent}
       >
         <div className="event-modal__header">
-          <h2 className="event-modal__title">{isEditing ? 'Edit event' : 'New event'}</h2>
-          <button className="event-modal__close-btn" onClick={onClose} aria-label="Close">✕</button>
+          <h2 className="event-modal__title">{isEditing ? t.eventModal.editEvent : t.eventModal.newEvent}</h2>
+          <button className="event-modal__close-btn" onClick={onClose} aria-label={t.eventModal.close}>✕</button>
         </div>
 
         <div className="event-modal__body">
           {/* Title */}
           <label className="event-modal__label">
-            Title
+            {t.eventModal.titleLabel}
             <input
               ref={titleRef}
               className="event-modal__input"
@@ -98,14 +99,14 @@ export default function EventModal({
               value={title}
               onChange={e => setTitle(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSave()}
-              placeholder="Event title"
+              placeholder={t.eventModal.titlePlaceholder}
             />
           </label>
 
           {/* Dates */}
           <div className="event-modal__dates">
             <label className="event-modal__label">
-              Start
+              {t.eventModal.startLabel}
               <input
                 className="event-modal__input"
                 type="date"
@@ -114,7 +115,7 @@ export default function EventModal({
               />
             </label>
             <label className="event-modal__label">
-              End
+              {t.eventModal.endLabel}
               <input
                 className="event-modal__input"
                 type="date"
@@ -127,7 +128,7 @@ export default function EventModal({
 
           {/* ── Tag picker ────────────────────────────────────────────────── */}
           <div className="event-modal__label">
-            Tag
+            {t.eventModal.tagLabel}
             <div className="event-modal__tag-picker">
               {/* "None" chip — event renders as default gray */}
               <button
@@ -142,7 +143,7 @@ export default function EventModal({
                   className="event-modal__tag-dot"
                   style={{ backgroundColor: '#6b7280' }}
                 />
-                None
+                {t.eventModal.tagNone}
               </button>
 
               {/* Existing tags */}
@@ -171,7 +172,7 @@ export default function EventModal({
                   className="event-modal__tag-new-trigger"
                   onClick={() => setShowNewTagForm(true)}
                 >
-                  + New tag
+                  {t.eventModal.newTagTrigger}
                 </button>
               )}
             </div>
@@ -186,7 +187,7 @@ export default function EventModal({
                   value={newTagName}
                   onChange={e => setNewTagName(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleCreateTag()}
-                  placeholder="Tag name"
+                  placeholder={t.eventModal.tagNamePlaceholder}
                 />
                 <div className="event-modal__swatches">
                   {PRESET_COLORS.map(c => (
@@ -211,7 +212,7 @@ export default function EventModal({
                     disabled={!newTagName.trim()}
                     onClick={handleCreateTag}
                   >
-                    Create
+                    {t.eventModal.createTag}
                   </button>
                   <button
                     type="button"
@@ -222,7 +223,7 @@ export default function EventModal({
                       setNewTagColor(PRESET_COLORS[0])
                     }}
                   >
-                    Cancel
+                    {t.eventModal.cancel}
                   </button>
                 </div>
               </div>
@@ -234,19 +235,19 @@ export default function EventModal({
         <div className="event-modal__footer">
           {isEditing && onDelete && (
             <button className="event-modal__btn event-modal__btn--delete" onClick={onDelete}>
-              Delete
+              {t.eventModal.deleteEvent}
             </button>
           )}
           <div className="event-modal__footer-right">
             <button className="event-modal__btn event-modal__btn--cancel" onClick={onClose}>
-              Cancel
+              {t.eventModal.cancel}
             </button>
             <button
               className="event-modal__btn event-modal__btn--save"
               onClick={handleSave}
               disabled={!title.trim() || !startDate || !endDate}
             >
-              Save
+              {t.eventModal.save}
             </button>
           </div>
         </div>

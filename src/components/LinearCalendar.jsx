@@ -54,10 +54,9 @@ const TrashIcon = () => (
     <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
   </svg>
 )
+import t from '../locales/index.js'
 import {
   buildMonthRow,
-  getMonthName,
-  DAY_ABBRS,
   GRID_COLS,
   isToday,
   isWeekendColumn,
@@ -82,13 +81,12 @@ const MONTH_INDICES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 const COL_INDICES = Array.from({ length: GRID_COLS }, (_, i) => i) // eslint-disable-line no-unused-vars
 
 // ── Date formatting for tooltip ───────────────────────────────────────────────
-const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 function formatDate(dateStr) {
   const [y, m, d] = dateStr.split('-').map(Number)
-  return `${MONTH_NAMES[m - 1]} ${d}, ${y}`
+  return `${t.calendar.months[m - 1]} ${d}, ${y}`
 }
 function formatDateRange(start, end) {
-  return start === end ? formatDate(start) : `${formatDate(start)} – ${formatDate(end)}`
+  return start === end ? formatDate(start) : `${formatDate(start)} ${t.calendar.dateRangeSeparator} ${formatDate(end)}`
 }
 
 function getDefaultCreateDate(year) {
@@ -356,7 +354,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
     () =>
       MONTH_INDICES.map((monthIndex) => ({
         monthIndex,
-        name: getMonthName(monthIndex).slice(0, 3),
+        name: t.calendar.months[monthIndex],
         cells: buildMonthRow(year, monthIndex),
       })),
     [year]
@@ -364,7 +362,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
 
   // Fast lookup: { [tagId]: tag }
   const tagsById = useMemo(
-    () => Object.fromEntries(tags.map(t => [t.id, t])),
+    () => Object.fromEntries(tags.map(tag => [tag.id, tag])),
     [tags]
   )
 
@@ -450,7 +448,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
     const file = e.target.files[0]
     if (!file) return
     if (!file.name.toLowerCase().endsWith('.ics')) {
-      setImportError('Invalid file type — please select a .ics file.')
+      setImportError(t.importError.invalidType)
       return
     }
     setImportError(null)
@@ -459,14 +457,14 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
       try {
         const { events: parsed, tags: parsedTags } = icsToEvents(ev.target.result)
         if (parsed.length === 0) {
-          setImportError('No valid events found in the file.')
+          setImportError(t.importError.noEvents)
         } else {
           replaceAll(parsed)
           replaceAllTags(parsedTags)
           setHiddenTagIds(new Set())
         }
       } catch (err) {
-        setImportError(err.message === 'ICS file too large' ? 'File too large (max 5 MB).' : 'Failed to parse .ics file.')
+        setImportError(err.message === 'ICS file too large' ? t.importError.tooLarge : t.importError.parseFailed)
       }
     }
     reader.readAsText(file)
@@ -523,7 +521,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             alt=""
             aria-hidden="true"
           />
-          <span className="linear-calendar__brand-title">Linear Calendar</span>
+          <span className="linear-calendar__brand-title">{t.appName}</span>
         </div>
 
         <YearSwitcher year={year} onYearChange={onChangeYear} />
@@ -532,8 +530,8 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
           <button
             className="linear-calendar__action-btn linear-calendar__action-btn--icon-only"
             onClick={onToggleTheme}
-            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-            title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+            aria-label={theme === 'dark' ? t.header.switchToLight : t.header.switchToDark}
+            title={theme === 'dark' ? t.header.lightMode : t.header.darkMode}
           >
             {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
           </button>
@@ -541,8 +539,8 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
           <button
             className="linear-calendar__action-btn linear-calendar__action-btn--icon-only"
             onClick={openHelp}
-            aria-label="Help"
-            title="Help"
+            aria-label={t.header.help}
+            title={t.header.help}
           >
             ?
           </button>
@@ -552,26 +550,26 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
               className="linear-calendar__action-btn linear-calendar__action-btn--accent"
               onClick={handleInstallApp}
               disabled={isInstalling}
-              title="Install app"
+              title={t.header.installTitle}
             >
-              Install
+              {t.header.install}
             </button>
           )}
 
           <button
             className="linear-calendar__action-btn"
             onClick={handleExport}
-            title="Export events as .ics"
+            title={t.header.exportTitle}
           >
-            <DownloadIcon /> <span className="linear-calendar__action-btn-label">Export</span>
+            <DownloadIcon /> <span className="linear-calendar__action-btn-label">{t.header.export}</span>
           </button>
 
           <button
             className="linear-calendar__action-btn"
             onClick={openImportPicker}
-            title="Import events from .ics"
+            title={t.header.importTitle}
           >
-            <UploadIcon /> <span className="linear-calendar__action-btn-label">Import</span>
+            <UploadIcon /> <span className="linear-calendar__action-btn-label">{t.header.import}</span>
           </button>
           {importError && (
             <span className="linear-calendar__action-btn--danger" role="alert">
@@ -582,17 +580,17 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
           <button
             className="linear-calendar__action-btn linear-calendar__action-btn--danger"
             onClick={() => setShowClearConfirm(true)}
-            title="Clear all events and tags"
+            title={t.header.clearTitle}
           >
-            <TrashIcon /> <span className="linear-calendar__action-btn-label">Clear</span>
+            <TrashIcon /> <span className="linear-calendar__action-btn-label">{t.header.clear}</span>
           </button>
 
           <button
             className="linear-calendar__action-btn"
             onClick={() => window.print()}
-            title="Print calendar"
+            title={t.header.printTitle}
           >
-            <PrintIcon /> <span className="linear-calendar__action-btn-label">Print</span>
+            <PrintIcon /> <span className="linear-calendar__action-btn-label">{t.header.print}</span>
           </button>
 
           {/* Hidden file input for import */}
@@ -658,7 +656,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
                               : <span className="linear-calendar__cell-day">{day}</span>
                             }
                             <span className="linear-calendar__cell-dow">
-                              {DAY_ABBRS[colIndex % 7]}
+                              {t.calendar.dayAbbrs[colIndex % 7]}
                             </span>
                           </>
                         )}
@@ -715,7 +713,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
                             setModalState({ mode: 'edit', event: ev })
                           }}
                           onMouseEnter={(e) => { if (!dragRef.current) setTooltip({ event: ev, x: e.clientX, y: e.clientY }) }}
-                          onMouseMove={(e)  => { if (!dragRef.current) setTooltip(t => t ? { ...t, x: e.clientX, y: e.clientY } : null) }}
+                          onMouseMove={(e)  => { if (!dragRef.current) setTooltip(prev => prev ? { ...prev, x: e.clientX, y: e.clientY } : null) }}
                           onMouseLeave={() => setTooltip(null)}
                         >
                           {showLeft && (
@@ -751,21 +749,21 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
           role="status"
           aria-live="polite"
         >
-          <span className="linear-calendar__toast-text">A new version is available.</span>
+          <span className="linear-calendar__toast-text">{t.toast.updateAvailable}</span>
           <button
             className="linear-calendar__toast-btn"
             onClick={handleReloadApp}
           >
-            Reload
+            {t.toast.reload}
           </button>
         </div>
       )}
 
       {/* ── Footer ──────────────────────────────────────────────────────────── */}
       <footer className="linear-calendar__footer">
-        <span>© {year} Arun K Viswanathan</span>
+        <span>{t.footer.copyright(year)}</span>
         <span className="linear-calendar__footer-sep">·</span>
-        <span>Built with <a href="https://claude.ai" target="_blank" rel="noreferrer">Claude</a></span>
+        <span>{t.footer.builtWith} <a href="https://claude.ai" target="_blank" rel="noreferrer">Claude</a></span>
       </footer>
 
       {/* ── Clear confirmation dialog ────────────────────────────────────────── */}
@@ -775,32 +773,33 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             className="linear-calendar__confirm-dialog"
             role="dialog"
             aria-modal="true"
-            aria-label="Clear calendar confirmation"
+            aria-label={t.clearDialog.ariaLabel}
             onClick={e => e.stopPropagation()}
           >
-            <h2>Clear calendar?</h2>
+            <h2>{t.clearDialog.title}</h2>
             <p>
-              This will permanently delete{' '}
-              <strong>{events.length} event{events.length !== 1 ? 's' : ''}</strong> and{' '}
-              <strong>{tags.length} tag{tags.length !== 1 ? 's' : ''}</strong>.
-              This cannot be undone.
+              {t.clearDialog.bodyPrefix}{' '}
+              <strong>{t.clearDialog.eventCount(events.length)}</strong>{' '}
+              {t.clearDialog.bodyAnd}{' '}
+              <strong>{t.clearDialog.tagCount(tags.length)}</strong>.{' '}
+              {t.clearDialog.bodySuffix}
             </p>
             <p className="linear-calendar__confirm-export-hint">
-              💡 We recommend exporting your data before clearing.
+              {t.clearDialog.exportHint}
             </p>
             <div className="linear-calendar__confirm-actions">
               <button className="linear-calendar__action-btn" onClick={handleExport}>
-                <DownloadIcon /> Export first
+                <DownloadIcon /> {t.clearDialog.exportFirst}
               </button>
               <div className="linear-calendar__confirm-actions-right">
                 <button className="linear-calendar__action-btn" onClick={() => setShowClearConfirm(false)}>
-                  Cancel
+                  {t.clearDialog.cancel}
                 </button>
                 <button
                   className="linear-calendar__action-btn linear-calendar__action-btn--danger"
                   onClick={handleClearAll}
                 >
-                  Clear everything
+                  {t.clearDialog.confirm}
                 </button>
               </div>
             </div>
@@ -818,25 +817,26 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
               className="linear-calendar__confirm-dialog"
               role="dialog"
               aria-modal="true"
-              aria-label="Delete tag confirmation"
+              aria-label={t.deleteTagDialog.ariaLabel}
               onClick={e => e.stopPropagation()}
             >
-              <h2>Delete tag{tag ? ` "${tag.name}"` : ''}?</h2>
+              <h2>{t.deleteTagDialog.title(tag?.name)}</h2>
               <p>
-                <strong>{affected.length} event{affected.length !== 1 ? 's' : ''}</strong>{' '}
-                use this tag. The tag will be removed from{' '}
-                {affected.length === 1 ? 'that event' : 'those events'} and deleted.
+                <strong>{t.deleteTagDialog.eventCount(affected.length)}</strong>{' '}
+                {t.deleteTagDialog.usesTag}{' '}
+                {affected.length === 1 ? t.deleteTagDialog.singularRef : t.deleteTagDialog.pluralRef}{' '}
+                {t.deleteTagDialog.bodySuffix}
               </p>
               <div className="linear-calendar__confirm-actions">
                 <div className="linear-calendar__confirm-actions-right">
                   <button className="linear-calendar__action-btn" onClick={() => setDeleteTagConfirm(null)}>
-                    Cancel
+                    {t.deleteTagDialog.cancel}
                   </button>
                   <button
                     className="linear-calendar__action-btn linear-calendar__action-btn--danger"
                     onClick={() => confirmDeleteTag(deleteTagConfirm)}
                   >
-                    Delete tag
+                    {t.deleteTagDialog.confirm}
                   </button>
                 </div>
               </div>

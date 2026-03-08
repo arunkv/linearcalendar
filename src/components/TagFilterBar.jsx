@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import './TagFilterBar.css'
+import t from '../locales/index.js'
 
 const PRESET_COLORS = [
   '#3b82f6', '#10b981', '#f97316', '#ef4444',
@@ -39,7 +40,7 @@ export default function TagFilterBar({ tags, hiddenTagIds, onToggle, onEditTag, 
 
   return (
     <div className="tag-filter-bar">
-      <span className="tag-filter-bar__label">Tags:</span>
+      <span className="tag-filter-bar__label">{t.tagFilterBar.label}</span>
       <div className="tag-filter-bar__chips">
         {tags.map(tag => {
           // ── Inline edit form ───────────────────────────────────────────────
@@ -56,7 +57,7 @@ export default function TagFilterBar({ tags, hiddenTagIds, onToggle, onEditTag, 
                     if (e.key === 'Enter') handleSaveEdit()
                     if (e.key === 'Escape') handleCancelEdit()
                   }}
-                  placeholder="Tag name"
+                  placeholder={t.tagFilterBar.tagNamePlaceholder}
                 />
                 <div className="tag-filter-bar__edit-swatches">
                   {PRESET_COLORS.map(c => (
@@ -81,14 +82,14 @@ export default function TagFilterBar({ tags, hiddenTagIds, onToggle, onEditTag, 
                     disabled={!editName.trim()}
                     onClick={handleSaveEdit}
                   >
-                    Save
+                    {t.tagFilterBar.save}
                   </button>
                   <button
                     type="button"
                     className="tag-filter-bar__edit-btn tag-filter-bar__edit-btn--cancel"
                     onClick={handleCancelEdit}
                   >
-                    Cancel
+                    {t.tagFilterBar.cancel}
                   </button>
                 </div>
               </div>
@@ -120,7 +121,7 @@ export default function TagFilterBar({ tags, hiddenTagIds, onToggle, onEditTag, 
                 className="tag-filter-bar__chip-edit"
                 role="button"
                 tabIndex={0}
-                aria-label={`Edit tag ${tag.name}`}
+                aria-label={t.tagFilterBar.editTag(tag.name)}
                 onClick={e => startEdit(tag, e)}
                 onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && startEdit(tag, e)}
               >
@@ -131,7 +132,7 @@ export default function TagFilterBar({ tags, hiddenTagIds, onToggle, onEditTag, 
                 className="tag-filter-bar__chip-delete"
                 role="button"
                 tabIndex={0}
-                aria-label={`Delete tag ${tag.name}`}
+                aria-label={t.tagFilterBar.deleteTag(tag.name)}
                 onClick={e => { e.stopPropagation(); onDelete(tag.id) }}
                 onKeyDown={e => {
                   if (e.key === 'Enter' || e.key === ' ') {

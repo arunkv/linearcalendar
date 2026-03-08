@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import LinearCalendar from './components/LinearCalendar.jsx'
+import t from './locales/index.js'
 
 /** Read ?year=YYYY from the current URL. Returns the integer or null. */
 function getYearFromUrl() {
@@ -25,7 +26,7 @@ export default function App() {
 
   // Keep the browser tab title in sync with the selected year
   useEffect(() => {
-    document.title = `${selectedYear} — Linear Calendar`
+    document.title = t.pageTitle(selectedYear)
   }, [selectedYear])
 
   // Keep URL in sync with year state and handle browser back/forward
@@ -44,7 +45,7 @@ export default function App() {
   }, [currentYear])
 
   function toggleTheme() {
-    setTheme(t => (t === 'light' ? 'dark' : 'light'))
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'))
   }
 
   return (

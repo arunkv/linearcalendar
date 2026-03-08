@@ -1,5 +1,6 @@
 import { useMemo, useState, useRef } from 'react'
 import './YearSwitcher.css'
+import t from '../locales/index.js'
 
 const TODAY_YEAR = new Date().getFullYear()
 
@@ -68,7 +69,7 @@ export default function YearSwitcher({ year, onYearChange }) {
       <button
         className="year-switcher__arrow"
         onClick={() => step(-1)}
-        aria-label="Previous year"
+        aria-label={t.yearSwitcher.prevYear}
         disabled={year <= 1}
       >
         ‹
@@ -90,13 +91,13 @@ export default function YearSwitcher({ year, onYearChange }) {
             onChange={(e) => { setCustomValue(e.target.value); setInvalid(false) }}
             onBlur={commitCustom}
             onKeyDown={handleCustomKeyDown}
-            aria-label="Enter year"
+            aria-label={t.yearSwitcher.enterYear}
           />
           <button
             className="year-switcher__cancel"
             onClick={cancelCustom}
-            aria-label="Cancel custom year"
-            title="Cancel"
+            aria-label={t.yearSwitcher.cancelYear}
+            title={t.yearSwitcher.cancelTitle}
           >
             ✕
           </button>
@@ -107,13 +108,13 @@ export default function YearSwitcher({ year, onYearChange }) {
           className="year-switcher__select"
           value={year}
           onChange={handleSelectChange}
-          aria-label="Select year"
+          aria-label={t.yearSwitcher.selectYear}
         >
           {presetYears.map((y) => (
             <option key={y} value={y}>{y}</option>
           ))}
           <option disabled>─────</option>
-          <option value="__custom__">Enter year…</option>
+          <option value="__custom__">{t.yearSwitcher.customOption}</option>
         </select>
       )}
 
@@ -121,7 +122,7 @@ export default function YearSwitcher({ year, onYearChange }) {
       <button
         className="year-switcher__arrow"
         onClick={() => step(1)}
-        aria-label="Next year"
+        aria-label={t.yearSwitcher.nextYear}
         disabled={year >= 9999}
       >
         ›
