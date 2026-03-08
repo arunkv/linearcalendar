@@ -37,9 +37,7 @@ export function useEvents() {
   }
 
   function updateEvent(id, changes) {
-    setEvents(prev =>
-      _persist(prev.map(ev => (ev.id === id ? { ...ev, ...changes } : ev)))
-    )
+    setEvents(prev => _persist(prev.map(ev => (ev.id === id ? { ...ev, ...changes } : ev))))
   }
 
   function deleteEvent(id) {

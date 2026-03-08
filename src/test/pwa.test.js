@@ -23,7 +23,9 @@ describe('pwa utilities', () => {
       nav: { serviceWorker: { controller: {} } },
     })
 
-    expect(dispatchEvent).toHaveBeenCalledWith(expect.objectContaining({ type: 'linearcalendar:pwa-update-available' }))
+    expect(dispatchEvent).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'linearcalendar:pwa-update-available' })
+    )
     expect(addEventListener).toHaveBeenCalledWith('updatefound', expect.any(Function))
   })
 

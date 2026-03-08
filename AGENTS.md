@@ -95,7 +95,38 @@ npm test              # Watch mode
 npm run test:run      # Single run (CI)
 npm run test:coverage # With coverage report
 npm run test:ui       # With interactive UI
+
+# Static analysis
+npm run lint          # ESLint for code quality and security
+npm run lint:fix      # Auto-fix ESLint issues
+npm run format        # Format code with Prettier
+npm run format:check  # Check formatting without changing files
+npm run analyze       # Run all checks (lint + format + test)
 ```
+
+---
+
+## Static Code Analysis
+
+The project uses ESLint with security plugins and Prettier for code quality.
+
+### ESLint Configuration
+- **Base**: `@eslint/js` recommended rules
+- **React**: `eslint-plugin-react` and `eslint-plugin-react-hooks`
+- **Security**: `eslint-plugin-security` for vulnerability detection
+- **Import**: `eslint-plugin-import` for ES module validation
+- **Prettier**: `eslint-config-prettier` to avoid formatting conflicts
+
+### Security Rules Enabled
+- `no-eval`, `no-implied-eval`, `no-new-func`, `no-script-url`
+- `security/detect-unsafe-regex`
+- `security/detect-eval-with-expression`
+- `security/detect-pseudoRandomBytes`
+- `react/no-danger` (prevents dangerouslySetInnerHTML)
+
+### CI/CD Integration
+- GitHub Actions runs lint, format check, and tests on every PR
+- CodeQL security analysis runs weekly and on pushes to main
 
 ---
 

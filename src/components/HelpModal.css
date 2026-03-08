@@ -47,7 +47,9 @@
   padding: 4px;
   line-height: 1;
   border-radius: 4px;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 .help-modal__close-btn:hover {

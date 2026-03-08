@@ -11,12 +11,8 @@ function getYearFromUrl() {
 export default function App() {
   const currentYear = new Date().getFullYear()
   // Initialise from URL (bookmarked ?year=YYYY), falling back to the current year
-  const [selectedYear, setSelectedYear] = useState(
-    () => getYearFromUrl() ?? currentYear
-  )
-  const [theme, setTheme] = useState(
-    () => localStorage.getItem('theme') || 'light'
-  )
+  const [selectedYear, setSelectedYear] = useState(() => getYearFromUrl() ?? currentYear)
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light')
 
   // Apply theme to <html> and persist
   useEffect(() => {

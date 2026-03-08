@@ -15,9 +15,7 @@ describe('useTags', () => {
   })
 
   it('should initialize with data from localStorage', () => {
-    const storedTags = [
-      { id: '1', name: 'Work', color: '#ff0000' }
-    ]
+    const storedTags = [{ id: '1', name: 'Work', color: '#ff0000' }]
     localStorage.getItem.mockReturnValue(JSON.stringify(storedTags))
     const { result } = renderHook(() => useTags())
     expect(result.current.tags).toEqual(storedTags)
@@ -41,11 +39,11 @@ describe('useTags', () => {
     expect(result.current.tags).toHaveLength(1)
     expect(result.current.tags[0]).toMatchObject({
       name: 'Personal',
-      color: '#00ff00'
+      color: '#00ff00',
     })
     expect(returnedTag).toMatchObject({
       name: 'Personal',
-      color: '#00ff00'
+      color: '#00ff00',
     })
     expect(returnedTag.id).toBeDefined()
   })
@@ -58,16 +56,11 @@ describe('useTags', () => {
       result.current.addTag({ name: 'Work', color: '#ff0000' })
     })
 
-    expect(localStorage.setItem).toHaveBeenCalledWith(
-      'linearcalendar-tags',
-      expect.any(String)
-    )
+    expect(localStorage.setItem).toHaveBeenCalledWith('linearcalendar-tags', expect.any(String))
   })
 
   it('should update an existing tag', () => {
-    const storedTags = [
-      { id: '1', name: 'Work', color: '#ff0000' }
-    ]
+    const storedTags = [{ id: '1', name: 'Work', color: '#ff0000' }]
     localStorage.getItem.mockReturnValue(JSON.stringify(storedTags))
     const { result } = renderHook(() => useTags())
 
@@ -82,7 +75,7 @@ describe('useTags', () => {
   it('should not update tags with different ids', () => {
     const storedTags = [
       { id: '1', name: 'Work', color: '#ff0000' },
-      { id: '2', name: 'Personal', color: '#00ff00' }
+      { id: '2', name: 'Personal', color: '#00ff00' },
     ]
     localStorage.getItem.mockReturnValue(JSON.stringify(storedTags))
     const { result } = renderHook(() => useTags())
@@ -98,7 +91,7 @@ describe('useTags', () => {
   it('should delete a tag', () => {
     const storedTags = [
       { id: '1', name: 'Work', color: '#ff0000' },
-      { id: '2', name: 'Personal', color: '#00ff00' }
+      { id: '2', name: 'Personal', color: '#00ff00' },
     ]
     localStorage.getItem.mockReturnValue(JSON.stringify(storedTags))
     const { result } = renderHook(() => useTags())
@@ -112,9 +105,7 @@ describe('useTags', () => {
   })
 
   it('should persist to localStorage when deleting', () => {
-    const storedTags = [
-      { id: '1', name: 'Work', color: '#ff0000' }
-    ]
+    const storedTags = [{ id: '1', name: 'Work', color: '#ff0000' }]
     localStorage.getItem.mockReturnValue(JSON.stringify(storedTags))
     const { result } = renderHook(() => useTags())
 
@@ -122,10 +113,7 @@ describe('useTags', () => {
       result.current.deleteTag('1')
     })
 
-    expect(localStorage.setItem).toHaveBeenCalledWith(
-      'linearcalendar-tags',
-      '[]'
-    )
+    expect(localStorage.setItem).toHaveBeenCalledWith('linearcalendar-tags', '[]')
   })
 
   it('should generate unique ids for each added tag', () => {
@@ -144,11 +132,13 @@ describe('useTags', () => {
   })
 
   it('should clear all tags', () => {
-    localStorage.getItem.mockReturnValue(JSON.stringify([
-      { id: '1', name: 'Work', color: '#ff0000' }
-    ]))
+    localStorage.getItem.mockReturnValue(
+      JSON.stringify([{ id: '1', name: 'Work', color: '#ff0000' }])
+    )
     const { result } = renderHook(() => useTags())
-    act(() => { result.current.clearAll() })
+    act(() => {
+      result.current.clearAll()
+    })
     expect(result.current.tags).toEqual([])
     expect(localStorage.setItem).toHaveBeenCalledWith('linearcalendar-tags', '[]')
   })

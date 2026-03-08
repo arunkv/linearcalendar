@@ -38,9 +38,7 @@ export function useTags() {
   }
 
   function updateTag(id, changes) {
-    setTags(prev =>
-      _persist(prev.map(t => (t.id === id ? { ...t, ...changes } : t)))
-    )
+    setTags(prev => _persist(prev.map(t => (t.id === id ? { ...t, ...changes } : t))))
   }
 
   function deleteTag(id) {

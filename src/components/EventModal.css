@@ -90,7 +90,7 @@
   border-color: #3b82f6;
 }
 
-[data-theme="dark"] .event-modal__input[type="date"] {
+[data-theme='dark'] .event-modal__input[type='date'] {
   color-scheme: dark;
 }
 
@@ -114,7 +114,9 @@
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
-  transition: transform 0.1s, border-color 0.1s;
+  transition:
+    transform 0.1s,
+    border-color 0.1s;
   outline: none;
 }
 
@@ -150,7 +152,9 @@
   font-weight: 600;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: background 0.12s, filter 0.12s;
+  transition:
+    background 0.12s,
+    filter 0.12s;
   font-family: inherit;
 }
 
@@ -189,7 +193,7 @@
   background: #fef2f2;
 }
 
-[data-theme="dark"] .event-modal__btn--delete:hover {
+[data-theme='dark'] .event-modal__btn--delete:hover {
   background: rgba(239, 68, 68, 0.1);
 }
 
@@ -220,7 +224,9 @@
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
-  transition: border-color 0.12s, background 0.12s;
+  transition:
+    border-color 0.12s,
+    background 0.12s;
 }
 
 .event-modal__tag-option:hover {
@@ -248,7 +254,9 @@
   font-size: 0.825rem;
   font-family: inherit;
   cursor: pointer;
-  transition: border-color 0.12s, color 0.12s;
+  transition:
+    border-color 0.12s,
+    color 0.12s;
 }
 
 .event-modal__tag-new-trigger:hover {

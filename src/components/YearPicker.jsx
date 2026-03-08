@@ -39,7 +39,9 @@ export default function YearPicker({ defaultYear, onYearSelect, theme, onToggleT
       </button>
 
       <div className="year-picker__card">
-        <div className="year-picker__icon" aria-hidden="true">📅</div>
+        <div className="year-picker__icon" aria-hidden="true">
+          📅
+        </div>
         <h1 className="year-picker__title">{t.appName}</h1>
         <p className="year-picker__subtitle">{t.yearPicker.subtitle}</p>
 
@@ -73,11 +75,7 @@ export default function YearPicker({ defaultYear, onYearSelect, theme, onToggleT
             </button>
           </div>
 
-          <button
-            className="year-picker__submit-btn"
-            type="submit"
-            disabled={!isValid}
-          >
+          <button className="year-picker__submit-btn" type="submit" disabled={!isValid}>
             {t.yearPicker.viewCalendar}
           </button>
         </form>

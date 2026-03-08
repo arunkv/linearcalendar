@@ -25,17 +25,17 @@ export default function EventModal({
 }) {
   const isEditing = Boolean(event)
 
-  const [title, setTitle]             = useState(event?.title     ?? '')
-  const [startDate, setStart]         = useState(event?.startDate ?? initialDate ?? '')
-  const [endDate, setEnd]             = useState(event?.endDate   ?? initialEndDate ?? initialDate ?? '')
-  const [tagId, setTagId]             = useState(event?.tagId     ?? null)
+  const [title, setTitle] = useState(event?.title ?? '')
+  const [startDate, setStart] = useState(event?.startDate ?? initialDate ?? '')
+  const [endDate, setEnd] = useState(event?.endDate ?? initialEndDate ?? initialDate ?? '')
+  const [tagId, setTagId] = useState(event?.tagId ?? null)
 
   // Inline new-tag form state
   const [showNewTagForm, setShowNewTagForm] = useState(false)
-  const [newTagName, setNewTagName]         = useState('')
-  const [newTagColor, setNewTagColor]       = useState(PRESET_COLORS[0])
+  const [newTagName, setNewTagName] = useState('')
+  const [newTagColor, setNewTagColor] = useState(PRESET_COLORS[0])
 
-  const titleRef      = useRef(null)
+  const titleRef = useRef(null)
   const newTagInputRef = useRef(null)
 
   // Auto-focus title on open
@@ -84,8 +84,16 @@ export default function EventModal({
         aria-label={isEditing ? t.eventModal.editEvent : t.eventModal.newEvent}
       >
         <div className="event-modal__header">
-          <h2 className="event-modal__title">{isEditing ? t.eventModal.editEvent : t.eventModal.newEvent}</h2>
-          <button className="event-modal__close-btn" onClick={onClose} aria-label={t.eventModal.close}>✕</button>
+          <h2 className="event-modal__title">
+            {isEditing ? t.eventModal.editEvent : t.eventModal.newEvent}
+          </h2>
+          <button
+            className="event-modal__close-btn"
+            onClick={onClose}
+            aria-label={t.eventModal.close}
+          >
+            ✕
+          </button>
         </div>
 
         <div className="event-modal__body">
@@ -136,13 +144,12 @@ export default function EventModal({
                 className={[
                   'event-modal__tag-option',
                   tagId === null ? 'event-modal__tag-option--selected' : '',
-                ].filter(Boolean).join(' ')}
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
                 onClick={() => setTagId(null)}
               >
-                <span
-                  className="event-modal__tag-dot"
-                  style={{ backgroundColor: '#6b7280' }}
-                />
+                <span className="event-modal__tag-dot" style={{ backgroundColor: '#6b7280' }} />
                 {t.eventModal.tagNone}
               </button>
 
@@ -154,13 +161,12 @@ export default function EventModal({
                   className={[
                     'event-modal__tag-option',
                     tagId === tag.id ? 'event-modal__tag-option--selected' : '',
-                  ].filter(Boolean).join(' ')}
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
                   onClick={() => setTagId(tag.id)}
                 >
-                  <span
-                    className="event-modal__tag-dot"
-                    style={{ backgroundColor: tag.color }}
-                  />
+                  <span className="event-modal__tag-dot" style={{ backgroundColor: tag.color }} />
                   {tag.name}
                 </button>
               ))}
@@ -197,7 +203,9 @@ export default function EventModal({
                       className={[
                         'event-modal__swatch',
                         c === newTagColor ? 'event-modal__swatch--selected' : '',
-                      ].filter(Boolean).join(' ')}
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
                       style={{ backgroundColor: c }}
                       onClick={() => setNewTagColor(c)}
                       aria-label={c}
@@ -229,7 +237,6 @@ export default function EventModal({
               </div>
             )}
           </div>
-
         </div>
 
         <div className="event-modal__footer">

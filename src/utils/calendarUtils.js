@@ -6,9 +6,18 @@ export const DAY_NAMES = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 export const DAY_ABBRS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
 const MONTH_NAMES = [
-  'January', 'February', 'March', 'April',
-  'May', 'June', 'July', 'August',
-  'September', 'October', 'November', 'December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ]
 
 export const DEFAULT_EVENT_COLOR = '#3b82f6'
@@ -48,11 +57,7 @@ export function getMonthStartDay(year, monthIndex) {
  */
 export function isToday(year, monthIndex, day) {
   const now = new Date()
-  return (
-    now.getFullYear() === year &&
-    now.getMonth() === monthIndex &&
-    now.getDate() === day
-  )
+  return now.getFullYear() === year && now.getMonth() === monthIndex && now.getDate() === day
 }
 
 /**
@@ -172,8 +177,10 @@ function fmtIcsDate(d) {
 function fmtIsoDate(d) {
   return (
     d.getFullYear() +
-    '-' + String(d.getMonth() + 1).padStart(2, '0') +
-    '-' + String(d.getDate()).padStart(2, '0')
+    '-' +
+    String(d.getMonth() + 1).padStart(2, '0') +
+    '-' +
+    String(d.getDate()).padStart(2, '0')
   )
 }
 
@@ -197,13 +204,13 @@ export function eventsToIcs(events, tagsById = {}) {
       `SUMMARY:${ev.title}`,
       `DTSTART;VALUE=DATE:${dtStartStr}`,
       `DTEND;VALUE=DATE:${fmtIcsDate(dtEnd)}`,
-      `X-APPLE-CALENDAR-COLOR:${color}`,
+      `X-APPLE-CALENDAR-COLOR:${color}`
     )
     if (tag) {
       lines.push(
         `X-LC-TAG-ID:${tag.id}`,
         `X-LC-TAG-NAME:${tag.name}`,
-        `X-LC-TAG-COLOR:${tag.color}`,
+        `X-LC-TAG-COLOR:${tag.color}`
       )
     }
     lines.push('END:VEVENT')
@@ -219,9 +226,9 @@ export function eventsToIcs(events, tagsById = {}) {
  * @returns {{ events: Array, tags: Array }} events with tagId refs and reconstructed tags
  */
 // Strip control characters (newlines, carriage returns, etc.) to prevent ICS injection on re-export
-const sanitizeText = (s) => s.replace(/[\x00-\x1F\x7F]/g, '').slice(0, 500)
+const sanitizeText = s => s.replace(/[\x00-\x1F\x7F]/g, '').slice(0, 500)
 // Validate hex color; reject anything else to prevent CSS/ICS injection
-const sanitizeColor = (s) => /^#[0-9a-fA-F]{6}$/.test(s) ? s : '#6b7280'
+const sanitizeColor = s => (/^#[0-9a-fA-F]{6}$/.test(s) ? s : '#6b7280')
 
 const ICS_MAX_BYTES = 5 * 1024 * 1024 // 5 MB
 
@@ -233,7 +240,7 @@ export function icsToEvents(text) {
   for (let i = 1; i < blocks.length; i++) {
     const block = blocks[i]
     // Plain string scan — no dynamic regex, no backtracking risk
-    const get = (key) => {
+    const get = key => {
       const prefix1 = key + ':'
       const prefix2 = key + ';'
       for (const raw of block.split('\n')) {
@@ -251,7 +258,7 @@ export function icsToEvents(text) {
     if (!title || !dtStart || !dtEnd) continue
 
     // Parse YYYYMMDD → YYYY-MM-DD string
-    const parseDate = (s) => `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`
+    const parseDate = s => `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`
     const startDate = parseDate(dtStart)
 
     // DTEND is exclusive → subtract 1 day for inclusive endDate (local arithmetic)
@@ -260,7 +267,7 @@ export function icsToEvents(text) {
     const endDate = fmtIsoDate(endRaw)
 
     const uid = get('UID').replace('@linearcalendar', '')
-    const id = uid || (Date.now().toString(36) + Math.random().toString(36).slice(2))
+    const id = uid || Date.now().toString(36) + Math.random().toString(36).slice(2)
 
     const tagId = get('X-LC-TAG-ID')
     const tagName = sanitizeText(get('X-LC-TAG-NAME'))
@@ -289,11 +296,11 @@ export function getEventsForMonth(events, year, monthIndex) {
       const s = parseDateLocal(ev.startDate)
       const e = parseDateLocal(ev.endDate)
       const clampedStart = s < monthStart ? monthStart : s
-      const clampedEnd   = e > monthEnd   ? monthEnd   : e
+      const clampedEnd = e > monthEnd ? monthEnd : e
       return {
         ...ev,
         startCol: startCol + clampedStart.getDate() - 1,
-        endCol:   startCol + clampedEnd.getDate() - 1,
+        endCol: startCol + clampedEnd.getDate() - 1,
       }
     })
 
@@ -306,9 +313,7 @@ export function getEventsForMonth(events, year, monthIndex) {
       let row = 0
       while (true) {
         if (!rowSlots[row]) rowSlots[row] = []
-        const overlaps = rowSlots[row].some(
-          ([s, e]) => ev.startCol <= e && ev.endCol >= s
-        )
+        const overlaps = rowSlots[row].some(([s, e]) => ev.startCol <= e && ev.endCol >= s)
         if (!overlaps) {
           rowSlots[row].push([ev.startCol, ev.endCol])
           return { ...ev, row: row + 1 } // 1-based for CSS grid-row

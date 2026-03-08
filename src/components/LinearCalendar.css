@@ -90,7 +90,7 @@
   background: #fef2f2;
 }
 
-[data-theme="dark"] .linear-calendar__action-btn--danger:hover {
+[data-theme='dark'] .linear-calendar__action-btn--danger:hover {
   background: rgba(220, 38, 38, 0.15);
 }
 
@@ -223,7 +223,12 @@
    horizontally on narrow viewports. */
 .linear-calendar__month-label {
   background-color: var(--month-label-bg, #f9fafb);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
   font-weight: 700;
   font-size: clamp(0.6rem, 1.1vw, 0.875rem);
   padding: 4px 7px;
@@ -287,7 +292,7 @@
   filter: brightness(0.96);
 }
 
-[data-theme="dark"] .linear-calendar__cell--clickable:hover {
+[data-theme='dark'] .linear-calendar__cell--clickable:hover {
   filter: brightness(1.15);
 }
 
@@ -322,7 +327,6 @@
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;
 }
-
 
 /* ─── Events container (spans all 37 date columns) ──────────────────────────
    CSS subgrid inherits the exact column widths from the parent grid, allowing
@@ -383,14 +387,22 @@
   flex-shrink: 0;
 }
 
-.linear-calendar__resize-handle--left  { left: 0; }
-.linear-calendar__resize-handle--right { right: 0; }
+.linear-calendar__resize-handle--left {
+  left: 0;
+}
+.linear-calendar__resize-handle--right {
+  right: 0;
+}
 
 /* Show handles on bar hover */
-.linear-calendar__event-bar:hover .linear-calendar__resize-handle { opacity: 1; }
+.linear-calendar__event-bar:hover .linear-calendar__resize-handle {
+  opacity: 1;
+}
 
 /* Keep handles visible during any active drag */
-.linear-calendar--dragging .linear-calendar__resize-handle { opacity: 1; }
+.linear-calendar--dragging .linear-calendar__resize-handle {
+  opacity: 1;
+}
 
 /* ─── Ghost bar (drag-to-create feedback) ────────────────────────────────────*/
 .linear-calendar__ghost-bar {
@@ -415,8 +427,12 @@
   pointer-events: none;
 }
 
-.linear-calendar--drag-create { cursor: crosshair; }
-.linear-calendar--drag-resize { cursor: ew-resize; }
+.linear-calendar--drag-create {
+  cursor: crosshair;
+}
+.linear-calendar--drag-resize {
+  cursor: ew-resize;
+}
 
 /* ─── Event tooltip ──────────────────────────────────────────────────────────*/
 .linear-calendar__event-tooltip {
@@ -685,22 +701,22 @@
   /* ── Force light palette even in dark mode ── */
   :root,
   [data-theme='dark'] {
-    --header-bg:          #ffffff;
-    --header-color:       #111827;
-    --header-border:      #d1d5db;
-    --header-bg-weekend:  #f9fafb;
-    --weekend-bg:         #f5f5f5;
-    --today-bg:           #f97316;
-    --today-color:        #ffffff;
-    --border-color:       #d1d5db;
-    --month-label-bg:     #f3f4f6;
-    --month-label-color:  #4b5563;
+    --header-bg: #ffffff;
+    --header-color: #111827;
+    --header-border: #d1d5db;
+    --header-bg-weekend: #f9fafb;
+    --weekend-bg: #f5f5f5;
+    --today-bg: #f97316;
+    --today-color: #ffffff;
+    --border-color: #d1d5db;
+    --month-label-bg: #f3f4f6;
+    --month-label-color: #4b5563;
     --month-label-border: #d1d5db;
-    --empty-cell-bg:      #f3f4f6;
-    --cell-bg:            #ffffff;
-    --cell-color:         #111827;
-    --body-bg:            #ffffff;
-    --body-color:         #111827;
+    --empty-cell-bg: #f3f4f6;
+    --cell-bg: #ffffff;
+    --cell-color: #111827;
+    --body-bg: #ffffff;
+    --body-color: #111827;
   }
 
   body {

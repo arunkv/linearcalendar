@@ -7,8 +7,12 @@ let mockSearch = '?year=2024'
 Object.defineProperty(window, 'location', {
   writable: true,
   value: {
-    get search() { return mockSearch },
-    set search(v) { mockSearch = v },
+    get search() {
+      return mockSearch
+    },
+    set search(v) {
+      mockSearch = v
+    },
     pathname: '/',
     href: 'http://localhost/',
     reload: vi.fn(),
@@ -17,7 +21,7 @@ Object.defineProperty(window, 'location', {
 
 describe('App', () => {
   function mockStorage(overrides = {}) {
-    localStorage.getItem.mockImplementation((key) => {
+    localStorage.getItem.mockImplementation(key => {
       if (key in overrides) return overrides[key]
       return null
     })
@@ -33,15 +37,28 @@ describe('App', () => {
   it('should render the calendar with year from URL', () => {
     mockStorage({ helpSeen: '1' })
     render(<App />)
-    
+
     expect(screen.getByDisplayValue('2024')).toBeInTheDocument()
   })
 
   it('should display all 12 months', () => {
     mockStorage({ helpSeen: '1' })
     render(<App />)
-    
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ]
     months.forEach(month => {
       expect(screen.getByText(month)).toBeInTheDocument()
     })
@@ -50,14 +67,14 @@ describe('App', () => {
   it('should render the app title', () => {
     mockStorage({ helpSeen: '1' })
     render(<App />)
-    
+
     expect(screen.getByText('Linear Calendar')).toBeInTheDocument()
   })
 
   it('should have action buttons', () => {
     mockStorage({ helpSeen: '1' })
     render(<App />)
-    
+
     expect(screen.getByLabelText('Switch to dark mode')).toBeInTheDocument()
     expect(screen.getByTitle('Export events as .ics')).toBeInTheDocument()
     expect(screen.getByTitle('Import events from .ics')).toBeInTheDocument()
@@ -67,17 +84,17 @@ describe('App', () => {
   it('should toggle theme when theme button is clicked', () => {
     mockStorage({ theme: 'light', helpSeen: '1' })
     render(<App />)
-    
+
     const themeButton = screen.getByLabelText('Switch to dark mode')
     fireEvent.click(themeButton)
-    
+
     expect(localStorage.setItem).toHaveBeenCalledWith('theme', 'dark')
   })
 
   it('should update document title with selected year', () => {
     mockStorage({ helpSeen: '1' })
     render(<App />)
-    
+
     expect(document.title).toBe('2024 — Linear Calendar')
   })
 
@@ -159,10 +176,10 @@ describe('App', () => {
   it('should change year when using year switcher', () => {
     mockStorage({ helpSeen: '1' })
     render(<App />)
-    
+
     const nextButton = screen.getByLabelText('Next year')
     fireEvent.click(nextButton)
-    
+
     expect(screen.getByDisplayValue('2025')).toBeInTheDocument()
   })
 
@@ -225,7 +242,7 @@ describe('App', () => {
 
     const titleInput = screen.getByPlaceholderText('Event title')
     fireEvent.keyDown(titleInput, { key: 'x' })
-    fireEvent.keyDown(titleInput, { key: '?' , shiftKey: true })
+    fireEvent.keyDown(titleInput, { key: '?', shiftKey: true })
 
     expect(createObjectURL).not.toHaveBeenCalled()
     expect(screen.getAllByRole('dialog')).toHaveLength(1)
@@ -275,7 +292,9 @@ describe('App', () => {
 
     const registration = { waiting: { postMessage: vi.fn() } }
     act(() => {
-      window.dispatchEvent(new CustomEvent('linearcalendar:pwa-update-available', { detail: registration }))
+      window.dispatchEvent(
+        new CustomEvent('linearcalendar:pwa-update-available', { detail: registration })
+      )
     })
 
     expect(await screen.findByRole('status')).toHaveTextContent('A new version is available.')
@@ -288,9 +307,11 @@ describe('App', () => {
 
     const postMessage = vi.fn()
     act(() => {
-      window.dispatchEvent(new CustomEvent('linearcalendar:pwa-update-available', {
-        detail: { waiting: { postMessage } },
-      }))
+      window.dispatchEvent(
+        new CustomEvent('linearcalendar:pwa-update-available', {
+          detail: { waiting: { postMessage } },
+        })
+      )
     })
 
     fireEvent.click(await screen.findByRole('button', { name: 'Reload' }))

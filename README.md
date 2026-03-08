@@ -74,3 +74,16 @@ npm run preview
 ```
 
 Serves the `dist/` folder at http://localhost:4173.
+
+### Code Quality
+
+```sh
+# Run all checks (lint + format + test)
+npm run analyze
+
+# Individual checks
+npm run lint          # ESLint for code quality and security
+npm run lint:fix      # Auto-fix ESLint issues
+npm run format        # Format code with Prettier
+npm run format:check  # Check formatting without changing files
+```

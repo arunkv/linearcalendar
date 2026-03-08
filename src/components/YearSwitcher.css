@@ -105,7 +105,7 @@
 }
 
 /* ── Dark mode option text fix ────────────────────────────────────────────── */
-[data-theme="dark"] .year-switcher__select option {
+[data-theme='dark'] .year-switcher__select option {
   background: #1f2937;
   color: #f9fafb;
 }

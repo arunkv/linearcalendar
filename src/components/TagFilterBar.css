@@ -38,7 +38,9 @@
   user-select: none;
   font-size: 0.8rem;
   color: var(--cell-color, #111827);
-  transition: opacity 0.15s, background 0.12s;
+  transition:
+    opacity 0.15s,
+    background 0.12s;
 }
 
 .tag-filter-bar__chip:hover {
@@ -101,7 +103,9 @@
   flex-shrink: 0;
   transition: color 0.1s;
 }
-.tag-filter-bar__chip-edit:hover { color: var(--cell-color, #111827); }
+.tag-filter-bar__chip-edit:hover {
+  color: var(--cell-color, #111827);
+}
 
 /* ─── Inline edit form ─────────────────────────────────────────────────────── */
 .tag-filter-bar__edit-form {
@@ -125,8 +129,14 @@
   outline: none;
   width: 120px;
 }
-.tag-filter-bar__edit-input:focus { border-color: #3b82f6; }
-.tag-filter-bar__edit-swatches { display: flex; gap: 4px; flex-shrink: 0; }
+.tag-filter-bar__edit-input:focus {
+  border-color: #3b82f6;
+}
+.tag-filter-bar__edit-swatches {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
 .tag-filter-bar__edit-swatch {
   width: 18px;
   height: 18px;
@@ -135,14 +145,22 @@
   cursor: pointer;
   outline: none;
   flex-shrink: 0;
-  transition: transform 0.1s, border-color 0.1s;
+  transition:
+    transform 0.1s,
+    border-color 0.1s;
 }
-.tag-filter-bar__edit-swatch:hover { transform: scale(1.15); }
+.tag-filter-bar__edit-swatch:hover {
+  transform: scale(1.15);
+}
 .tag-filter-bar__edit-swatch--selected {
   border-color: var(--cell-color, #111827);
   transform: scale(1.15);
 }
-.tag-filter-bar__edit-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.tag-filter-bar__edit-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
 .tag-filter-bar__edit-btn {
   padding: 3px 10px;
   border-radius: 5px;
@@ -151,14 +169,27 @@
   cursor: pointer;
   border: 1px solid transparent;
   font-family: inherit;
-  transition: background 0.12s, filter 0.12s;
+  transition:
+    background 0.12s,
+    filter 0.12s;
 }
-.tag-filter-bar__edit-btn--save { background: #3b82f6; color: #ffffff; }
-.tag-filter-bar__edit-btn--save:hover { filter: brightness(0.92); }
-.tag-filter-bar__edit-btn--save:disabled { opacity: 0.4; cursor: not-allowed; filter: none; }
+.tag-filter-bar__edit-btn--save {
+  background: #3b82f6;
+  color: #ffffff;
+}
+.tag-filter-bar__edit-btn--save:hover {
+  filter: brightness(0.92);
+}
+.tag-filter-bar__edit-btn--save:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: none;
+}
 .tag-filter-bar__edit-btn--cancel {
   background: none;
   border-color: var(--border-color, #e5e7eb);
   color: var(--cell-color, #111827);
 }
-.tag-filter-bar__edit-btn--cancel:hover { background: var(--cell-bg, #ffffff); }
+.tag-filter-bar__edit-btn--cancel:hover {
+  background: var(--cell-bg, #ffffff);
+}

@@ -18,8 +18,7 @@ describe('EventModal', () => {
     onAddTag: vi.fn(),
   }
 
-  const renderModal = (overrides = {}) =>
-    render(<EventModal {...defaultProps} {...overrides} />)
+  const renderModal = (overrides = {}) => render(<EventModal {...defaultProps} {...overrides} />)
 
   it('should render in create mode', () => {
     renderModal()
@@ -28,7 +27,13 @@ describe('EventModal', () => {
 
   it('should render in edit mode', () => {
     renderModal({
-      event: { id: '1', title: 'Test Event', startDate: '2024-03-15', endDate: '2024-03-15', tagId: '1' },
+      event: {
+        id: '1',
+        title: 'Test Event',
+        startDate: '2024-03-15',
+        endDate: '2024-03-15',
+        tagId: '1',
+      },
       initialDate: null,
     })
     expect(screen.getByText('Edit event')).toBeInTheDocument()
@@ -36,7 +41,13 @@ describe('EventModal', () => {
 
   it('should populate form with event data in edit mode', () => {
     renderModal({
-      event: { id: '1', title: 'Test Event', startDate: '2024-03-15', endDate: '2024-03-17', tagId: '1' },
+      event: {
+        id: '1',
+        title: 'Test Event',
+        startDate: '2024-03-15',
+        endDate: '2024-03-17',
+        tagId: '1',
+      },
       initialDate: null,
     })
     expect(screen.getByDisplayValue('Test Event')).toBeInTheDocument()
@@ -60,11 +71,13 @@ describe('EventModal', () => {
     })
     fireEvent.click(screen.getByText('Save'))
 
-    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({
-      title: 'New Event',
-      startDate: '2024-03-15',
-      endDate: '2024-03-15',
-    }))
+    expect(onSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: 'New Event',
+        startDate: '2024-03-15',
+        endDate: '2024-03-15',
+      })
+    )
   })
 
   it('should call onClose when clicking cancel', () => {

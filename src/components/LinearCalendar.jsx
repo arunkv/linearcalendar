@@ -2,56 +2,116 @@ import { Fragment, useMemo, useState, useRef, useEffect, useCallback } from 'rea
 
 // ── Inline SVG icons ──────────────────────────────────────────────────────────
 const SunIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <circle cx="12" cy="12" r="4"/>
-    <line x1="12" y1="2" x2="12" y2="5"/>
-    <line x1="12" y1="19" x2="12" y2="22"/>
-    <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
-    <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
-    <line x1="2" y1="12" x2="5" y2="12"/>
-    <line x1="19" y1="12" x2="22" y2="12"/>
-    <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/>
-    <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4" />
+    <line x1="12" y1="2" x2="12" y2="5" />
+    <line x1="12" y1="19" x2="12" y2="22" />
+    <line x1="4.22" y1="4.22" x2="6.34" y2="6.34" />
+    <line x1="17.66" y1="17.66" x2="19.78" y2="19.78" />
+    <line x1="2" y1="12" x2="5" y2="12" />
+    <line x1="19" y1="12" x2="22" y2="12" />
+    <line x1="4.22" y1="19.78" x2="6.34" y2="17.66" />
+    <line x1="17.66" y1="6.34" x2="19.78" y2="4.22" />
   </svg>
 )
 
 const MoonIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
   </svg>
 )
 
 const DownloadIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-    <polyline points="7 10 12 15 17 10"/>
-    <line x1="12" y1="15" x2="12" y2="3"/>
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="7 10 12 15 17 10" />
+    <line x1="12" y1="15" x2="12" y2="3" />
   </svg>
 )
 
 const UploadIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-    <polyline points="17 8 12 3 7 8"/>
-    <line x1="12" y1="3" x2="12" y2="15"/>
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="17 8 12 3 7 8" />
+    <line x1="12" y1="3" x2="12" y2="15" />
   </svg>
 )
 
 const PrintIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <polyline points="6 9 6 2 18 2 18 9"/>
-    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-    <rect x="6" y="14" width="12" height="8"/>
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <polyline points="6 9 6 2 18 2 18 9" />
+    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+    <rect x="6" y="14" width="12" height="8" />
   </svg>
 )
 
 const TrashIcon = () => (
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <polyline points="3 6 5 6 21 6"/>
-    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-    <path d="M10 11v6"/>
-    <path d="M14 11v6"/>
-    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <polyline points="3 6 5 6 21 6" />
+    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+    <path d="M10 11v6" />
+    <path d="M14 11v6" />
+    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
   </svg>
 )
 import t from '../locales/index.js'
@@ -86,7 +146,9 @@ function formatDate(dateStr) {
   return `${t.calendar.months[m - 1]} ${d}, ${y}`
 }
 function formatDateRange(start, end) {
-  return start === end ? formatDate(start) : `${formatDate(start)} ${t.calendar.dateRangeSeparator} ${formatDate(end)}`
+  return start === end
+    ? formatDate(start)
+    : `${formatDate(start)} ${t.calendar.dateRangeSeparator} ${formatDate(end)}`
 }
 
 function getDefaultCreateDate(year) {
@@ -98,9 +160,9 @@ function getDefaultCreateDate(year) {
 }
 
 function isEditableTarget(target) {
-  return target instanceof HTMLElement && (
-    target.isContentEditable ||
-    ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(target.tagName)
+  return (
+    target instanceof HTMLElement &&
+    (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(target.tagName))
   )
 }
 
@@ -117,21 +179,28 @@ function resolveEventColor(ev, tagsById) {
 
 export default function LinearCalendar({ year, onChangeYear, theme, onToggleTheme }) {
   const { events, addEvent, updateEvent, deleteEvent, replaceAll } = useEvents()
-  const { tags, addTag, updateTag, deleteTag, clearAll: clearAllTags, replaceAll: replaceAllTags } = useTags()
+  const {
+    tags,
+    addTag,
+    updateTag,
+    deleteTag,
+    clearAll: clearAllTags,
+    replaceAll: replaceAllTags,
+  } = useTags()
 
   const [modalState, setModalState] = useState(null)
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [deleteTagConfirm, setDeleteTagConfirm] = useState(null) // tagId pending deletion
   const [importError, setImportError] = useState(null)
-  const [showHelp, setShowHelp] = useState(
-    () => !localStorage.getItem('helpSeen')
-  )
+  const [showHelp, setShowHelp] = useState(() => !localStorage.getItem('helpSeen'))
   const [tooltip, setTooltip] = useState(null) // { event, x, y }
   const [installPrompt, setInstallPrompt] = useState(null)
   const [updateRegistration, setUpdateRegistration] = useState(null)
   const [isInstalling, setIsInstalling] = useState(false)
 
-  function openHelp() { setShowHelp(true) }
+  function openHelp() {
+    setShowHelp(true)
+  }
   function closeHelp() {
     localStorage.setItem('helpSeen', '1')
     setShowHelp(false)
@@ -168,19 +237,23 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
   // ── Drag state ──────────────────────────────────────────────────────────────
   // dragRef is mutable (not state) so pointermove doesn't cause 60fps re-renders.
   // Only dragVisual (which drives rendering) is real state.
-  const dragRef          = useRef(null)
+  const dragRef = useRef(null)
   const [dragVisual, setDragVisual] = useState(null)
   const suppressClickRef = useRef(null) // holds eventId to swallow post-drag click
   const suppressCellClickRef = useRef(false)
-  const gridRootRef      = useRef(null)
+  const gridRootRef = useRef(null)
 
   // Stable refs so useCallback([], []) closures can read the latest values
-  const yearRef        = useRef(year)
+  const yearRef = useRef(year)
   const updateEventRef = useRef(updateEvent)
-  useEffect(() => { yearRef.current = year }, [year])
-  useEffect(() => { updateEventRef.current = updateEvent }, [updateEvent])
+  useEffect(() => {
+    yearRef.current = year
+  }, [year])
+  useEffect(() => {
+    updateEventRef.current = updateEvent
+  }, [updateEvent])
 
-  const handlePointerMove = useCallback((e) => {
+  const handlePointerMove = useCallback(e => {
     const drag = dragRef.current
     if (!drag) return
     const dx = e.clientX - drag.startClientX
@@ -198,23 +271,23 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
           type: 'create',
           monthIndex: drag.monthIndex,
           startCol: Math.min(drag.anchorCol, col),
-          endCol:   Math.max(drag.anchorCol, col),
+          endCol: Math.max(drag.anchorCol, col),
         })
       }
     } else if (drag.type === 'resize') {
       let newStart = drag.currentStartCol
-      let newEnd   = drag.currentEndCol
+      let newEnd = drag.currentEndCol
       if (drag.edge === 'start') newStart = Math.min(col, drag.currentEndCol)
-      else                       newEnd   = Math.max(col, drag.currentStartCol)
+      else newEnd = Math.max(col, drag.currentStartCol)
       if (newStart !== drag.currentStartCol || newEnd !== drag.currentEndCol) {
         drag.currentStartCol = newStart
-        drag.currentEndCol   = newEnd
+        drag.currentEndCol = newEnd
         setDragVisual({
           type: 'resize',
-          eventId:    drag.event.id,
+          eventId: drag.event.id,
           monthIndex: drag.monthIndex,
-          startCol:   newStart,
-          endCol:     newEnd,
+          startCol: newStart,
+          endCol: newEnd,
         })
       }
     }
@@ -229,7 +302,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
       gridEl.classList.remove(
         'linear-calendar--dragging',
         'linear-calendar--drag-create',
-        'linear-calendar--drag-resize',
+        'linear-calendar--drag-resize'
       )
     }
     if (drag.type === 'create') {
@@ -240,20 +313,20 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
       } else {
         // Drag — open modal with pre-filled date range
         const startCol = Math.min(drag.anchorCol, drag.currentCol)
-        const endCol   = Math.max(drag.anchorCol, drag.currentCol)
+        const endCol = Math.max(drag.anchorCol, drag.currentCol)
         openCreateModal(
           colToDateKey(yearRef.current, drag.monthIndex, startCol),
-          colToDateKey(yearRef.current, drag.monthIndex, endCol),
+          colToDateKey(yearRef.current, drag.monthIndex, endCol)
         )
       }
     } else if (drag.type === 'resize') {
       if (drag.hasMoved) {
-        const col     = drag.edge === 'start' ? drag.currentStartCol : drag.currentEndCol
+        const col = drag.edge === 'start' ? drag.currentStartCol : drag.currentEndCol
         const newDate = colToDateKey(yearRef.current, drag.monthIndex, col)
-        const field   = drag.edge === 'start' ? 'startDate' : 'endDate'
+        const field = drag.edge === 'start' ? 'startDate' : 'endDate'
         // Guard: don't produce an inverted range
         const newStart = drag.edge === 'start' ? newDate : drag.event.startDate
-        const newEnd   = drag.edge === 'end'   ? newDate : drag.event.endDate
+        const newEnd = drag.edge === 'end' ? newDate : drag.event.endDate
         if (newStart <= newEnd) {
           updateEventRef.current(drag.event.id, { [field]: newDate })
         }
@@ -268,11 +341,11 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
   // Register document-level pointer handlers once
   useEffect(() => {
     document.addEventListener('pointermove', handlePointerMove)
-    document.addEventListener('pointerup',     handlePointerUp)
+    document.addEventListener('pointerup', handlePointerUp)
     document.addEventListener('pointercancel', handlePointerUp)
     return () => {
       document.removeEventListener('pointermove', handlePointerMove)
-      document.removeEventListener('pointerup',     handlePointerUp)
+      document.removeEventListener('pointerup', handlePointerUp)
       document.removeEventListener('pointercancel', handlePointerUp)
     }
   }, [handlePointerMove, handlePointerUp])
@@ -320,11 +393,15 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
     e.currentTarget.setPointerCapture?.(e.pointerId)
     const { colStartX, colWidth } = getColGeometry()
     dragRef.current = {
-      type: 'create', monthIndex,
-      anchorCol: colIndex, currentCol: colIndex,
-      colStartX, colWidth,
+      type: 'create',
+      monthIndex,
+      anchorCol: colIndex,
+      currentCol: colIndex,
+      colStartX,
+      colWidth,
       hasMoved: false,
-      startClientX: e.clientX, startClientY: e.clientY,
+      startClientX: e.clientX,
+      startClientY: e.clientY,
     }
     const gridEl = gridRootRef.current
     if (gridEl) gridEl.classList.add('linear-calendar--dragging', 'linear-calendar--drag-create')
@@ -338,11 +415,17 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
     e.currentTarget.setPointerCapture?.(e.pointerId)
     const { colStartX, colWidth } = getColGeometry()
     dragRef.current = {
-      type: 'resize', edge, event: ev, monthIndex,
-      currentStartCol: ev.startCol, currentEndCol: ev.endCol,
-      colStartX, colWidth,
+      type: 'resize',
+      edge,
+      event: ev,
+      monthIndex,
+      currentStartCol: ev.startCol,
+      currentEndCol: ev.endCol,
+      colStartX,
+      colWidth,
       hasMoved: false,
-      startClientX: e.clientX, startClientY: e.clientY,
+      startClientX: e.clientX,
+      startClientY: e.clientY,
     }
     const gridEl = gridRootRef.current
     if (gridEl) gridEl.classList.add('linear-calendar--dragging', 'linear-calendar--drag-resize')
@@ -352,7 +435,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
   // Pre-compute all 12 month rows; recomputes only when `year` changes
   const monthRows = useMemo(
     () =>
-      MONTH_INDICES.map((monthIndex) => ({
+      MONTH_INDICES.map(monthIndex => ({
         monthIndex,
         name: t.calendar.months[monthIndex],
         cells: buildMonthRow(year, monthIndex),
@@ -361,10 +444,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
   )
 
   // Fast lookup: { [tagId]: tag }
-  const tagsById = useMemo(
-    () => Object.fromEntries(tags.map(tag => [tag.id, tag])),
-    [tags]
-  )
+  const tagsById = useMemo(() => Object.fromEntries(tags.map(tag => [tag.id, tag])), [tags])
 
   // Filter before passing to getEventsForMonth so row-packing sees only visible
   // events (no ghost rows from hidden-tag events).
@@ -453,7 +533,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
     }
     setImportError(null)
     const reader = new FileReader()
-    reader.onload = (ev) => {
+    reader.onload = ev => {
       try {
         const { events: parsed, tags: parsedTags } = icsToEvents(ev.target.result)
         if (parsed.length === 0) {
@@ -464,7 +544,9 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
           setHiddenTagIds(new Set())
         }
       } catch (err) {
-        setImportError(err.message === 'ICS file too large' ? t.importError.tooLarge : t.importError.parseFailed)
+        setImportError(
+          err.message === 'ICS file too large' ? t.importError.tooLarge : t.importError.parseFailed
+        )
       }
     }
     reader.readAsText(file)
@@ -507,6 +589,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
 
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteTagConfirm, handleExport, modalState, showClearConfirm, showHelp, year])
 
   return (
@@ -561,7 +644,8 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             onClick={handleExport}
             title={t.header.exportTitle}
           >
-            <DownloadIcon /> <span className="linear-calendar__action-btn-label">{t.header.export}</span>
+            <DownloadIcon />{' '}
+            <span className="linear-calendar__action-btn-label">{t.header.export}</span>
           </button>
 
           <button
@@ -569,7 +653,8 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             onClick={openImportPicker}
             title={t.header.importTitle}
           >
-            <UploadIcon /> <span className="linear-calendar__action-btn-label">{t.header.import}</span>
+            <UploadIcon />{' '}
+            <span className="linear-calendar__action-btn-label">{t.header.import}</span>
           </button>
           {importError && (
             <span className="linear-calendar__action-btn--danger" role="alert">
@@ -582,7 +667,8 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             onClick={() => setShowClearConfirm(true)}
             title={t.header.clearTitle}
           >
-            <TrashIcon /> <span className="linear-calendar__action-btn-label">{t.header.clear}</span>
+            <TrashIcon />{' '}
+            <span className="linear-calendar__action-btn-label">{t.header.clear}</span>
           </button>
 
           <button
@@ -590,7 +676,8 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
             onClick={() => window.print()}
             title={t.header.printTitle}
           >
-            <PrintIcon /> <span className="linear-calendar__action-btn-label">{t.header.print}</span>
+            <PrintIcon />{' '}
+            <span className="linear-calendar__action-btn-label">{t.header.print}</span>
           </button>
 
           {/* Hidden file input for import */}
@@ -616,7 +703,6 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
       {/* ── Grid wrapper (handles fallback scroll on narrow viewports) ──────── */}
       <div className="linear-calendar__grid-wrapper">
         <div className="linear-calendar__grid">
-
           {/* ── One pair of rows per month ────────────────────────────────── */}
           {monthRows.map(({ monthIndex, name, cells }) => {
             const monthEvents = getEventsForMonth(visibleEvents, year, monthIndex)
@@ -635,10 +721,12 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
 
                     const cellClass = [
                       'linear-calendar__cell',
-                      empty   ? 'linear-calendar__cell--empty'     : 'linear-calendar__cell--clickable',
-                      weekend ? 'linear-calendar__cell--weekend'    : '',
-                      today   ? 'linear-calendar__cell--today'      : '',
-                    ].filter(Boolean).join(' ')
+                      empty ? 'linear-calendar__cell--empty' : 'linear-calendar__cell--clickable',
+                      weekend ? 'linear-calendar__cell--weekend' : '',
+                      today ? 'linear-calendar__cell--today' : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')
 
                     return (
                       <div
@@ -646,15 +734,18 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
                         className={cellClass}
                         data-col={colIndex}
                         data-month={monthIndex}
-                        onPointerDown={empty ? undefined : (e) => handleCellPointerDown(e, monthIndex, colIndex)}
+                        onPointerDown={
+                          empty ? undefined : e => handleCellPointerDown(e, monthIndex, colIndex)
+                        }
                         onClick={empty ? undefined : () => handleCellClick(dateKey)}
                       >
                         {!empty && (
                           <>
-                            {today
-                              ? <span className="linear-calendar__today-dot">{day}</span>
-                              : <span className="linear-calendar__cell-day">{day}</span>
-                            }
+                            {today ? (
+                              <span className="linear-calendar__today-dot">{day}</span>
+                            ) : (
+                              <span className="linear-calendar__cell-day">{day}</span>
+                            )}
                             <span className="linear-calendar__cell-dow">
                               {t.calendar.dayAbbrs[colIndex % 7]}
                             </span>
@@ -682,17 +773,20 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
 
                     {monthEvents.map(ev => {
                       const evStartDate = parseDateLocal(ev.startDate)
-                      const evEndDate   = parseDateLocal(ev.endDate)
-                      const monthStart  = new Date(year, monthIndex, 1)
-                      const monthEnd    = new Date(year, monthIndex + 1, 0)
+                      const evEndDate = parseDateLocal(ev.endDate)
+                      const monthStart = new Date(year, monthIndex, 1)
+                      const monthEnd = new Date(year, monthIndex + 1, 0)
                       // Show left handle only when the event actually starts in this month
-                      const showLeft  = evStartDate >= monthStart
+                      const showLeft = evStartDate >= monthStart
                       // Show right handle only when the event actually ends in this month
-                      const showRight = evEndDate   <= monthEnd
+                      const showRight = evEndDate <= monthEnd
                       // During a resize, override the displayed columns for this bar
-                      const isResizing   = dragVisual?.type === 'resize' && dragVisual.eventId === ev.id && dragVisual.monthIndex === monthIndex
+                      const isResizing =
+                        dragVisual?.type === 'resize' &&
+                        dragVisual.eventId === ev.id &&
+                        dragVisual.monthIndex === monthIndex
                       const dispStartCol = isResizing ? dragVisual.startCol : ev.startCol
-                      const dispEndCol   = isResizing ? dragVisual.endCol   : ev.endCol
+                      const dispEndCol = isResizing ? dragVisual.endCol : ev.endCol
 
                       return (
                         <div
@@ -703,7 +797,7 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
                             gridRow: ev.row,
                             backgroundColor: resolveEventColor(ev, tagsById),
                           }}
-                          onClick={(e) => {
+                          onClick={e => {
                             if (suppressClickRef.current === ev.id) {
                               suppressClickRef.current = null
                               return
@@ -712,23 +806,33 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
                             setTooltip(null)
                             setModalState({ mode: 'edit', event: ev })
                           }}
-                          onMouseEnter={(e) => { if (!dragRef.current) setTooltip({ event: ev, x: e.clientX, y: e.clientY }) }}
-                          onMouseMove={(e)  => { if (!dragRef.current) setTooltip(prev => prev ? { ...prev, x: e.clientX, y: e.clientY } : null) }}
+                          onMouseEnter={e => {
+                            if (!dragRef.current)
+                              setTooltip({ event: ev, x: e.clientX, y: e.clientY })
+                          }}
+                          onMouseMove={e => {
+                            if (!dragRef.current)
+                              setTooltip(prev =>
+                                prev ? { ...prev, x: e.clientX, y: e.clientY } : null
+                              )
+                          }}
                           onMouseLeave={() => setTooltip(null)}
                         >
                           {showLeft && (
                             <div
                               className="linear-calendar__resize-handle linear-calendar__resize-handle--left"
-                              onPointerDown={(e) => handleResizePointerDown(e, ev, 'start', monthIndex)}
-                              onClick={(e) => e.stopPropagation()}
+                              onPointerDown={e =>
+                                handleResizePointerDown(e, ev, 'start', monthIndex)
+                              }
+                              onClick={e => e.stopPropagation()}
                             />
                           )}
                           <span className="linear-calendar__event-bar-title">{ev.title}</span>
                           {showRight && (
                             <div
                               className="linear-calendar__resize-handle linear-calendar__resize-handle--right"
-                              onPointerDown={(e) => handleResizePointerDown(e, ev, 'end', monthIndex)}
-                              onClick={(e) => e.stopPropagation()}
+                              onPointerDown={e => handleResizePointerDown(e, ev, 'end', monthIndex)}
+                              onClick={e => e.stopPropagation()}
                             />
                           )}
                         </div>
@@ -739,21 +843,13 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
               </Fragment>
             )
           })}
-
         </div>
       </div>
 
       {updateRegistration && (
-        <div
-          className="linear-calendar__toast"
-          role="status"
-          aria-live="polite"
-        >
+        <div className="linear-calendar__toast" role="status" aria-live="polite">
           <span className="linear-calendar__toast-text">{t.toast.updateAvailable}</span>
-          <button
-            className="linear-calendar__toast-btn"
-            onClick={handleReloadApp}
-          >
+          <button className="linear-calendar__toast-btn" onClick={handleReloadApp}>
             {t.toast.reload}
           </button>
         </div>
@@ -763,7 +859,12 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
       <footer className="linear-calendar__footer">
         <span>{t.footer.copyright(year)}</span>
         <span className="linear-calendar__footer-sep">·</span>
-        <span>{t.footer.builtWith} <a href="https://claude.ai" target="_blank" rel="noreferrer">Claude</a></span>
+        <span>
+          {t.footer.builtWith}{' '}
+          <a href="https://claude.ai" target="_blank" rel="noreferrer">
+            Claude
+          </a>
+        </span>
       </footer>
 
       {/* ── Clear confirmation dialog ────────────────────────────────────────── */}
@@ -778,21 +879,20 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
           >
             <h2>{t.clearDialog.title}</h2>
             <p>
-              {t.clearDialog.bodyPrefix}{' '}
-              <strong>{t.clearDialog.eventCount(events.length)}</strong>{' '}
-              {t.clearDialog.bodyAnd}{' '}
-              <strong>{t.clearDialog.tagCount(tags.length)}</strong>.{' '}
+              {t.clearDialog.bodyPrefix} <strong>{t.clearDialog.eventCount(events.length)}</strong>{' '}
+              {t.clearDialog.bodyAnd} <strong>{t.clearDialog.tagCount(tags.length)}</strong>.{' '}
               {t.clearDialog.bodySuffix}
             </p>
-            <p className="linear-calendar__confirm-export-hint">
-              {t.clearDialog.exportHint}
-            </p>
+            <p className="linear-calendar__confirm-export-hint">{t.clearDialog.exportHint}</p>
             <div className="linear-calendar__confirm-actions">
               <button className="linear-calendar__action-btn" onClick={handleExport}>
                 <DownloadIcon /> {t.clearDialog.exportFirst}
               </button>
               <div className="linear-calendar__confirm-actions-right">
-                <button className="linear-calendar__action-btn" onClick={() => setShowClearConfirm(false)}>
+                <button
+                  className="linear-calendar__action-btn"
+                  onClick={() => setShowClearConfirm(false)}
+                >
                   {t.clearDialog.cancel}
                 </button>
                 <button
@@ -808,42 +908,48 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
       )}
 
       {/* ── Delete tag confirmation dialog ──────────────────────────────────── */}
-      {deleteTagConfirm && (() => {
-        const affected = events.filter(ev => ev.tagId === deleteTagConfirm)
-        const tag = tagsById[deleteTagConfirm]
-        return (
-          <div className="linear-calendar__overlay" onClick={() => setDeleteTagConfirm(null)}>
-            <div
-              className="linear-calendar__confirm-dialog"
-              role="dialog"
-              aria-modal="true"
-              aria-label={t.deleteTagDialog.ariaLabel}
-              onClick={e => e.stopPropagation()}
-            >
-              <h2>{t.deleteTagDialog.title(tag?.name)}</h2>
-              <p>
-                <strong>{t.deleteTagDialog.eventCount(affected.length)}</strong>{' '}
-                {t.deleteTagDialog.usesTag}{' '}
-                {affected.length === 1 ? t.deleteTagDialog.singularRef : t.deleteTagDialog.pluralRef}{' '}
-                {t.deleteTagDialog.bodySuffix}
-              </p>
-              <div className="linear-calendar__confirm-actions">
-                <div className="linear-calendar__confirm-actions-right">
-                  <button className="linear-calendar__action-btn" onClick={() => setDeleteTagConfirm(null)}>
-                    {t.deleteTagDialog.cancel}
-                  </button>
-                  <button
-                    className="linear-calendar__action-btn linear-calendar__action-btn--danger"
-                    onClick={() => confirmDeleteTag(deleteTagConfirm)}
-                  >
-                    {t.deleteTagDialog.confirm}
-                  </button>
+      {deleteTagConfirm &&
+        (() => {
+          const affected = events.filter(ev => ev.tagId === deleteTagConfirm)
+          const tag = tagsById[deleteTagConfirm]
+          return (
+            <div className="linear-calendar__overlay" onClick={() => setDeleteTagConfirm(null)}>
+              <div
+                className="linear-calendar__confirm-dialog"
+                role="dialog"
+                aria-modal="true"
+                aria-label={t.deleteTagDialog.ariaLabel}
+                onClick={e => e.stopPropagation()}
+              >
+                <h2>{t.deleteTagDialog.title(tag?.name)}</h2>
+                <p>
+                  <strong>{t.deleteTagDialog.eventCount(affected.length)}</strong>{' '}
+                  {t.deleteTagDialog.usesTag}{' '}
+                  {affected.length === 1
+                    ? t.deleteTagDialog.singularRef
+                    : t.deleteTagDialog.pluralRef}{' '}
+                  {t.deleteTagDialog.bodySuffix}
+                </p>
+                <div className="linear-calendar__confirm-actions">
+                  <div className="linear-calendar__confirm-actions-right">
+                    <button
+                      className="linear-calendar__action-btn"
+                      onClick={() => setDeleteTagConfirm(null)}
+                    >
+                      {t.deleteTagDialog.cancel}
+                    </button>
+                    <button
+                      className="linear-calendar__action-btn linear-calendar__action-btn--danger"
+                      onClick={() => confirmDeleteTag(deleteTagConfirm)}
+                    >
+                      {t.deleteTagDialog.confirm}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )
-      })()}
+          )
+        })()}
 
       {/* ── Event tooltip ───────────────────────────────────────────────────── */}
       {tooltip && !modalState && (
@@ -878,14 +984,18 @@ export default function LinearCalendar({ year, onChangeYear, theme, onToggleThem
           initialEndDate={modalState.mode === 'create' ? (modalState.initialEndDate ?? null) : null}
           tags={tags}
           onAddTag={addTag}
-          onSave={(data) => {
+          onSave={data => {
             if (modalState.mode === 'edit') updateEvent(modalState.event.id, data)
             else addEvent(data)
             setModalState(null)
           }}
-          onDelete={modalState.mode === 'edit'
-            ? () => { deleteEvent(modalState.event.id); setModalState(null) }
-            : undefined
+          onDelete={
+            modalState.mode === 'edit'
+              ? () => {
+                  deleteEvent(modalState.event.id)
+                  setModalState(null)
+                }
+              : undefined
           }
           onClose={() => setModalState(null)}
         />

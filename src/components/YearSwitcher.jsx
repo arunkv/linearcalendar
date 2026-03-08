@@ -80,15 +80,17 @@ export default function YearSwitcher({ year, onYearChange }) {
         <>
           <input
             ref={inputRef}
-            className={[
-              'year-switcher__input',
-              invalid ? 'year-switcher__input--invalid' : '',
-            ].filter(Boolean).join(' ')}
+            className={['year-switcher__input', invalid ? 'year-switcher__input--invalid' : '']
+              .filter(Boolean)
+              .join(' ')}
             type="number"
             min="1"
             max="9999"
             value={customValue}
-            onChange={(e) => { setCustomValue(e.target.value); setInvalid(false) }}
+            onChange={e => {
+              setCustomValue(e.target.value)
+              setInvalid(false)
+            }}
             onBlur={commitCustom}
             onKeyDown={handleCustomKeyDown}
             aria-label={t.yearSwitcher.enterYear}
@@ -110,8 +112,10 @@ export default function YearSwitcher({ year, onYearChange }) {
           onChange={handleSelectChange}
           aria-label={t.yearSwitcher.selectYear}
         >
-          {presetYears.map((y) => (
-            <option key={y} value={y}>{y}</option>
+          {presetYears.map(y => (
+            <option key={y} value={y}>
+              {y}
+            </option>
           ))}
           <option disabled>─────</option>
           <option value="__custom__">{t.yearSwitcher.customOption}</option>

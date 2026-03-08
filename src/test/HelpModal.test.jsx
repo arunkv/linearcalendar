@@ -3,8 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import HelpModal from '../components/HelpModal.jsx'
 
 describe('HelpModal', () => {
-  const renderModal = (overrides = {}) =>
-    render(<HelpModal onClose={vi.fn()} {...overrides} />)
+  const renderModal = (overrides = {}) => render(<HelpModal onClose={vi.fn()} {...overrides} />)
 
   it('renders the dialog with correct role and label', () => {
     renderModal()
@@ -60,10 +59,18 @@ describe('HelpModal', () => {
     renderModal()
     expect(screen.getByText('Keyboard shortcuts')).toBeInTheDocument()
     expect(screen.getByText((_, node) => node.textContent === '? — open help.')).toBeInTheDocument()
-    expect(screen.getByText((_, node) => node.textContent === 'N — create a new event.')).toBeInTheDocument()
-    expect(screen.getByText((_, node) => node.textContent === 'X — export events as .ics.')).toBeInTheDocument()
-    expect(screen.getByText((_, node) => node.textContent === 'I — import from a .ics file.')).toBeInTheDocument()
-    expect(screen.getByText((_, node) => node.textContent === 'Esc — close the current dialog.')).toBeInTheDocument()
+    expect(
+      screen.getByText((_, node) => node.textContent === 'N — create a new event.')
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText((_, node) => node.textContent === 'X — export events as .ics.')
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText((_, node) => node.textContent === 'I — import from a .ics file.')
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText((_, node) => node.textContent === 'Esc — close the current dialog.')
+    ).toBeInTheDocument()
   })
 
   it('calls onClose when Escape key is pressed', () => {

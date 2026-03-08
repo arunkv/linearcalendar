@@ -56,11 +56,15 @@ export async function registerServiceWorker({
     return register()
   }
 
-  win.addEventListener('load', () => {
-    register().catch((error) => {
-      console.error('Service worker registration failed', error)
-    })
-  }, { once: true })
+  win.addEventListener(
+    'load',
+    () => {
+      register().catch(error => {
+        console.error('Service worker registration failed', error)
+      })
+    },
+    { once: true }
+  )
 
   return null
 }

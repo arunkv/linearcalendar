@@ -17,8 +17,7 @@ describe('TagFilterBar', () => {
     onDelete: vi.fn(),
   }
 
-  const renderBar = (overrides = {}) =>
-    render(<TagFilterBar {...defaultProps} {...overrides} />)
+  const renderBar = (overrides = {}) => render(<TagFilterBar {...defaultProps} {...overrides} />)
 
   it('should render nothing when no tags exist', () => {
     const { container } = renderBar({ tags: [] })

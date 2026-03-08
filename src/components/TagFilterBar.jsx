@@ -3,14 +3,20 @@ import './TagFilterBar.css'
 import t from '../locales/index.js'
 
 const PRESET_COLORS = [
-  '#3b82f6', '#10b981', '#f97316', '#ef4444',
-  '#8b5cf6', '#06b6d4', '#f59e0b', '#6b7280',
+  '#3b82f6',
+  '#10b981',
+  '#f97316',
+  '#ef4444',
+  '#8b5cf6',
+  '#06b6d4',
+  '#f59e0b',
+  '#6b7280',
 ]
 
 export default function TagFilterBar({ tags, hiddenTagIds, onToggle, onEditTag, onDelete }) {
   const [editingTagId, setEditingTagId] = useState(null)
-  const [editName,     setEditName]     = useState('')
-  const [editColor,    setEditColor]    = useState(PRESET_COLORS[0])
+  const [editName, setEditName] = useState('')
+  const [editColor, setEditColor] = useState(PRESET_COLORS[0])
   const editInputRef = useRef(null)
 
   // Auto-focus edit input when form opens
@@ -67,7 +73,9 @@ export default function TagFilterBar({ tags, hiddenTagIds, onToggle, onEditTag, 
                       className={[
                         'tag-filter-bar__edit-swatch',
                         c === editColor ? 'tag-filter-bar__edit-swatch--selected' : '',
-                      ].filter(Boolean).join(' ')}
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
                       style={{ backgroundColor: c }}
                       onClick={() => setEditColor(c)}
                       aria-label={c}
@@ -101,20 +109,16 @@ export default function TagFilterBar({ tags, hiddenTagIds, onToggle, onEditTag, 
           return (
             <div
               key={tag.id}
-              className={[
-                'tag-filter-bar__chip',
-                isHidden ? 'tag-filter-bar__chip--hidden' : '',
-              ].filter(Boolean).join(' ')}
+              className={['tag-filter-bar__chip', isHidden ? 'tag-filter-bar__chip--hidden' : '']
+                .filter(Boolean)
+                .join(' ')}
               role="button"
               tabIndex={0}
               aria-pressed={!isHidden}
               onClick={() => onToggle(tag.id)}
               onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onToggle(tag.id)}
             >
-              <span
-                className="tag-filter-bar__chip-dot"
-                style={{ backgroundColor: tag.color }}
-              />
+              <span className="tag-filter-bar__chip-dot" style={{ backgroundColor: tag.color }} />
               <span className="tag-filter-bar__chip-label">{tag.name}</span>
               {/* ✏ edit icon */}
               <span
@@ -133,7 +137,10 @@ export default function TagFilterBar({ tags, hiddenTagIds, onToggle, onEditTag, 
                 role="button"
                 tabIndex={0}
                 aria-label={t.tagFilterBar.deleteTag(tag.name)}
-                onClick={e => { e.stopPropagation(); onDelete(tag.id) }}
+                onClick={e => {
+                  e.stopPropagation()
+                  onDelete(tag.id)
+                }}
                 onKeyDown={e => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.stopPropagation()

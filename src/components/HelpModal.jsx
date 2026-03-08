@@ -24,23 +24,27 @@ export default function HelpModal({ onClose }) {
       >
         <div className="help-modal__header">
           <h2 className="help-modal__title">{h.title}</h2>
-          <button className="help-modal__close-btn" onClick={onClose} aria-label={h.close}>✕</button>
+          <button className="help-modal__close-btn" onClick={onClose} aria-label={h.close}>
+            ✕
+          </button>
         </div>
 
         <div className="help-modal__body">
-          <p className="help-modal__intro">
-            {h.intro}
-          </p>
+          <p className="help-modal__intro">{h.intro}</p>
 
           <section className="help-modal__section">
             <h3>{h.gettingStarted.heading}</h3>
             <ul>
-              <li><strong>{h.gettingStarted.addEvent}</strong> {h.gettingStarted.addEventText}</li>
-              <li><strong>{h.gettingStarted.editEvent}</strong> {h.gettingStarted.editEventText}</li>
               <li>
-                <strong>{h.gettingStarted.changeYear}</strong>{' '}
-                {h.gettingStarted.changeYearText}{' '}
-                <code>{h.gettingStarted.changeYearCode}</code>{h.gettingStarted.changeYearSuffix}
+                <strong>{h.gettingStarted.addEvent}</strong> {h.gettingStarted.addEventText}
+              </li>
+              <li>
+                <strong>{h.gettingStarted.editEvent}</strong> {h.gettingStarted.editEventText}
+              </li>
+              <li>
+                <strong>{h.gettingStarted.changeYear}</strong> {h.gettingStarted.changeYearText}{' '}
+                <code>{h.gettingStarted.changeYearCode}</code>
+                {h.gettingStarted.changeYearSuffix}
               </li>
             </ul>
           </section>
@@ -60,12 +64,12 @@ export default function HelpModal({ onClose }) {
             <h3>{h.importExport.heading}</h3>
             <ul>
               <li>
-                <strong>{h.importExport.exportLabel}</strong>{' '}
-                {h.importExport.exportText} <code>{h.importExport.exportCode}</code> {h.importExport.exportSuffix}
+                <strong>{h.importExport.exportLabel}</strong> {h.importExport.exportText}{' '}
+                <code>{h.importExport.exportCode}</code> {h.importExport.exportSuffix}
               </li>
               <li>
-                <strong>{h.importExport.importLabel}</strong>{' '}
-                {h.importExport.importText} <code>{h.importExport.importCode}</code> {h.importExport.importSuffix}
+                <strong>{h.importExport.importLabel}</strong> {h.importExport.importText}{' '}
+                <code>{h.importExport.importCode}</code> {h.importExport.importSuffix}
               </li>
             </ul>
           </section>
@@ -73,17 +77,24 @@ export default function HelpModal({ onClose }) {
           <section className="help-modal__section">
             <h3>{h.shortcuts.heading}</h3>
             <ul>
-              <li><kbd>{h.shortcuts.helpKbd}</kbd> {h.shortcuts.helpText}</li>
-              <li><kbd>{h.shortcuts.newEventKbd}</kbd> {h.shortcuts.newEventText}</li>
               <li>
-                <kbd>{h.shortcuts.exportKbd}</kbd>{' '}
-                {h.shortcuts.exportText} <code>{h.shortcuts.exportCode}</code>{h.shortcuts.exportSuffix}
+                <kbd>{h.shortcuts.helpKbd}</kbd> {h.shortcuts.helpText}
               </li>
               <li>
-                <kbd>{h.shortcuts.importKbd}</kbd>{' '}
-                {h.shortcuts.importText} <code>{h.shortcuts.importCode}</code> {h.shortcuts.importSuffix}
+                <kbd>{h.shortcuts.newEventKbd}</kbd> {h.shortcuts.newEventText}
               </li>
-              <li><kbd>{h.shortcuts.escKbd}</kbd> {h.shortcuts.escText}</li>
+              <li>
+                <kbd>{h.shortcuts.exportKbd}</kbd> {h.shortcuts.exportText}{' '}
+                <code>{h.shortcuts.exportCode}</code>
+                {h.shortcuts.exportSuffix}
+              </li>
+              <li>
+                <kbd>{h.shortcuts.importKbd}</kbd> {h.shortcuts.importText}{' '}
+                <code>{h.shortcuts.importCode}</code> {h.shortcuts.importSuffix}
+              </li>
+              <li>
+                <kbd>{h.shortcuts.escKbd}</kbd> {h.shortcuts.escText}
+              </li>
             </ul>
           </section>
 
@@ -93,14 +104,18 @@ export default function HelpModal({ onClose }) {
               <li>
                 {h.other.togglePrefix} <strong>{h.other.toggleLabel}</strong> {h.other.toggleSuffix}
               </li>
-              <li><strong>{h.other.printLabel}</strong> {h.other.printText}</li>
+              <li>
+                <strong>{h.other.printLabel}</strong> {h.other.printText}
+              </li>
               <li>{h.other.localStorage}</li>
             </ul>
           </section>
         </div>
 
         <div className="help-modal__footer">
-          <button className="help-modal__btn" onClick={onClose}>{h.gotIt}</button>
+          <button className="help-modal__btn" onClick={onClose}>
+            {h.gotIt}
+          </button>
         </div>
       </div>
     </div>

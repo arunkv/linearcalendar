@@ -16,7 +16,7 @@ describe('useEvents', () => {
 
   it('should initialize with data from localStorage', () => {
     const storedEvents = [
-      { id: '1', title: 'Test Event', startDate: '2024-01-01', endDate: '2024-01-01', tagId: null }
+      { id: '1', title: 'Test Event', startDate: '2024-01-01', endDate: '2024-01-01', tagId: null },
     ]
     localStorage.getItem.mockReturnValue(JSON.stringify(storedEvents))
     const { result } = renderHook(() => useEvents())
@@ -38,7 +38,7 @@ describe('useEvents', () => {
         title: 'New Event',
         startDate: '2024-03-15',
         endDate: '2024-03-15',
-        tagId: 'tag-1'
+        tagId: 'tag-1',
       })
     })
 
@@ -47,7 +47,7 @@ describe('useEvents', () => {
       title: 'New Event',
       startDate: '2024-03-15',
       endDate: '2024-03-15',
-      tagId: 'tag-1'
+      tagId: 'tag-1',
     })
     expect(result.current.events[0].id).toBeDefined()
   })
@@ -60,19 +60,16 @@ describe('useEvents', () => {
       result.current.addEvent({
         title: 'New Event',
         startDate: '2024-03-15',
-        endDate: '2024-03-15'
+        endDate: '2024-03-15',
       })
     })
 
-    expect(localStorage.setItem).toHaveBeenCalledWith(
-      'linearcalendar-events',
-      expect.any(String)
-    )
+    expect(localStorage.setItem).toHaveBeenCalledWith('linearcalendar-events', expect.any(String))
   })
 
   it('should update an existing event', () => {
     const storedEvents = [
-      { id: '1', title: 'Old Title', startDate: '2024-01-01', endDate: '2024-01-01' }
+      { id: '1', title: 'Old Title', startDate: '2024-01-01', endDate: '2024-01-01' },
     ]
     localStorage.getItem.mockReturnValue(JSON.stringify(storedEvents))
     const { result } = renderHook(() => useEvents())
@@ -88,7 +85,7 @@ describe('useEvents', () => {
   it('should not update events with different ids', () => {
     const storedEvents = [
       { id: '1', title: 'Event 1', startDate: '2024-01-01', endDate: '2024-01-01' },
-      { id: '2', title: 'Event 2', startDate: '2024-01-02', endDate: '2024-01-02' }
+      { id: '2', title: 'Event 2', startDate: '2024-01-02', endDate: '2024-01-02' },
     ]
     localStorage.getItem.mockReturnValue(JSON.stringify(storedEvents))
     const { result } = renderHook(() => useEvents())
@@ -104,7 +101,7 @@ describe('useEvents', () => {
   it('should delete an event', () => {
     const storedEvents = [
       { id: '1', title: 'Event 1', startDate: '2024-01-01', endDate: '2024-01-01' },
-      { id: '2', title: 'Event 2', startDate: '2024-01-02', endDate: '2024-01-02' }
+      { id: '2', title: 'Event 2', startDate: '2024-01-02', endDate: '2024-01-02' },
     ]
     localStorage.getItem.mockReturnValue(JSON.stringify(storedEvents))
     const { result } = renderHook(() => useEvents())
@@ -119,7 +116,7 @@ describe('useEvents', () => {
 
   it('should persist to localStorage when deleting', () => {
     const storedEvents = [
-      { id: '1', title: 'Event 1', startDate: '2024-01-01', endDate: '2024-01-01' }
+      { id: '1', title: 'Event 1', startDate: '2024-01-01', endDate: '2024-01-01' },
     ]
     localStorage.getItem.mockReturnValue(JSON.stringify(storedEvents))
     const { result } = renderHook(() => useEvents())
@@ -128,21 +125,18 @@ describe('useEvents', () => {
       result.current.deleteEvent('1')
     })
 
-    expect(localStorage.setItem).toHaveBeenCalledWith(
-      'linearcalendar-events',
-      '[]'
-    )
+    expect(localStorage.setItem).toHaveBeenCalledWith('linearcalendar-events', '[]')
   })
 
   it('should replace all events', () => {
     const storedEvents = [
-      { id: '1', title: 'Old Event', startDate: '2024-01-01', endDate: '2024-01-01' }
+      { id: '1', title: 'Old Event', startDate: '2024-01-01', endDate: '2024-01-01' },
     ]
     localStorage.getItem.mockReturnValue(JSON.stringify(storedEvents))
     const { result } = renderHook(() => useEvents())
 
     const newEvents = [
-      { id: '2', title: 'New Event', startDate: '2024-02-01', endDate: '2024-02-01' }
+      { id: '2', title: 'New Event', startDate: '2024-02-01', endDate: '2024-02-01' },
     ]
 
     act(() => {

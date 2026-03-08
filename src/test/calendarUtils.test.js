@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import {
   DAY_NAMES,
   DAY_ABBRS,
-  DEFAULT_EVENT_COLOR,
+  _DEFAULT_EVENT_COLOR,
   GRID_COLS,
   getDaysInMonth,
   getMonthStartDay,
@@ -103,9 +103,18 @@ describe('calendarUtils', () => {
 
   describe('getMonthName', () => {
     it.each([
-      [0, 'January'], [1, 'February'], [2, 'March'], [3, 'April'],
-      [4, 'May'], [5, 'June'], [6, 'July'], [7, 'August'],
-      [8, 'September'], [9, 'October'], [10, 'November'], [11, 'December'],
+      [0, 'January'],
+      [1, 'February'],
+      [2, 'March'],
+      [3, 'April'],
+      [4, 'May'],
+      [5, 'June'],
+      [6, 'July'],
+      [7, 'August'],
+      [8, 'September'],
+      [9, 'October'],
+      [10, 'November'],
+      [11, 'December'],
     ])('getMonthName(%i) → %s', (month, name) => {
       expect(getMonthName(month)).toBe(name)
     })
@@ -155,8 +164,8 @@ describe('calendarUtils', () => {
       expect(row[1]).toBeNull() // Mon
       expect(row[2]).toBeNull() // Tue
       expect(row[3]).toBeNull() // Wed
-      expect(row[4]).toBe(1)    // Thu - Feb 1
-      expect(row[5]).toBe(2)    // Fri
+      expect(row[4]).toBe(1) // Thu - Feb 1
+      expect(row[5]).toBe(2) // Fri
     })
 
     it('should correctly handle leap year February with 29 days', () => {
@@ -176,13 +185,15 @@ describe('calendarUtils', () => {
     })
 
     it('should include event data correctly', () => {
-      const events = [{
-        id: 'test-123',
-        title: 'Test Event',
-        startDate: '2024-03-15',
-        endDate: '2024-03-15',
-        tagId: 'tag-1',
-      }]
+      const events = [
+        {
+          id: 'test-123',
+          title: 'Test Event',
+          startDate: '2024-03-15',
+          endDate: '2024-03-15',
+          tagId: 'tag-1',
+        },
+      ]
       const tagsById = { 'tag-1': { id: 'tag-1', name: 'Work', color: '#ff0000' } }
       const ics = eventsToIcs(events, tagsById)
       expect(ics).toContain('BEGIN:VEVENT')
@@ -198,13 +209,15 @@ describe('calendarUtils', () => {
     })
 
     it('should handle multi-day events with correct end date', () => {
-      const events = [{
-        id: 'multi-day',
-        title: 'Conference',
-        startDate: '2024-03-15',
-        endDate: '2024-03-17',
-        color: '#3b82f6'
-      }]
+      const events = [
+        {
+          id: 'multi-day',
+          title: 'Conference',
+          startDate: '2024-03-15',
+          endDate: '2024-03-17',
+          color: '#3b82f6',
+        },
+      ]
       const ics = eventsToIcs(events)
       expect(ics).toContain('DTSTART;VALUE=DATE:20240315')
       expect(ics).toContain('DTEND;VALUE=DATE:20240318') // Day after end date
@@ -212,8 +225,20 @@ describe('calendarUtils', () => {
 
     it('should handle multiple events', () => {
       const events = [
-        { id: '1', title: 'Event 1', startDate: '2024-01-01', endDate: '2024-01-01', color: '#ff0000' },
-        { id: '2', title: 'Event 2', startDate: '2024-01-02', endDate: '2024-01-02', color: '#00ff00' },
+        {
+          id: '1',
+          title: 'Event 1',
+          startDate: '2024-01-01',
+          endDate: '2024-01-01',
+          color: '#ff0000',
+        },
+        {
+          id: '2',
+          title: 'Event 2',
+          startDate: '2024-01-02',
+          endDate: '2024-01-02',
+          color: '#00ff00',
+        },
       ]
       const ics = eventsToIcs(events)
       expect(ics.match(/BEGIN:VEVENT/g)).toHaveLength(2)
@@ -361,47 +386,55 @@ END:VCALENDAR`
     })
 
     it('should include event that falls within month', () => {
-      const events = [{
-        id: '1',
-        title: 'January Event',
-        startDate: '2024-01-15',
-        endDate: '2024-01-15'
-      }]
+      const events = [
+        {
+          id: '1',
+          title: 'January Event',
+          startDate: '2024-01-15',
+          endDate: '2024-01-15',
+        },
+      ]
       const result = getEventsForMonth(events, 2024, 0)
       expect(result).toHaveLength(1)
       expect(result[0].title).toBe('January Event')
     })
 
     it('should include event that spans multiple months', () => {
-      const events = [{
-        id: '1',
-        title: 'Multi-month',
-        startDate: '2023-12-15',
-        endDate: '2024-02-15'
-      }]
+      const events = [
+        {
+          id: '1',
+          title: 'Multi-month',
+          startDate: '2023-12-15',
+          endDate: '2024-02-15',
+        },
+      ]
       const result = getEventsForMonth(events, 2024, 0) // January
       expect(result).toHaveLength(1)
     })
 
     it('should exclude event outside month', () => {
-      const events = [{
-        id: '1',
-        title: 'February Event',
-        startDate: '2024-02-15',
-        endDate: '2024-02-15'
-      }]
+      const events = [
+        {
+          id: '1',
+          title: 'February Event',
+          startDate: '2024-02-15',
+          endDate: '2024-02-15',
+        },
+      ]
       const result = getEventsForMonth(events, 2024, 0) // January
       expect(result).toHaveLength(0)
     })
 
     it('should calculate correct column positions', () => {
       // January 2024 starts on Monday (col 1)
-      const events = [{
-        id: '1',
-        title: 'Jan 5th',
-        startDate: '2024-01-05',
-        endDate: '2024-01-05'
-      }]
+      const events = [
+        {
+          id: '1',
+          title: 'Jan 5th',
+          startDate: '2024-01-05',
+          endDate: '2024-01-05',
+        },
+      ]
       const result = getEventsForMonth(events, 2024, 0)
       expect(result[0].startCol).toBe(5) // Mon=1 + 5th - 1 = 5
       expect(result[0].endCol).toBe(5)
@@ -409,23 +442,27 @@ END:VCALENDAR`
     })
 
     it('should clamp events that extend beyond month boundaries', () => {
-      const events = [{
-        id: '1',
-        title: 'Spillover',
-        startDate: '2023-12-28',
-        endDate: '2024-01-05'
-      }]
+      const events = [
+        {
+          id: '1',
+          title: 'Spillover',
+          startDate: '2023-12-28',
+          endDate: '2024-01-05',
+        },
+      ]
       const result = getEventsForMonth(events, 2024, 0)
       // Should clamp to Jan 1-5, 2024
       expect(result[0].startCol).toBe(1) // Jan 1st
-      expect(result[0].endCol).toBe(5)   // Jan 5th
+      expect(result[0].endCol).toBe(5) // Jan 5th
     })
 
     it('should place event on the 1st at the month start column (UTC-safe)', () => {
       // new Date('2024-01-01') is parsed as UTC midnight; in UTC- timezones
       // .getDate() would return 31 (Dec), shifting the event out of January.
       // parseDateLocal ensures the date string is always read as local midnight.
-      const events = [{ id: '1', title: 'New Year', startDate: '2024-01-01', endDate: '2024-01-01' }]
+      const events = [
+        { id: '1', title: 'New Year', startDate: '2024-01-01', endDate: '2024-01-01' },
+      ]
       const result = getEventsForMonth(events, 2024, 0)
       expect(result).toHaveLength(1)
       expect(result[0].startCol).toBe(1) // Jan 1, 2024 = Monday = col 1
@@ -435,7 +472,9 @@ END:VCALENDAR`
     it('should place event on the last day of month at correct column (UTC-safe)', () => {
       // new Date('2024-01-31') in UTC is Jan 31; in UTC- zones getDate() could
       // return 30, placing the event one column too early.
-      const events = [{ id: '1', title: 'Last Day', startDate: '2024-01-31', endDate: '2024-01-31' }]
+      const events = [
+        { id: '1', title: 'Last Day', startDate: '2024-01-31', endDate: '2024-01-31' },
+      ]
       const result = getEventsForMonth(events, 2024, 0)
       expect(result).toHaveLength(1)
       expect(result[0].startCol).toBe(31) // col 1 (Mon) + 31 - 1 = 31
