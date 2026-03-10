@@ -118,7 +118,7 @@ const fr = {
     invalidType: 'Type de fichier non valide — veuillez sélectionner un fichier .ics.',
     noEvents: 'Aucun événement valide trouvé dans le fichier.',
     tooLarge: 'Fichier trop volumineux (max 5 Mo).',
-    parseFailed: 'Échec de analyse du fichier .ics.',
+    parseFailed: "Échec de l'analyse du fichier .ics.",
   },
 
   helpModal: {
@@ -131,11 +131,11 @@ const fr = {
     gettingStarted: {
       heading: 'Pour commencer',
       addEvent: 'Ajouter un événement',
-      addEventText: '— cliquez sur nimporte quelle cellule de date du calendrier.',
+      addEventText: "— cliquez sur n'importe quelle cellule de date du calendrier.",
       editEvent: 'Modifier ou supprimer un événement',
-      editEventText: '— cliquez sur la barre colorée de événement.',
+      editEventText: "— cliquez sur la barre colorée de l'événement.",
       changeYear: "Changer d'année",
-      changeYearText: '— utilisez le sélecteur dans en-tête, ou ajoutez',
+      changeYearText: "— utilisez le sélecteur dans l'en-tête, ou ajoutez",
       changeYearCode: '?year=2025',
       changeYearSuffix: ' aux favoris.',
     },
@@ -145,7 +145,7 @@ const fr = {
       assignPrefix: 'Attribuez une',
       assignTag: 'étiquette',
       assignSuffix: '(avec une couleur) à tout événement pour un regroupement facile.',
-      createInline: 'Créez des étiquettes en ligne lors de ajout ou modification.',
+      createInline: "Créez des étiquettes en ligne lors de l'ajout ou de la modification.",
       toggleVisibility: 'Activez la visibilité des étiquettes depuis la barre de filtres.',
     },
 
@@ -164,7 +164,7 @@ const fr = {
     shortcuts: {
       heading: 'Raccourcis clavier',
       helpKbd: '?',
-      helpText: '— ouvrir aide.',
+      helpText: "— ouvrir l'aide.",
       newEventKbd: 'N',
       newEventText: '— créer un nouvel événement.',
       exportKbd: 'X',
@@ -183,7 +183,7 @@ const fr = {
       heading: 'Autre',
       togglePrefix: 'Basculer entre le',
       toggleLabel: 'mode sombre / clair',
-      toggleSuffix: 'avec licône lune/soleil.',
+      toggleSuffix: "avec l'icône lune/soleil.",
       printLabel: 'Imprimer',
       printText: 'affiche une vue optimisée pour le paysage.',
       localStorage: 'Toutes les données sont stockées localement dans votre navigateur.',

@@ -186,7 +186,7 @@ const es = {
       toggleLabel: 'modo oscuro / claro',
       toggleSuffix: 'con el icono de luna/sol.',
       printLabel: 'Imprimir',
-      printText: 'genera una vista limpia optimizada para horizontal.',
+      printText: 'genera una vista limpia optimizada para impresión horizontal.',
       localStorage:
         'Todos los datos se almacenan localmente en su navegador — no se envían a ningún servidor.',
     },
