@@ -8,12 +8,19 @@ function genId() {
 
 function parseEvent(raw) {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null
-  const { id, title, startDate, endDate, tagId } = raw
+  const { id, title, startDate, endDate, tagId, source } = raw
   if (typeof id !== 'string' || !id) return null
   if (typeof title !== 'string') return null
   if (typeof startDate !== 'string') return null
   if (typeof endDate !== 'string') return null
-  return { id, title, startDate, endDate, tagId: typeof tagId === 'string' ? tagId : null }
+  return {
+    id,
+    title,
+    startDate,
+    endDate,
+    tagId: typeof tagId === 'string' ? tagId : null,
+    source: source === 'google' ? 'google' : 'local',
+  }
 }
 
 export function useEvents() {
@@ -27,12 +34,14 @@ export function useEvents() {
   })
 
   function _persist(updated) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+    // Only persist local events — Google events are fetched fresh each session
+    const localOnly = updated.filter(ev => ev.source !== 'google')
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(localOnly))
     return updated
   }
 
   function addEvent({ title, startDate, endDate, tagId }) {
-    const ev = { id: genId(), title, startDate, endDate, tagId }
+    const ev = { id: genId(), title, startDate, endDate, tagId, source: 'local' }
     setEvents(prev => _persist([...prev, ev]))
   }
 
@@ -48,5 +57,17 @@ export function useEvents() {
     setEvents(_persist(newEvents))
   }
 
-  return { events, addEvent, updateEvent, deleteEvent, replaceAll }
+  /**
+   * Merge Google Calendar events into the event list.
+   * Replaces any previously synced Google events and appends fresh ones.
+   * Local events are untouched.
+   */
+  function syncFromGoogle(googleEvents) {
+    setEvents(prev => {
+      const localEvents = prev.filter(ev => ev.source !== 'google')
+      return _persist([...localEvents, ...googleEvents])
+    })
+  }
+
+  return { events, addEvent, updateEvent, deleteEvent, replaceAll, syncFromGoogle }
 }

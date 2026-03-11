@@ -20,7 +20,7 @@ describe('useEvents', () => {
     ]
     localStorage.getItem.mockReturnValue(JSON.stringify(storedEvents))
     const { result } = renderHook(() => useEvents())
-    expect(result.current.events).toEqual(storedEvents)
+    expect(result.current.events).toEqual([{ ...storedEvents[0], source: 'local' }])
   })
 
   it('should handle localStorage parse errors gracefully', () => {
