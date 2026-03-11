@@ -30,17 +30,17 @@
 /* Sign-out button */
 .gcal-btn--signout {
   padding: 3px 8px;
-  border: 1px solid var(--border, #d1d5db);
+  border: 1px solid var(--header-border, #d1d5db);
   border-radius: 4px;
   background: transparent;
-  color: var(--text-muted, #6b7280);
+  color: var(--header-color, #111827);
   font-size: 12px;
   cursor: pointer;
   transition: background 0.15s;
 }
 
 .gcal-btn--signout:hover {
-  background: var(--surface-hover, #f3f4f6);
+  background: var(--header-bg-weekend, #f3f4f6);
 }
 
 /* Loading state */
@@ -76,7 +76,7 @@
 
 .gcal-user__name {
   font-size: 13px;
-  color: var(--text, #374151);
+  color: var(--header-color, #111827);
   max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
