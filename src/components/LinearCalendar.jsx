@@ -115,6 +115,7 @@ const TrashIcon = () => (
   </svg>
 )
 import LanguageSwitcher from './LanguageSwitcher.jsx'
+import GoogleSignInButton from './GoogleSignInButton.jsx'
 import {
   buildMonthRow,
   GRID_COLS,
@@ -130,6 +131,7 @@ import {
 } from '../utils/calendarUtils.js'
 import { useEvents } from '../hooks/useEvents.js'
 import { useTags } from '../hooks/useTags.js'
+import { useGoogleCalendar } from '../hooks/useGoogleCalendar.js'
 import EventModal from './EventModal.jsx'
 import YearSwitcher from './YearSwitcher.jsx'
 import TagFilterBar from './TagFilterBar.jsx'
@@ -186,8 +188,18 @@ export default function LinearCalendar({
   locale,
   onChangeLocale,
   availableLocales,
+  googleAuth,
 }) {
-  const { events, addEvent, updateEvent, deleteEvent, replaceAll } = useEvents()
+  const { events, addEvent, updateEvent, deleteEvent, replaceAll, syncFromGoogle } = useEvents()
+  const { fetchGoogleEvents, isFetching: isGcalFetching } = useGoogleCalendar(googleAuth?.accessToken)
+
+  // When the user signs in (or the year changes while signed in), fetch Google Calendar events
+  useEffect(() => {
+    if (!googleAuth?.isSignedIn || !googleAuth?.accessToken) return
+    fetchGoogleEvents(year).then(googleEvents => {
+      if (googleEvents.length > 0) syncFromGoogle(googleEvents)
+    })
+  }, [googleAuth?.isSignedIn, googleAuth?.accessToken, year]) // eslint-disable-line react-hooks/exhaustive-deps
   const {
     tags,
     addTag,
@@ -620,6 +632,17 @@ export default function LinearCalendar({
         <YearSwitcher year={year} onYearChange={onChangeYear} t={t} />
 
         <div className="linear-calendar__header-actions">
+          {googleAuth && (
+            <GoogleSignInButton
+              isSignedIn={googleAuth.isSignedIn}
+              isLoading={googleAuth.isLoading || isGcalFetching}
+              userInfo={googleAuth.userInfo}
+              error={googleAuth.error}
+              onSignIn={googleAuth.onSignIn}
+              onSignOut={googleAuth.onSignOut}
+            />
+          )}
+
           <button
             className="linear-calendar__action-btn linear-calendar__action-btn--icon-only"
             onClick={onToggleTheme}

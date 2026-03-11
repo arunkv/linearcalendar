@@ -1,0 +1,90 @@
+.gcal-signin,
+.gcal-user {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Sign-in button */
+.gcal-btn--signin {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border: 1px solid var(--border, #d1d5db);
+  border-radius: 4px;
+  background: var(--surface, #fff);
+  color: var(--text, #374151);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.gcal-btn--signin:hover {
+  background: var(--surface-hover, #f3f4f6);
+  border-color: var(--border-hover, #9ca3af);
+}
+
+/* Sign-out button */
+.gcal-btn--signout {
+  padding: 3px 8px;
+  border: 1px solid var(--border, #d1d5db);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted, #6b7280);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.gcal-btn--signout:hover {
+  background: var(--surface-hover, #f3f4f6);
+}
+
+/* Loading state */
+.gcal-btn--loading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted, #6b7280);
+}
+
+.gcal-btn__spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border, #d1d5db);
+  border-top-color: var(--accent, #4285f4);
+  border-radius: 50%;
+  animation: gcal-spin 0.7s linear infinite;
+}
+
+@keyframes gcal-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Signed-in user row */
+.gcal-user__avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.gcal-user__name {
+  font-size: 13px;
+  color: var(--text, #374151);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Error message */
+.gcal-btn__error {
+  font-size: 12px;
+  color: var(--danger, #dc2626);
+}
