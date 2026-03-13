@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service — Linear Calendar</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand: #f97316;
+      --brand-dark: #ea580c;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --bg: #ffffff;
+      --surface: #f9fafb;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text: #f9fafb;
+        --muted: #9ca3af;
+        --border: #374151;
+        --bg: #111827;
+        --surface: #1f2937;
+      }
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    header {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    header img {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+    }
+
+    header span {
+      font-weight: 700;
+      font-size: 0.9375rem;
+    }
+
+    main {
+      max-width: 740px;
+      margin: 48px auto;
+      padding: 0 24px 80px;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .meta {
+      font-size: 0.875rem;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 36px 0 10px;
+    }
+
+    p { margin-bottom: 14px; }
+    p:last-child { margin-bottom: 0; }
+
+    ul {
+      padding-left: 20px;
+      margin-bottom: 14px;
+    }
+
+    li { margin-bottom: 6px; }
+
+    a {
+      color: var(--brand);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    a:hover { color: var(--brand-dark); }
+
+    .callout {
+      background: var(--surface);
+      border-left: 3px solid var(--brand);
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin: 24px 0;
+      font-size: 0.9375rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/">
+    <img src="/favicon.svg" alt="" aria-hidden="true" />
+    <span>Linear Calendar</span>
+  </a>
+</header>
+
+<main>
+  <h1>Terms of Service</h1>
+  <p class="meta">Effective date: March 13, 2026 &nbsp;·&nbsp; Last updated: March 13, 2026</p>
+
+  <div class="callout">
+    <strong>Short version:</strong> Linear Calendar is a free tool provided as-is. Your data stays
+    in your browser. Use it responsibly and in accordance with Google's terms when using the Google
+    Calendar integration.
+  </div>
+
+  <h2>1. Acceptance of Terms</h2>
+  <p>
+    By accessing or using Linear Calendar at
+    <a href="/">linearcalendar.app</a> ("the Service"), you agree to be bound by these Terms of
+    Service ("Terms"). If you do not agree to these Terms, please do not use the Service.
+  </p>
+  <p>
+    These Terms apply to all visitors and users of the Service.
+  </p>
+
+  <h2>2. Description of the Service</h2>
+  <p>
+    Linear Calendar is a free, open-source web application that provides a year-at-a-glance
+    calendar view. It allows you to create and manage personal events stored locally in your
+    browser, and optionally connect with Google Calendar to view your Google Calendar events
+    alongside your local events.
+  </p>
+  <p>
+    The source code is publicly available on
+    <a href="https://github.com/arunkv/linearcalendar" target="_blank" rel="noreferrer">GitHub</a>
+    under an open-source licence.
+  </p>
+
+  <h2>3. Your Data</h2>
+  <p>
+    All events and tags you create in Linear Calendar are stored exclusively in your browser's
+    local storage. You retain full ownership of this data. We do not access, transmit, or store
+    your locally created data on any server.
+  </p>
+  <p>
+    You may export your data at any time as a standard <code>.ics</code> file and import it into
+    any compatible calendar application.
+  </p>
+
+  <h2>4. Google Account and Google Calendar Integration</h2>
+  <p>
+    The Service offers an optional integration with Google Calendar via Google's OAuth 2.0
+    authentication. By connecting your Google Account you agree to:
+  </p>
+  <ul>
+    <li>
+      <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer">Google Terms of Service</a>
+    </li>
+    <li>
+      <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Google Privacy Policy</a>
+    </li>
+    <li>
+      <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noreferrer">Google API Services User Data Policy</a>
+    </li>
+  </ul>
+  <p>
+    We access your Google Calendar data in read-only mode solely to display your events within
+    the application. We do not store your Google Calendar data on any server, and we do not share
+    it with any third party.
+  </p>
+  <p>
+    You may revoke the application's access to your Google Account at any time via your
+    <a href="https://myaccount.google.com/permissions" target="_blank" rel="noreferrer">Google Account permissions page</a>.
+  </p>
+
+  <h2>5. Acceptable Use</h2>
+  <p>You agree not to use the Service to:</p>
+  <ul>
+    <li>Violate any applicable law or regulation.</li>
+    <li>Infringe the rights of any third party, including intellectual property rights.</li>
+    <li>Attempt to gain unauthorised access to any system or network.</li>
+    <li>Interfere with or disrupt the integrity or performance of the Service.</li>
+    <li>Use the Google Calendar integration in violation of Google's Terms of Service or Developer
+        Policies.</li>
+  </ul>
+
+  <h2>6. Intellectual Property</h2>
+  <p>
+    Linear Calendar is open-source software. The source code is released under the terms of its
+    open-source licence, which you can review in the
+    <a href="https://github.com/arunkv/linearcalendar" target="_blank" rel="noreferrer">GitHub repository</a>.
+    The "Linear Calendar" name and associated branding remain the property of Arun K Viswanathan.
+  </p>
+
+  <h2>7. Disclaimer of Warranties</h2>
+  <p>
+    THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+    PURPOSE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED,
+    ERROR-FREE, OR COMPLETELY SECURE.
+  </p>
+  <p>
+    You use the Service at your own risk. We strongly recommend regularly exporting your events
+    using the built-in export feature to avoid any unintended data loss.
+  </p>
+
+  <h2>8. Limitation of Liability</h2>
+  <p>
+    TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL ARUN K VISWANATHAN BE
+    LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING
+    LOSS OF DATA, LOSS OF PROFITS, OR LOSS OF GOODWILL, ARISING OUT OF OR RELATED TO YOUR USE
+    OF OR INABILITY TO USE THE SERVICE.
+  </p>
+
+  <h2>9. Changes to the Service and Terms</h2>
+  <p>
+    We reserve the right to modify or discontinue the Service at any time without notice. We also
+    reserve the right to update these Terms at any time. When we do, we will revise the
+    "Last updated" date at the top of this page. Your continued use of the Service after any
+    changes constitutes your acceptance of the updated Terms.
+  </p>
+
+  <h2>10. Governing Law</h2>
+  <p>
+    These Terms are governed by and construed in accordance with the laws of the State of
+    California, United States, without regard to its conflict of law principles.
+  </p>
+
+  <h2>11. Contact</h2>
+  <p>
+    If you have questions about these Terms of Service, please open an issue on our
+    <a href="https://github.com/arunkv/linearcalendar/issues" target="_blank" rel="noreferrer">GitHub repository</a>.
+  </p>
+</main>
+
+<footer>
+  <a href="/">Linear Calendar</a> &nbsp;·&nbsp;
+  <a href="/privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+  <a href="/terms.html">Terms of Service</a>
+</footer>
+
+</body>
+</html>

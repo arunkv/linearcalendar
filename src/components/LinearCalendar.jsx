@@ -916,6 +916,10 @@ export default function LinearCalendar({
             GitHub
           </a>
         </span>
+        <span className="linear-calendar__footer-sep">·</span>
+        <a href="/privacy.html">Privacy</a>
+        <span className="linear-calendar__footer-sep">·</span>
+        <a href="/terms.html">Terms</a>
       </footer>
 
       {/* ── Clear confirmation dialog ────────────────────────────────────────── */}
