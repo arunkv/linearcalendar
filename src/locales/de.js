@@ -135,7 +135,8 @@ const de = {
       editEvent: 'Ereignis bearbeiten oder löschen',
       editEventText: '— klicken Sie auf den farbigen Ereignisbalken.',
       changeYear: 'Jahr wechseln',
-      changeYearText: '— verwenden Sie die Jahresauswahl in der Kopfzeile oder setzen Sie ein Lesezeichen mit',
+      changeYearText:
+        '— verwenden Sie die Jahresauswahl in der Kopfzeile oder setzen Sie ein Lesezeichen mit',
       changeYearCode: '?year=2025',
       changeYearSuffix: '.',
     },
@@ -145,7 +146,8 @@ const de = {
       assignPrefix: 'Weisen Sie jedem Ereignis ein',
       assignTag: 'Etikett',
       assignSuffix: '(mit Farbe) zur einfachen Gruppierung zu.',
-      createInline: 'Erstellen Sie Etiketten direkt beim Hinzufügen oder Bearbeiten eines Ereignisses.',
+      createInline:
+        'Erstellen Sie Etiketten direkt beim Hinzufügen oder Bearbeiten eines Ereignisses.',
       toggleVisibility: 'Schalten Sie die Sichtbarkeit von Etiketten über die Filterleiste ein.',
     },
 
@@ -186,7 +188,8 @@ const de = {
       toggleSuffix: 'mit dem Mond-/Sonnensymbol wechseln.',
       printLabel: 'Drucken',
       printText: 'erzeugt eine saubere, für Querformat optimierte Ansicht.',
-      localStorage: 'Alle Daten werden lokal in Ihrem Browser gespeichert — es werden keine Daten an Server übertragen.',
+      localStorage:
+        'Alle Daten werden lokal in Ihrem Browser gespeichert — es werden keine Daten an Server übertragen.',
     },
   },
 

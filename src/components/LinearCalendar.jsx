@@ -191,7 +191,9 @@ export default function LinearCalendar({
   googleAuth,
 }) {
   const { events, addEvent, updateEvent, deleteEvent, replaceAll, syncFromGoogle } = useEvents()
-  const { fetchGoogleEvents, isFetching: isGcalFetching } = useGoogleCalendar(googleAuth?.accessToken)
+  const { fetchGoogleEvents, isFetching: isGcalFetching } = useGoogleCalendar(
+    googleAuth?.accessToken
+  )
 
   // When the user signs in (or the year changes while signed in), fetch Google Calendar events
   useEffect(() => {

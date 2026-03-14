@@ -1,12 +1,7 @@
 import './GoogleSignInButton.css'
 
 const GoogleIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
+  <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
     <path
       fill="#4285F4"
       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -26,7 +21,14 @@ const GoogleIcon = () => (
   </svg>
 )
 
-export default function GoogleSignInButton({ isSignedIn, isLoading, userInfo, onSignIn, onSignOut, error }) {
+export default function GoogleSignInButton({
+  isSignedIn,
+  isLoading,
+  userInfo,
+  onSignIn,
+  onSignOut,
+  error,
+}) {
   if (isLoading) {
     return (
       <div className="gcal-btn gcal-btn--loading" aria-busy="true">
@@ -48,7 +50,11 @@ export default function GoogleSignInButton({ isSignedIn, isLoading, userInfo, on
           />
         )}
         <span className="gcal-user__name">{userInfo.name}</span>
-        <button className="gcal-btn gcal-btn--signout" onClick={onSignOut} title="Sign out of Google Calendar">
+        <button
+          className="gcal-btn gcal-btn--signout"
+          onClick={onSignOut}
+          title="Sign out of Google Calendar"
+        >
           Sign out
         </button>
       </div>
@@ -57,11 +63,19 @@ export default function GoogleSignInButton({ isSignedIn, isLoading, userInfo, on
 
   return (
     <div className="gcal-signin">
-      <button className="gcal-btn gcal-btn--signin" onClick={onSignIn} title="Import events from Google Calendar">
+      <button
+        className="gcal-btn gcal-btn--signin"
+        onClick={onSignIn}
+        title="Import events from Google Calendar"
+      >
         <GoogleIcon />
         <span>Sign in with Google</span>
       </button>
-      {error && <span className="gcal-btn__error" role="alert">{error}</span>}
+      {error && (
+        <span className="gcal-btn__error" role="alert">
+          {error}
+        </span>
+      )}
     </div>
   )
 }

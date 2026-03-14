@@ -24,7 +24,16 @@ export default function App() {
   const { t, locale, setLocale, availableLocales } = useLocale()
 
   // Google Auth
-  const { isSignedIn, isLoading: authLoading, error: authError, userInfo, accessToken, signIn, signOut, handleCallback } = useGoogleAuth()
+  const {
+    isSignedIn,
+    isLoading: authLoading,
+    error: authError,
+    userInfo,
+    accessToken,
+    signIn,
+    signOut,
+    handleCallback,
+  } = useGoogleAuth()
 
   // Handle OAuth callback: if ?code= is in the URL, exchange it for tokens
   useEffect(() => {
