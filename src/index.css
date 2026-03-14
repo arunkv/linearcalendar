@@ -10,8 +10,8 @@
   --header-bg: #ffffff;
   --header-color: #111827;
   --header-border: #e5e7eb;
-  --header-bg-weekend: #f9fafb;
-  --weekend-bg: #f9fafb;
+  --header-bg-weekend: #fef3e2;
+  --weekend-bg: #fef5e7;
   --today-bg: #f97316;
   --today-color: #ffffff;
   --border-color: #e5e7eb;
@@ -29,8 +29,9 @@
   --header-bg: #1e293b;
   --header-color: #f1f5f9;
   --header-border: #334155;
-  --header-bg-weekend: #243044;
-  --weekend-bg: #1a2535;
+  --header-bg-weekend: #2a2210;
+  --weekend-bg: #201a09;
+  --weekend-color: #d4a56a;
   --today-bg: #f97316;
   --today-color: #ffffff;
   --border-color: #334155;

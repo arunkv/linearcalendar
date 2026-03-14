@@ -306,6 +306,11 @@
   background-color: var(--weekend-bg, #f9fafb);
 }
 
+/* Weekend day numbers use --weekend-color when defined (dark mode) */
+.linear-calendar__cell--weekend:not(.linear-calendar__cell--empty) .linear-calendar__cell-day {
+  color: var(--weekend-color, var(--cell-color, #111827));
+}
+
 /* ─── Today highlight ────────────────────────────────────────────────────────
    The cell itself stays neutral; the inner <span> carries the orange circle. */
 .linear-calendar__cell--today {
