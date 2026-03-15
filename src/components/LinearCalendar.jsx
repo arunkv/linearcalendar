@@ -378,8 +378,10 @@ export default function LinearCalendar({
         const newEnd = toDateKey(en.getFullYear(), en.getMonth(), en.getDate())
         updateEventRef.current(drag.event.id, { startDate: newStart, endDate: newEnd })
       }
-      // Suppress synthetic click after pointer-capture release
-      suppressClickRef.current = drag.event.id
+      // Suppress synthetic click only after an actual drag move
+      if (drag.hasMoved) {
+        suppressClickRef.current = drag.event.id
+      }
     }
     dragRef.current = null
     setDragVisual(null)
