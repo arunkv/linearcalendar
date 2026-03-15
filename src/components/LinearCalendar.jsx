@@ -313,6 +313,17 @@ export default function LinearCalendar({
           endCol: newEnd,
         })
       }
+    } else if (drag.type === 'move') {
+      const colDelta = col - drag.anchorCol
+      if (colDelta !== drag.currentColDelta) {
+        drag.currentColDelta = colDelta
+        setDragVisual({
+          type: 'move',
+          eventId: drag.event.id,
+          monthIndex: drag.monthIndex,
+          colDelta,
+        })
+      }
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -325,7 +336,8 @@ export default function LinearCalendar({
       gridEl.classList.remove(
         'linear-calendar--dragging',
         'linear-calendar--drag-create',
-        'linear-calendar--drag-resize'
+        'linear-calendar--drag-resize',
+        'linear-calendar--drag-move'
       )
     }
     if (drag.type === 'create') {
@@ -356,6 +368,18 @@ export default function LinearCalendar({
         // Suppress the synthetic click that fires after pointer-capture release
         suppressClickRef.current = drag.event.id
       }
+    } else if (drag.type === 'move') {
+      if (drag.hasMoved && drag.currentColDelta !== 0) {
+        const s = parseDateLocal(drag.event.startDate)
+        const en = parseDateLocal(drag.event.endDate)
+        s.setDate(s.getDate() + drag.currentColDelta)
+        en.setDate(en.getDate() + drag.currentColDelta)
+        const newStart = toDateKey(s.getFullYear(), s.getMonth(), s.getDate())
+        const newEnd = toDateKey(en.getFullYear(), en.getMonth(), en.getDate())
+        updateEventRef.current(drag.event.id, { startDate: newStart, endDate: newEnd })
+      }
+      // Suppress synthetic click after pointer-capture release
+      suppressClickRef.current = drag.event.id
     }
     dragRef.current = null
     setDragVisual(null)
@@ -452,6 +476,31 @@ export default function LinearCalendar({
     }
     const gridEl = gridRootRef.current
     if (gridEl) gridEl.classList.add('linear-calendar--dragging', 'linear-calendar--drag-resize')
+    setTooltip(null)
+  }
+
+  function handleMovePointerDown(e, ev, monthIndex) {
+    if (isTouchPointer(e)) return
+    if (e.button !== 0) return
+    e.stopPropagation()
+    e.currentTarget.setPointerCapture?.(e.pointerId)
+    const { colStartX, colWidth } = getColGeometry()
+    const rawCol = Math.floor((e.clientX - colStartX) / colWidth)
+    const anchorCol = clampCol(rawCol, yearRef.current, monthIndex)
+    dragRef.current = {
+      type: 'move',
+      event: ev,
+      monthIndex,
+      anchorCol,
+      currentColDelta: 0,
+      colStartX,
+      colWidth,
+      hasMoved: false,
+      startClientX: e.clientX,
+      startClientY: e.clientY,
+    }
+    const gridEl = gridRootRef.current
+    if (gridEl) gridEl.classList.add('linear-calendar--dragging', 'linear-calendar--drag-move')
     setTooltip(null)
   }
 
@@ -827,8 +876,20 @@ export default function LinearCalendar({
                         dragVisual?.type === 'resize' &&
                         dragVisual.eventId === ev.id &&
                         dragVisual.monthIndex === monthIndex
-                      const dispStartCol = isResizing ? dragVisual.startCol : ev.startCol
-                      const dispEndCol = isResizing ? dragVisual.endCol : ev.endCol
+                      const isMoving =
+                        dragVisual?.type === 'move' &&
+                        dragVisual.eventId === ev.id &&
+                        dragVisual.monthIndex === monthIndex
+                      const dispStartCol = isResizing
+                        ? dragVisual.startCol
+                        : isMoving
+                          ? clampCol(ev.startCol + dragVisual.colDelta, year, monthIndex)
+                          : ev.startCol
+                      const dispEndCol = isResizing
+                        ? dragVisual.endCol
+                        : isMoving
+                          ? clampCol(ev.endCol + dragVisual.colDelta, year, monthIndex)
+                          : ev.endCol
 
                       return (
                         <div
@@ -838,7 +899,9 @@ export default function LinearCalendar({
                             gridColumn: `${dispStartCol + 1} / ${dispEndCol + 2}`,
                             gridRow: ev.row,
                             backgroundColor: resolveEventColor(ev, tagsById),
+                            opacity: isMoving ? 0.75 : undefined,
                           }}
+                          onPointerDown={e => handleMovePointerDown(e, ev, monthIndex)}
                           onClick={e => {
                             if (suppressClickRef.current === ev.id) {
                               suppressClickRef.current = null

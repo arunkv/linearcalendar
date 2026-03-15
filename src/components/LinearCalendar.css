@@ -358,7 +358,7 @@
   align-items: center;
   overflow: hidden;
   color: #ffffff;
-  cursor: pointer;
+  cursor: grab;
   user-select: none;
   transition: filter 0.1s;
 }
@@ -437,6 +437,9 @@
 }
 .linear-calendar--drag-resize {
   cursor: ew-resize;
+}
+.linear-calendar--drag-move {
+  cursor: grabbing;
 }
 
 /* ─── Event tooltip ──────────────────────────────────────────────────────────*/
